@@ -1,2 +1,22 @@
 // This File is imported last, and will override other styles in the cascade
 // Add styles here to make changes without digging in too much
+
+body{
+	background-image:url('../images/bg.jpg');
+	> header {
+		padding-top: 45px;
+		padding-bottom: 15px;
+		background: transparent;
+		font-family: 'Lato', sans-serif;
+		h1{
+			font-size: 48px;
+			font-family: 'Lato', sans-serif;
+			font-weight: 300;
+		}
+		h2{
+			font-size: 14px;
+			font-family: 'Lato', sans-serif;
+			color: white;
+		}
+	}
+}
