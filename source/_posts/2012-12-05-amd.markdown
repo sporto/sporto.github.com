@@ -1,0 +1,51 @@
+---
+layout: post
+title: "AMD, is not one or the other"
+date: 2012-12-05 12:43
+comments: true
+categories: 
+---
+
+I am starting to see a pattern in many JS libraries where they are trying to detect the presence of AMD an act accordingly. I think it is great that AMD is getting so much attention but they usual way this is done has a big issue: **It shouldn’t be one or the other.**
+
+The pattern usually goes like this:
+
+```javascript
+
+	if ( typeof define === 'function' && define.amd ) {
+		… define as AMD module
+	} else {
+		… attach as global
+	}
+
+```
+
+Problem with this is that if the script is loaded using a common script tag and a AMD loaded (e.g. require) is also present, then it won’t be possible to use the library in the normal way (using the global variable). 
+
+You might think that if require is there we should load everything using it, but we have good reasons not to do this. We concatentate and minifiy the most important parts of our JS code, the rest is loaded using require on demand.
+
+So the better way to do this is by attaching the library in many ways as possible:
+
+```javascript
+
+	// CommonJS module is defined
+  if (typeof exports !== 'undefined') {
+    if (typeof module !== 'undefined' && module.exports) {
+      module.exports = foo;
+	}
+
+    exports.foo = foo;
+  }
+
+  // Register as a named module with AMD.
+  if (typeof define === 'function' && define.amd) {
+    define(‘foo’, [], function(){ return foo; });
+}
+
+  // Integrate with $ if defined
+  // or create our own underscore object.
+	if (jQuery) {
+		jQuery.fn.foo = foo
+	}
+
+```
