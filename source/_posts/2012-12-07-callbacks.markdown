@@ -182,3 +182,177 @@ finder
 A Flow Control Library
 ---------------------
 
+Flow control libraries are also a very nice way to tackle your async needs. One I particularly like is [Async](https://github.com/caolan/async).
+
+Code using Async looks like this:
+
+```javascript
+async.series([
+    function(){ ... },
+    function(){ ... }
+]);
+```
+
+#### Setup (Example 1)
+
+Again we need a couple of functions that will do the work, as in the other examples these functions in the real world will probably make an AjAX request and return the results. For now let's just use a timeout.
+
+```javascript
+function finder(records, cb) {
+    setTimeout(function () {
+        records.push(3, 4);
+        cb(null, records);
+    }, 1000);
+}
+function processor(records, cb) {
+    setTimeout(function () {
+        records.push(5, 6);
+        cb(null, records);
+    }, 1000);
+}
+```
+Note that I am triggering callbacks inside this functions. These callbacks will be passed by the control flow library. Also note that the first argument passed to the callbacks is 'null': 
+
+```javascript
+cb(null, records);
+```
+
+This a common pattern in Node.js that allows passing an error as the first argument if an error occurs, by using this signatures in my functions and let flow very nicely with Async.
+
+### Using Async
+
+So the code that will use these functions looks like this:
+
+```javascript
+async.waterfall([
+    function(cb){
+        finder([1, 2], cb);
+    },
+    function(records, cb){
+        processor(records, cb);
+    },
+    function(records, cb) {
+        alert(records);
+    }
+]);
+```
+
+Async takes care of calling each function in order after the previous one has finished. As you can see this code is quite minimal and easy to understand.
+
+You can see the working example here http://jsfiddle.net/sporto/GuxRF/
+
+### Another setup (Example 2)
+Now, it is very likely that you will have a library that follows the callback(null, results) signature unless you are using Node.js. So a more real example will look like this:
+
+```javascript
+function finder(records, cb) {
+    setTimeout(function () {
+        records.push(3, 4);
+        cb(records);
+    }, 500);
+}
+function processor(records, cb) {
+    setTimeout(function () {
+        records.push(5, 6);
+        cb(records);
+    }, 500);
+}
+
+// using the finder and the processor
+async.waterfall([
+    function(cb){
+        finder([1, 2], function(records) {
+            cb(null, records)
+        });
+    },
+    function(records, cb){
+        processor(records, function(records) {
+            cb(null, records);
+        });
+    },
+    function(records, cb) {
+        alert(records);
+    }
+]);
+```
+​
+Note the nested functions inside the waterfall call. You can see this example here http://jsfiddle.net/sporto/x63BS/
+
+### Pros
+
+- Usually code using a control flow library is easier to understand because it follows a natural order (from top to bottom). This is not true with callbacks and listeners.
+- If your functions or library follows the callback(error, result) pattern and use a flow control library like a Async then your code will flow very nicely from one function to the other, as shown in the first example.
+
+### Cons
+
+- If the signatures don't match as in the second example then you can argue that the flow control library offers little in terms of readability.
+
+Promises
+---------
+
+Finally we get to our final destination: promises. Promises are a very powerful tool, but they are the harder to understand of these bunch.
+
+
+Code using promises may look like this:
+
+```javascript
+finder([1,2])
+    .then(function(records) {
+    	.. do something
+    });
+```
+
+This will vary widely depending on the promises library you use, in this case I am using [when.js](https://github.com/cujojs/when).
+
+### Setup
+
+My finder and processor functions will look like this:
+
+```javascript
+function finder(records){
+    var deferred = when.defer(); 
+    setTimeout(function () {
+        records.push(3, 4);
+        deferred.resolve(records);
+    }, 500);
+    return deferred.promise;
+}
+function processor(records) {
+     var deferred = when.defer();
+    setTimeout(function () {
+        records.push(5, 6);
+        deferred.resolve(records);
+    }, 500);
+    return deferred.promise;
+}
+```
+
+Each function creates a deferred and returns a promise. Then it resolves the deferred when the results arrive.
+
+### Consuming the promises
+
+The code that consumes these functions looks like this:
+
+```javascript
+finder([1,2])
+    .then(processor)
+    .then(function(records) {
+            alert(records);
+    });
+```
+
+As you can see it is quite minimal and easy to understand. When used like this promises bring a lot of clarity to your code. Note how in the first then I simply pass the 'processor' function. This is because this function returns a promise itself so everything will just flow nicely.
+
+You can see the working example here http://jsfiddle.net/sporto/Rhjbn/
+
+### The big benefit of promises
+
+Now if you think that this is all there is to promises you are missing something big. Promises have a neat trick that neither callbacks, listeners or control flows can do. They can be passed around, aggregated and most importantly they will trigger event if the event has already happened. Let me show you an example of this last point:
+
+This is a huge thing for dealing with user interaction, where you don't have control of the order of events. See this other post http://sporto.github.com/blog/2012/09/22/embracing-async-with-deferreds/
+
+Conclusion
+---------
+
+Hopefully I have help you to understand some of the tools that you have at your disposal when working with asynchronous JavaScript.
+
