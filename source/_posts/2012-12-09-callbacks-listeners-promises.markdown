@@ -22,7 +22,7 @@ Photo credit: bitzcelt / Foter / CC BY-NC-ND
 Callbacks
 ---------
 
-Let's start with callback pattern, this is the most basic and the best know pattern to deal with async programming.
+Let's start with callback pattern, this is the most basic and the best known pattern to deal with async programming.
 
 A callback looks like this:
 
@@ -32,11 +32,11 @@ finder([1, 2], function(results) {
 });
 ````
 
-In the callback pattern we call a function that will do the asynchronous operation. As one of the parameters we pass a function that will be called when the operation is done.
+In the callback pattern we call a function that will do the asynchronous operation. One of the parameters we pass is a function that will be called when the operation is done.
 
 ### Setup
 
-In order to illustrate how they work we need a couple of functions that will find and process the records. In the real world this functions will make an AJAX request and return the results, but for now let's just use timeouts.
+In order to illustrate how they work we need a couple of functions that will find and process the records. In the real world these functions will make an AJAX request and return the results, but for now let's just use timeouts.
 
 ```javascript
 function finder(records, cb) {
@@ -66,7 +66,7 @@ finder([1, 2], function (records) {
 
 We call the first function, passing a callback. Inside this callback we call the second function passing another callback.
 
-These nested callbacks can be written more clear but passing references to a function.
+These nested callbacks can be written more clearly by passing a reference to another function.
 
 ```javascript
 function onProcessorDone(records){
@@ -87,13 +87,13 @@ Working example here:
 
 ### Pros
 
-- They are very well know pattern, so they are easy to understand.
+- They are a very well know pattern, so they are familiar thus easy to understand.
 - Very easy to implement in your own libraries / functions.
 
 ### Cons
 
-- Nested callbacks will form the infamous pyramid of doom as shown above, which can get hard to read when you have many levels deep. But this is quite easy to fix by splitting the functions also as shown above.
-- You can only pass one callback for a given event, this can be a big limitation sometimes.
+- Nested callbacks will form the infamous pyramid of doom as shown above, which can get hard to read when you have multiple nested levels. But this is quite easy to fix by splitting the functions also as shown above.
+- You can only pass one callback for a given event, this can be a big limitation in many cases.
 
 <div style="height: 150px; overflow:hidden;">
 	<img src="http://photos.foter.com/66/summer-sound-large-view_l.jpg" style="display: block; width: 100%;">	
@@ -111,11 +111,11 @@ finder.on('done', function (event, records) {
 });
 ```
 
-We call a function on an object that adds a listener. In that function we usually pass the name of the event we want to listen to and a callback function. 'on' is one of many common way of adding listeners, other common function names you will come across are 'bind', 'listen', 'addEventListener', 'observe'.
+We call a function on an object that adds a listener. In that function we pass the name of the event we want to listen to and a callback function. 'on' is one of many common name for this function, other common names you will come across are 'bind', 'listen', 'addEventListener', 'observe'.
 
 ### Setup
 
-Let's do some setup for a listener demonstration. Unfortunately the setup needed is a bit more involving than the callbacks example. 
+Let's do some setup for a listener demonstration. Unfortunately the setup needed is a bit more involving than in the callbacks example. 
 
 First we need a couple of objects that will do the work of finding and processing the records.
 
@@ -140,7 +140,7 @@ var processor = {
  }
 ```
 
-Note that they are calling a method trigger when the work is done, I will add this method to these objects using a mix-in. Again 'trigger' is one of the names you will come across, others are 'fire', 'publish'.
+Note that they are calling a method **trigger** when the work is done, I will add this method to these objects using a mix-in. Again 'trigger' is one of the names you will come across, others common names are 'fire' and 'publish'.
 
 We need a mix-in object that has the listener behaviour, in this case I will just lean on jQuery for this:
 
@@ -162,7 +162,7 @@ Then apply the behaviour to our finder and processor objects:
  $.extend(processor, eventable);
 ```
 
-Excellent, now our objects can add listeners and trigger events.
+Excellent, now our objects can take listeners and trigger events.
 
 ### Using the listeners
 
@@ -200,7 +200,7 @@ finder
 
 ### Cons
 
-- A bit more difficult to setup than callbacks in your own code, you will probably want to use a library e.g. jQuery, bean.
+- A bit more difficult to setup than callbacks in your own code, you will probably want to use a library e.g. jQuery, [bean.js](https://github.com/fat/bean).
 
 <div style="height: 150px; overflow:hidden;">
 	<img src="http://foter.com/image/display/1036313/495x371/" style="display: block; width: 100%; margin-top: -50px;">
@@ -212,7 +212,7 @@ A Flow Control Library
 
 Flow control libraries are also a very nice way to deal with asynchronous code. One I particularly like is [Async.js](https://github.com/caolan/async).
 
-Code using Async looks like this:
+Code using Async.js looks like this:
 
 ```javascript
 async.series([
@@ -241,7 +241,7 @@ function processor(records, cb) {
 ```
 
 #### The Node Continuation Passing Style
-Note the style used in the callbacks inside these functions. 
+Note the style used in the callbacks inside the functions above. 
 
 ```javascript
 	cb(null, records);
@@ -265,7 +265,7 @@ async.waterfall([
 ]);
 ```
 
-Async.js takes care of calling each function in order after the previous one has finished. Note how we can just past the 'processor' function, this is because we are using the Node continuation style. As you can see this code is quite minimal and easy to understand.
+Async.js takes care of calling each function in order after the previous one has finished. Note how we can just pass the 'processor' function, this is because we are using the Node continuation style. As you can see this code is quite minimal and easy to understand.
 
 Working example here:
 {% jsfiddle GuxRF  js,result %}
@@ -305,7 +305,7 @@ async.waterfall([
 ]);
 ```
 ​
-It becomes a lot more convoluted but style you can see the flow going from top to bottom.
+It becomes a lot more convoluted but at least you can see the flow going from top to bottom.
 
 Working example here:
 {% jsfiddle x63BS  js,result %}
@@ -316,7 +316,7 @@ Working example here:
 
 ### Cons
 
-- If the signatures don't match as in the second example then you can argue that the flow control library offers little in terms of readability.
+- If the signatures of the functions don't match as in the second example then you can argue that the flow control library offers little in terms of readability.
 
 <div style="height: 150px; overflow:hidden;">
 	<img src="http://photos.foter.com/90/time-heals-nothing_4.jpeg" style="display: block; width: 100%; margin-top:-70px;">
@@ -327,7 +327,6 @@ Promises
 ---------
 
 Finally we get to our final destination. Promises are a very powerful tool, but they are the least understood.
-
 
 Code using promises may look like this:
 
@@ -377,31 +376,35 @@ finder([1,2])
     });
 ```
 
-As you can see it is quite minimal and easy to understand. When used like this promises bring a lot of clarity to your code as they follow a natural flow. Note how in the first callback we can simply pass the 'processor' function. This is because this function returns a promise itself so everything will just flow nicely.
+As you can see, it is quite minimal and easy to understand. When used like this, promises bring a lot of clarity to your code as they follow a natural flow. Note how in the first callback we can simply pass the 'processor' function. This is because this function returns a promise itself so everything will just flow nicely.
 
 Working example here:
 {% jsfiddle Rhjbn  js,result %}
 
-There is a lot to promises, they can be passed around and aggregated into bigger promises, resolved or rejected.
+There is a lot to promises:
+
+- they can be passed around as regular objects
+- aggregated into bigger promises
+- you can add handlers for failed promises
 
 ### The big benefit of promises
 
-Now if you think that this is all there is to promises you are missing the what I consider the biggest advantage. Promises have a neat trick that neither callbacks, listeners or control flows can do. You can add listener to promises even when they have already resolved and those listener will trigger immediately, meaning that you don't have to worry if the event has already happened. Let me show you an example of this last point:
+Now if you think that this is all there is to promises you are missing what I consider the biggest advantage. Promises have a neat trick that neither callbacks, listeners or control flows can do. You can add a listener to promise even when it has already been resolved, in this case that listener will trigger immediately, meaning that you don't have to worry if the event has already happened when you add the listener. This works the same for aggregated promises. Let me show you an example of this:
 
 {% jsfiddle 8zjGq  js,result %}
 
-This is a huge feature for dealing with user interaction in the browser. In complex applications you may not now the order of actions that the user will take, so promises are an excellent tool for dealing with this. See this other [post](http://sporto.github.com/blog/2012/09/22/embracing-async-with-deferreds/).
+This is a huge feature for dealing with user interaction in the browser. In complex applications you may not now the order of actions that the user will take, so you can use promises to track use interaction. See this other [post](http://sporto.github.com/blog/2012/09/22/embracing-async-with-deferreds/) if interested.
 
 ### Pros
 
-- Really powerful, you can aggregate promises, pass the around, or add listeners when already resolved.
+- Really powerful, you can aggregate promises, pass them around, or add listeners when already resolved.
 
 ### Cons
-- Least understood of all of these tools.
+- The least understood of all these tools.
 - They can get difficult to track when you have lots of aggregated promises with added listeners along the way.
 
 Conclusion
 ---------
 
-These are in my opinion the four main tools for dealing with asynchronous code. Hopefully I have help you to understand these tools better.
+That's it! These are in my opinion the four main tools for dealing with asynchronous code. Hopefully I have help you to understand them better and gave you more options for you asynchronous needs.
 
