@@ -247,33 +247,31 @@ Note the style used in the callbacks inside these functions.
 	cb(null, records);
 ```
 
-The first argument in the callback is null if no error occurs or it should be an error if one occurs. This is a common pattern in Node.js libraries and Async.js uses this pattern. By using this style the flow between Async.js and the callbacks becomes super simple.
+The first argument in the callback is null if no error occurs; or the error if one occurs. This is a common pattern in Node.js libraries and Async.js uses this pattern. By using this style the flow between Async.js and the callbacks becomes super simple.
 
 ### Using Async
 
-So the code that will use these functions looks like this:
+The code that will consume these functions looks like this:
 
 ```javascript
 async.waterfall([
     function(cb){
         finder([1, 2], cb);
     },
-    function(records, cb){
-        processor(records, cb);
-    },
+    processor,
     function(records, cb) {
         alert(records);
     }
 ]);
 ```
 
-Async takes care of calling each function in order after the previous one has finished. As you can see this code is quite minimal and easy to understand.
+Async.js takes care of calling each function in order after the previous one has finished. Note how we can just past the 'processor' function, this is because we are using the Node continuation style. As you can see this code is quite minimal and easy to understand.
 
 Working example here:
 {% jsfiddle GuxRF  js,result %}
 
 ### Another setup (Example 2)
-Now, it is very likely that you will have a library that follows the callback(null, results) signature unless you are using Node.js. So a more real example will look like this:
+Now, when doing front-end development it is unlikely that you will have a library that follows the callback(null, results) signature. So a more realistic example will look like this:
 
 ```javascript
 function finder(records, cb) {
@@ -307,7 +305,7 @@ async.waterfall([
 ]);
 ```
 ​
-Note the nested functions inside the waterfall call.
+It becomes a lot more convoluted but style you can see the flow going from top to bottom.
 
 Working example here:
 {% jsfiddle x63BS  js,result %}
@@ -315,7 +313,6 @@ Working example here:
 ### Pros
 
 - Usually code using a control flow library is easier to understand because it follows a natural order (from top to bottom). This is not true with callbacks and listeners.
-- If your functions or library follows the callback(error, result) pattern and use a flow control library like a Async then your code will flow very nicely from one function to the other, as shown in the first example.
 
 ### Cons
 
@@ -329,7 +326,7 @@ Photo credit: Helmut Kaczmarek / Foter / CC BY-NC-SA
 Promises
 ---------
 
-Finally we get to our final destination: promises. Promises are a very powerful tool, but they are the harder to understand of these bunch.
+Finally we get to our final destination. Promises are a very powerful tool, but they are the least understood.
 
 
 Code using promises may look like this:
@@ -345,7 +342,7 @@ This will vary widely depending on the promises library you use, in this case I 
 
 ### Setup
 
-My finder and processor functions will look like this:
+Out finder and processor functions look like this:
 
 ```javascript
 function finder(records){
@@ -366,9 +363,9 @@ function processor(records) {
 }
 ```
 
-Each function creates a deferred and returns a promise. Then it resolves the deferred when the results arrive.
+Each function creates a deferred object and returns a promise. Then it resolves the deferred when the results arrive.
 
-### Consuming the promises
+### Using the promises
 
 The code that consumes these functions looks like this:
 
@@ -380,24 +377,31 @@ finder([1,2])
     });
 ```
 
-As you can see it is quite minimal and easy to understand. When used like this promises bring a lot of clarity to your code. Note how in the first then I simply pass the 'processor' function. This is because this function returns a promise itself so everything will just flow nicely.
+As you can see it is quite minimal and easy to understand. When used like this promises bring a lot of clarity to your code as they follow a natural flow. Note how in the first callback we can simply pass the 'processor' function. This is because this function returns a promise itself so everything will just flow nicely.
 
 Working example here:
 {% jsfiddle Rhjbn  js,result %}
 
+There is a lot to promises, they can be passed around and aggregated into bigger promises, resolved or rejected.
+
 ### The big benefit of promises
 
-Now if you think that this is all there is to promises you are missing something big. Promises have a neat trick that neither callbacks, listeners or control flows can do. They can be passed around, aggregated and most importantly they will trigger event if the event has already happened. Let me show you an example of this last point:
+Now if you think that this is all there is to promises you are missing the what I consider the biggest advantage. Promises have a neat trick that neither callbacks, listeners or control flows can do. You can add listener to promises even when they have already resolved and those listener will trigger immediately, meaning that you don't have to worry if the event has already happened. Let me show you an example of this last point:
 
 {% jsfiddle 8zjGq  js,result %}
 
-This is a huge thing for dealing with user interaction, where you don't have control of the order of events. See this other [post](http://sporto.github.com/blog/2012/09/22/embracing-async-with-deferreds/).
+This is a huge feature for dealing with user interaction in the browser. In complex applications you may not now the order of actions that the user will take, so promises are an excellent tool for dealing with this. See this other [post](http://sporto.github.com/blog/2012/09/22/embracing-async-with-deferreds/).
+
+### Pros
+
+- Really powerful, you can aggregate promises, pass the around, or add listeners when already resolved.
+
+### Cons
+- Least understood of all of these tools.
+- They can get difficult to track when you have lots of aggregated promises with added listeners along the way.
 
 Conclusion
 ---------
 
-Hopefully I have help you to understand some of the tools that you have at your disposal when working with asynchronous JavaScript.
-
-Photo Credits
-
+These are in my opinion the four main tools for dealing with asynchronous code. Hopefully I have help you to understand these tools better.
 
