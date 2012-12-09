@@ -6,12 +6,23 @@ comments: true
 categories: 
 ---
 
-When doing JavaScript development you will find that there are lots of tools at your disposal for dealing with Asynchronous events. This post explains four of these tools and what their advantages are.
+When it comes to dealing with **asynchronous** development in JavaScript there are many tool you can use. This post explains four of these tools and what their advantages are. These are Callbacks, Listeners, Control Flow Libraries and Promises.
+
+### Example Scenario
+
+To illustrate the use of these four tools, let's create a simple example scenario.
+
+Let's say that we want to find some records, then process them and finally return the processed results. Both operations (find and process) are asynchronous.
+
+<div style="height: 180px; overflow:hidden;">
+	<img src="http://photos.foter.com/29/why-didnt-you-call-me_l.jpg" style="display: block; width: 100%; margin-top:-120px;">
+</div>
+Photo credit: bitzcelt / Foter / CC BY-NC-ND
 
 Callbacks
 ---------
 
-Let's start with callbacks, these are the most basic and well known form of async pattern you will find.
+Let's start with callback pattern, this is the most basic and the best know pattern to deal with async programming.
 
 A callback looks like this:
 
@@ -21,11 +32,11 @@ finder([1, 2], function(results) {
 });
 ````
 
-Now let's say that we want to find some records and then process then and finally return the result. Both operations (find and process) are async.
+In the callback pattern we call a function that will do the asynchronous operation. As one of the parameters we pass a function that will be called when the operation is done.
 
 ### Setup
 
-We need some functions to call in order to play with the callbacks. In the real world this functions will make an AJAX request somewhere and return the results but for now let's just use timeouts.
+In order to illustrate how they work we need a couple of functions that will find and process the records. In the real world this functions will make an AJAX request and return the results, but for now let's just use timeouts.
 
 ```javascript
 function finder(records, cb) {
@@ -43,7 +54,7 @@ function processor(records, cb) {
 ```
 ### Using the callbacks
 
-The code that uses this functions will look like this:
+The code that consumes these functions looks like this:
 
 ```javascript
 finder([1, 2], function (records) {
@@ -53,7 +64,9 @@ finder([1, 2], function (records) {
 });
 ```
 
-This can also be done like this, which might be clearer:
+We call the first function, passing a callback. Inside this callback we call the second function passing another callback.
+
+These nested callbacks can be written more clear but passing references to a function.
 
 ```javascript
 function onProcessorDone(records){
@@ -69,22 +82,28 @@ finder([1, 2], onFinderDone);
 
 In both case the console log above with log [1,2,3,4,5,6]
 
-See the working example here http://jsfiddle.net/sporto/jjzbr/
+Working example here:
+{% jsfiddle jjzbr  js,result %}
 
 ### Pros
 
-- Callbacks are easier to understand, we are quite familiar with them
-- Easy to implement in your own libraries / functions
+- They are very well know pattern, so they are easy to understand.
+- Very easy to implement in your own libraries / functions.
 
 ### Cons
 
-- The infamous pyramid of doom as shown above, but this is quite easy to fix by splitting the functions also as shown above
-- There can only be one callback
+- Nested callbacks will form the infamous pyramid of doom as shown above, which can get hard to read when you have many levels deep. But this is quite easy to fix by splitting the functions also as shown above.
+- You can only pass one callback for a given event, this can be a big limitation sometimes.
+
+<div style="height: 150px; overflow:hidden;">
+	<img src="http://photos.foter.com/66/summer-sound-large-view_l.jpg" style="display: block; width: 100%;">	
+</div>
+Photo credit: Brandon Christopher Warren / Foter / CC BY-NC
 
 Listeners
 ---------
 
-Listeners are also a well known pattern, mostly popularizer by jQuery and other DOM libraries. A Listener looks like this:
+Listeners are also a well known pattern, mostly made popular by jQuery and other DOM libraries. A Listener might look like this:
 
 ```javascript
 finder.on('done', function (event, records) {
@@ -92,9 +111,11 @@ finder.on('done', function (event, records) {
 });
 ```
 
+We call a function on an object that adds a listerner. In that function we usually pass the name of the event we want to listen to an a callback function. 'on' is one of many common way of adding listeners, other common function names you will come across are 'bind', 'listen', 'addEventListener', 'observe'.
+
 ### Setup
 
-Let's do some setup for a listener demonstration. Unfortunately this setup is a lot more involving than callbacks. 
+Let's do some setup for a listener demonstration. Unfortunately the setup needed is a bit more involving than the callbacks example. 
 
 First we need a couple of objects that will do the work of finding and processing the records.
 
@@ -119,7 +140,7 @@ var processor = {
  }
 ```
 
-Note that they are calling a method trigger when the work is done, I will add this method to these objects using a mix-in.
+Note that they are calling a method trigger when the work is done, I will add this method to these objects using a mix-in. Again 'trigger' is one of the names you will come across, others are 'fire', 'publish'.
 
 We need a mix-in object that has the listener behaviour, in this case I will just lean on jQuery for this:
 
@@ -140,11 +161,12 @@ Then apply the behaviour to our finder and processor objects:
  $.extend(finder, eventable);
  $.extend(processor, eventable);
 ```
-Cool, now our objects can add listeners and trigger events.
+
+Excellent, now our objects can add listeners and trigger events.
 
 ### Using the listeners
 
-The code to use the listeners is simple:
+The code that consumes the listeners is simple:
 
 ```javascript
 finder.on('done', function (event, records) {
@@ -158,12 +180,13 @@ finder.run([1,2]);
 
 Again the console run will output [1,2,3,4,5,6]
 
-See the working example here http://jsfiddle.net/sporto/FYBjc/
+Working example here:
+{% jsfiddle FYBjc  js,result %}
 
 ### Pros
 
-- This is well understood pattern.
-- The big advantage is that you are not limited to one listener per object, you add as many listeners as you want. E.g.
+- This is another well understood pattern.
+- The big advantage is that you are not limited to one listener per object, you can add as many listeners as you want. E.g.
 
 ```javascript
 finder
@@ -177,12 +200,17 @@ finder
 
 ### Cons
 
-- A lot more difficult to setup than callbacks, you will probably want to use a library e.g. jQuery, bean.
+- A bit more difficult to setup than callbacks in your own code, you will probably want to use a library e.g. jQuery, bean.
+
+<div style="height: 150px; overflow:hidden;">
+	<img src="http://foter.com/image/display/1036313/495x371/" style="display: block; width: 100%; margin-top: -50px;">
+</div>
+Photo credit: Nod Young / Foter / CC BY-NC-SA
 
 A Flow Control Library
 ---------------------
 
-Flow control libraries are also a very nice way to tackle your async needs. One I particularly like is [Async](https://github.com/caolan/async).
+Flow control libraries are also a very nice way to deal with asynchronous code. One I particularly like is [Async.js](https://github.com/caolan/async).
 
 Code using Async looks like this:
 
@@ -195,7 +223,7 @@ async.series([
 
 #### Setup (Example 1)
 
-Again we need a couple of functions that will do the work, as in the other examples these functions in the real world will probably make an AjAX request and return the results. For now let's just use a timeout.
+Again we need a couple of functions that will do the work, as in the other examples these functions in the real world will probably make an AjAX request and return the results. For now let's just use timeouts.
 
 ```javascript
 function finder(records, cb) {
@@ -211,13 +239,15 @@ function processor(records, cb) {
     }, 1000);
 }
 ```
-Note that I am triggering callbacks inside this functions. These callbacks will be passed by the control flow library. Also note that the first argument passed to the callbacks is 'null': 
+
+#### The Node Continuation Passing Style
+Note the style used in the callbacks inside these functions. 
 
 ```javascript
-cb(null, records);
+	cb(null, records);
 ```
 
-This a common pattern in Node.js that allows passing an error as the first argument if an error occurs, by using this signatures in my functions and let flow very nicely with Async.
+The first argument in the callback is null if no error occurs or it should be an error if one occurs. This is a common pattern in Node.js libraries and Async.js uses this pattern. By using this style the flow between Async.js and the callbacks becomes super simple.
 
 ### Using Async
 
@@ -239,7 +269,8 @@ async.waterfall([
 
 Async takes care of calling each function in order after the previous one has finished. As you can see this code is quite minimal and easy to understand.
 
-You can see the working example here http://jsfiddle.net/sporto/GuxRF/
+Working example here:
+{% jsfiddle GuxRF  js,result %}
 
 ### Another setup (Example 2)
 Now, it is very likely that you will have a library that follows the callback(null, results) signature unless you are using Node.js. So a more real example will look like this:
@@ -276,7 +307,10 @@ async.waterfall([
 ]);
 ```
 ​
-Note the nested functions inside the waterfall call. You can see this example here http://jsfiddle.net/sporto/x63BS/
+Note the nested functions inside the waterfall call.
+
+Working example here:
+{% jsfiddle x63BS  js,result %}
 
 ### Pros
 
@@ -286,6 +320,11 @@ Note the nested functions inside the waterfall call. You can see this example he
 ### Cons
 
 - If the signatures don't match as in the second example then you can argue that the flow control library offers little in terms of readability.
+
+<div style="height: 150px; overflow:hidden;">
+	<img src="http://photos.foter.com/90/time-heals-nothing_4.jpeg" style="display: block; width: 100%; margin-top:-70px;">
+</div>
+Photo credit: Helmut Kaczmarek / Foter / CC BY-NC-SA
 
 Promises
 ---------
@@ -343,16 +382,22 @@ finder([1,2])
 
 As you can see it is quite minimal and easy to understand. When used like this promises bring a lot of clarity to your code. Note how in the first then I simply pass the 'processor' function. This is because this function returns a promise itself so everything will just flow nicely.
 
-You can see the working example here http://jsfiddle.net/sporto/Rhjbn/
+Working example here:
+{% jsfiddle Rhjbn  js,result %}
 
 ### The big benefit of promises
 
 Now if you think that this is all there is to promises you are missing something big. Promises have a neat trick that neither callbacks, listeners or control flows can do. They can be passed around, aggregated and most importantly they will trigger event if the event has already happened. Let me show you an example of this last point:
 
-This is a huge thing for dealing with user interaction, where you don't have control of the order of events. See this other post http://sporto.github.com/blog/2012/09/22/embracing-async-with-deferreds/
+{% jsfiddle 8zjGq  js,result %}
+
+This is a huge thing for dealing with user interaction, where you don't have control of the order of events. See this other [post](http://sporto.github.com/blog/2012/09/22/embracing-async-with-deferreds/).
 
 Conclusion
 ---------
 
 Hopefully I have help you to understand some of the tools that you have at your disposal when working with asynchronous JavaScript.
+
+Photo Credits
+
 
