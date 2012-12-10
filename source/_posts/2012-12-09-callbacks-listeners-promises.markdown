@@ -30,7 +30,7 @@ A callback looks like this:
 finder([1, 2], function(results) {
 	..do something
 });
-````
+```
 
 In the callback pattern we call a function that will do the asynchronous operation. One of the parameters we pass is a function that will be called when the operation is done.
 
@@ -221,7 +221,7 @@ async.series([
 ]);
 ```
 
-#### Setup (Example 1)
+### Setup (Example 1)
 
 Again we need a couple of functions that will do the work, as in the other examples these functions in the real world will probably make an AjAX request and return the results. For now let's just use timeouts.
 
