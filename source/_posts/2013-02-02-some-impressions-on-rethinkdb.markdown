@@ -9,6 +9,7 @@ categories:
 Tried RethinkDB for a week. Overall it gave me a very good impression. 
 
 - Very easy to setup and run
+- Setting up sharding and replication is quite simple as well
 - The composable query language is a big plus. I really like the way I can build queries in my code by adding refinements if I need them. Reminds me of ActiveRecord in Rails.
 - The admin interface is gorgeus and super useful, but I wish I could save my queries.
 - The developers are very active in IRC and the forum, they responded all my questions very quickly.
