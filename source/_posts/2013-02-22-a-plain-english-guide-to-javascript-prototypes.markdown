@@ -26,7 +26,7 @@ Prototype inheritance chains can go as long as you want. But in general it is no
 The \_\_proto\_\_ object
 ------------------
 
-To begin with prototype chains in JavaScript there is nothing as simple as the __\_\_proto\_\___ property. Unfortunatelly __\_\_proto\_\___ is not part of the standard interface of JavaScript, not at least until ES6. So you shouldn't use it in production code. But anyway it makes explaining prototypes easy.
+To understand prototype chains in JavaScript there is nothing as simple as the __\_\_proto\_\___ property. Unfortunatelly __\_\_proto\_\___ is not part of the standard interface of JavaScript, not at least until ES6. So you shouldn't use it in production code. But anyway it makes explaining prototypes easy.
 
 ```js
 	// let's create an alien object
@@ -149,9 +149,9 @@ There is no such thing as Object.setPrototype.
 
 __Constructor functions__ are the most used way in JavaScript to construct prototype chains. The popularity of __constructor functions__ comes from the fact that this was the only original way for constructing types. It is also an important consideration the fact that many engines are highly optimized for constructor functions.
 
-Unfortunatelly they can get confusing, they are in my opinion one of the main reasons why new comers find JavaScript puzzling. I believe that constructor functions was an ackward inclusion in a prototype language like JavaScript, but they are a big part of the language and we need to understand them well.
+Unfortunatelly they can get confusing, they are in my opinion one of the main reasons why new comers find JavaScript puzzling, but they are a big part of the language and we need to understand them well.
 
-## Functions as contructors
+### Functions as contructors
 
 In JavaScript you create an instance of a function like this:
 
@@ -164,11 +164,11 @@ In JavaScript you create an instance of a function like this:
 	console.log(foo instanceof Foo ) //=> true
 ```
 
-En essence functions when used with the keyboard __new__ behave like factories, meaning that they create new objects. The new object they create is linked to the function by its prototype, more on this later. So in JavaScript we call this an __instance__ of the function.
+In essence functions when used with the keyboard __new__ behave like factories, meaning that they create new objects. The new object they create is linked to the function by its prototype, more on this later. So in JavaScript we call this an __instance__ of the function.
 	
 ### 'this' is assigned implicitly
 
-When we use '__new__' JavaScript injects an implicit reference to the new object being created using the ‘__this__’ keyword. It also returns this reference implicitly at the end of the function. 
+When we use '__new__', JavaScript injects an implicit reference to the new object being created in the form of the ‘__this__’ keyword. It also returns this reference implicitly at the end of the function. 
 
 When we do this:
 
@@ -181,7 +181,7 @@ When we do this:
 	foo.kind //=> ‘foo’
 ```
 
-Behind the scenes is like doing something like this:
+Behind the scenes it is like doing something like this:
 
 ```js
 	function Foo() {
