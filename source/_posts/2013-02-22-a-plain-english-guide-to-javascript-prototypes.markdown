@@ -164,7 +164,7 @@ In JavaScript you create an instance of a function like this:
 	console.log(foo instanceof Foo ) //=> true
 ```
 
-In essence functions when used with the keyboard __new__ behave like factories, meaning that they create new objects. The new object they create is linked to the function by its prototype, more on this later. So in JavaScript we call this an __instance__ of the function.
+In essence functions when used with the keyword __new__ behave like factories, meaning that they create new objects. The new object they create is linked to the function by its prototype, more on this later. So in JavaScript we call this an __instance__ of the function.
 	
 ### 'this' is assigned implicitly
 
@@ -194,9 +194,9 @@ Behind the scenes it is like doing something like this:
 	}
 ```
 
-But keep in mind that the implicit '__this__' is only assigned to a new object when using '__new__'. If you forget '__new__' keyboard then '__this__' will be the global object. Of course forgetting __new__ is a cause of multiple bugs, so don't forget __new__. 
+But keep in mind that the implicit '__this__' is only assigned to a new object when using '__new__'. If you forget '__new__' keyword then '__this__' will be the global object. Of course forgetting __new__ is a cause of multiple bugs, so don't forget __new__. 
 
-One convention that I like is capitalizing the first letter of a function when it is intented to be used as a function constructor, so you now straight away to you are missing the __new__ keyword.
+One convention that I like is capitalizing the first letter of a function when it is intented to be used as a function constructor, so you now straightaway to you are missing the __new__ keyword.
 
 ### The 'function prototype'
 
