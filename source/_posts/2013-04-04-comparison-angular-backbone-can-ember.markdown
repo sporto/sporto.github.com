@@ -203,6 +203,16 @@ __CanJS__ may seem like an unproven solution because you cannot find a ton of si
 | ------- | -------- | ----- | ----- |
 | 4       | 5 	     | 4     | 3 |
 
+### Memory leak safety
+
+This is an important consideration if you are single page apps that are intented to  stay open for a long time. You don’t want your application to leak memory. Unfortunatelly this can happen quite easily. Specially if you are creating listeners for DOM events yourself.
+
+__Angular__, __CanJS__ and __Ember__ will deal with this effectively as long as you follow their best practices. __Backbone__ on the other hand requires you to do this work manually in a teardown method.
+
+| Angular | Backbone | CanJS | Ember |
+| ------- | -------- | ----- | ----- |
+| 5       | 3 	     | 5     | 5 |
+
 ## Personal taste
 
 This is probably one of the biggest factors when choosing a library. 
