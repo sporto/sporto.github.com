@@ -179,13 +179,13 @@ I don't consider performance be a critical factor on choosing a framework becaus
 
 I have seen and made many performance tests with these libraries e.g. [this one](http://jsperf.com/angular-vs-knockout-vs-ember/118). But I am not convinced on the reliability of these tests. It is really hard to be sure that the test is really testing the right things and in the right way.
 
-I have put a lower score to Angular based on the fact that it does dirty checking of objects. This cannot possibly be as performant as the others. [See this](http://stackoverflow.com/questions/9682092/databinding-in-angularjs/9693933#9693933).
+However, from what I have seen and read __CanJS__ seems to have the edge when it comes to performance, specially in rendering view bindings. On the other hand I have put a lower score to __Angular__ based on the fact that it does dirty checking of objects. This cannot possibly be as performant as the others. [See this](http://stackoverflow.com/questions/9682092/databinding-in-angularjs/9693933#9693933).
 
 ### Scores
 
 | Angular | Backbone | CanJS | Ember |
 | ------- | -------- | ----- | ----- |
-| 4       | 5 	     | 5     | 5 |
+| 3       | 4 	     | 5     | 4 |
 
 ## Maturity
 
@@ -197,7 +197,7 @@ __Ember__ is relatively new. It has had major changes along the way, just reachi
 
 __Angular__ seems more stable and proven than Ember. But not as much as Backbone.
 
-__CanJS__ may seem like an unproven solution because you cannot find a ton of site built with it. But CanJS comes with a lot more maturity than what you first perceive. CanJS is an extraction of [JavaScriptMVC](http://javascriptmvc.com/) a library that has been around since 2008 and has a ton of experience build in.
+__CanJS__ may seem like an unproven solution because you cannot find a ton of site built with it. But CanJS comes with a lot more maturity than what you first perceive. CanJS is an extraction of __[JavaScriptMVC](http://javascriptmvc.com/)__ a library that has been around since 2008 and has a ton of experience build in.
 
 | Angular | Backbone | CanJS | Ember |
 | ------- | -------- | ----- | ----- |
