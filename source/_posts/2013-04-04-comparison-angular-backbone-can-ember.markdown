@@ -13,12 +13,11 @@ In this post I compare four leading libraries I have personal experience with, t
 To each factor I have assigned a score from 1 to 5. Where 1 is poor and 5 is great. I have tried to be impartial in my comparison, but of course my objectivity is heavily compromised because the scores are mostly based on my experience with each of these frameworks.
 
 <p>
-{% img left /images/mvc/angular.png 160 160 'image' 'images' %}
-{% img left /images/mvc/backbone.png 160 160 'image' 'images' %}
-{% img left /images/mvc/can.png 160 160 'image' 'images' %}
-{% img left /images/mvc/ember.png 160 160 'image' 'images' %}
+{% img /images/logos/angular.png 160 160 'Angular.js' 'images' %}
+{% img /images/logos/backbone.png 160 160 'Backbone.js' 'images' %}
+{% img /images/logos/can.png 160 160 'Can.js' 'images' %}
+{% img /images/logos/ember.png 160 160 'Ember.js' 'images' %}
 </p>
----
 
 ## Features
 
