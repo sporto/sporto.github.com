@@ -12,23 +12,26 @@ In this post I compare four leading libraries I have personal experience with, t
 
 To each factor I have assigned a score from 1 to 5. Where 1 is poor and 5 is great. I have tried to be impartial in my comparison, but of course my objectivity is heavily compromised because the scores are mostly based on my experience with each of these frameworks.
 
-{% img left /images/angular.png 350 350 'image' 'images' %}
-{% img left /images/backbone.png 350 350 'image' 'images' %}
-{% img left /images/can.png 350 350 'image' 'images' %}
-{% img left /images/ember.png 350 350 'image' 'images' %}
+<p>
+{% img left /images/mvc/angular.png 160 160 'image' 'images' %}
+{% img left /images/mvc/backbone.png 160 160 'image' 'images' %}
+{% img left /images/mvc/can.png 160 160 'image' 'images' %}
+{% img left /images/mvc/ember.png 160 160 'image' 'images' %}
+</p>
+---
 
 ## Features
 
 There are really important features a framework should have to provide the necessary foundation to build usefull things. Can it do view bindings? two way bindings? filters? computed properties? dirty attributes? form validation? etc. This is a very long list. Below is a comparison of what I consider the really important features in an MVC framework:
 
-|Feature                 | Angular | Backbone | CanJS | Ember |
-|----                    | ------- | -------- | ----- | ----- |
-| Observables            | y       | y 	     | y     | y |
-| Routing                | y       | y 	     | y     | y |
-| View bindings          | y       | - 	     | y     | y |
-| Two way bindings       | y       | - 	     | -     | y |
-| Partial views          | y       | - 	     | y     | y |
-| Filtered list views    | y       | - 	     | -     | y |
+Feature                | Angular | Backbone | CanJS | Ember 
+----                   | ------- | -------- | ----- | ----- 
+Observables            | y       | y        | y     | y     
+Routing                | y       | y        | y     | y     
+View bindings          | y       |          | y     | y     
+Two way bindings       | y       | -        | -     | y     
+Partial views          | y       | -        | y     | y     
+Filtered list views    | y       | -        | -     | y     
 
 __Observables__: objects that can be observed for changes. 
 
@@ -46,9 +49,9 @@ __Filtered list views__: Having views that display objects filtered by a certain
 
 So based on these features my scores are:
 
-| Angular | Backbone | CanJS | Ember |
-| ------- | -------- | ----- | ----- |
-| 5       | 2 	     | 4     | 5 |
+Angular | Backbone | CanJS | Ember 
+------- | -------- | ----- | ----- 
+5       | 2 	     | 4     | 5 
 
 It is important to note that __Backbone__ can do most of this things with a lot of manual code or with the help of plug-ins. But I am only considering the available features in the core framework.
 
@@ -57,9 +60,9 @@ It is important to note that __Backbone__ can do most of this things with a lot 
 
 There are hundreds of awesome plug-ins and libraries out there that do specialised things. They usually do these things better than what comes bundle with a framework. So it important to be able to integrate these libraries with the chosen MVC framework. 
 
-| Angular | Backbone | CanJS | Ember |
-| ------- | -------- | ----- | ----- |
-| 3       | 5 	     | 4     | 3 |
+Angular | Backbone | CanJS | Ember
+------- | -------- | ----- | -----
+3       | 5 	     | 4     | 3
 
 __Backbone__ is the most flexible framework as it is the one with the less conventions and set ways of doing things. You are required to make a lot of decisions when using Backbone. 
 
@@ -87,9 +90,9 @@ Ember also has a steep learning curve like Angular, I believe it is easier to le
 
 ### Scores
 
-| Angular | Backbone | CanJS | Ember |
-| ------- | -------- | ----- | ----- |
-| 2       | 4 	     | 5     | 3 |
+Angular | Backbone | CanJS | Ember
+------- | -------- | ----- | -----
+2       | 4 	     | 5     | 3
 
 ## Developer productivity	
 
@@ -113,9 +116,9 @@ Ember really shines here. Because Ember is full of conventions it does a lot of 
 
 ### Scores
 
-| Angular | Backbone | CanJS | Ember |
-| ------- | -------- | ----- | ----- |
-| 4       | 2 	     | 4     | 5 |
+Angular | Backbone | CanJS | Ember
+------- | -------- | ----- | -----
+4       | 2 	     | 4     | 5
 
 ## Community
 
@@ -123,17 +126,17 @@ __How easy is to find help, tutorials and experts?__
 
 The __Backbone__ community is huge, there is no doubt about that. You can find dozens of tutorials about Backbone, a very active community on StackOverflow and IRC. The __Angular__ and __Ember__ communities are quite big as well. Also lots of tutorial and activity in StackOverflow and IRC, but not as much as Backbone. The __CanJS__ community on the other hand is small in comparison, but fortunatelly is quite active and helpful. I haven't found the small size of the CanJS community to be a liability.
 
-| Angular | Backbone | CanJS | Ember |
-| ------- | -------- | ----- | ----- |
-| 4       | 5 	     | 3     | 4 |
+Angular | Backbone | CanJS | Ember
+------- | -------- | ----- | -----
+4       | 5 	     | 3     | 4
 
 ## Ecosystem
 
 __Is there an ecosystem of plug-ins and libraries?__
 
-| Angular | Backbone | CanJS | Ember |
-| ------- | -------- | ----- | ----- |
-| 4       | 5 	     | 2     | 4 |
+Angular | Backbone | CanJS | Ember
+------- | -------- | ----- | -----
+4       | 5 	     | 2     | 4
 
 Here again __Backbone__ beats the others hands down. There are tons of plug-ins for it. The __Angular__ ecosystem is getting quite interesting as well with things like [Angular UI](http://angular-ui.github.com/). I think that the __Ember__ ecosystem is less developed but it should get better due to Ember's popularity. __CanJS__ has the smallest ecosystem if any.
 
@@ -143,9 +146,9 @@ This might be an important consideration, specially if you are doing mobile deve
 
 ### Size library alone (no dependecies, just min)
 
-| Angular | Backbone | CanJS | Ember |
-| ------- | -------- | ----- | ----- |
-| 80k       | 18k 	     | 33k     | 141k |
+Angular | Backbone | CanJS | Ember
+------- | -------- | ----- | -----
+80k     | 18k      | 33k   | 141k
 
 __Backbone__ is the smallest and people often point to this fact. But this is not the end of the story.
 
@@ -161,15 +164,15 @@ __CanJS__ needs at least __Zepto__. This is __57K__.
 
 __Ember__ needs __[jQuery](http://jquery.com/)__ and __[Handlebars](http://handlebarsjs.com/)__. This is __269K__.
 
-| Angular | Backbone | CanJS | Ember |
-| ------- | -------- | ----- | ----- |
-| 80k       | 61k 	     | 57k     | 269k |
+Angular | Backbone | CanJS | Ember
+------- | -------- | ----- | -----
+80k     | 61k      | 57k   | 269k
 
 ### Scores
 
-| Angular | Backbone | CanJS | Ember |
-| ------- | -------- | ----- | ----- |
-| 4       | 5 	     | 5     | 2 |
+Angular | Backbone | CanJS | Ember
+------- | -------- | ----- | -----
+4       | 5        | 5     | 2
 
 __Ember__ gets a low score because it takes a lot more bytes than the other three.
 
@@ -183,9 +186,9 @@ However, from what I have seen and read __CanJS__ seems to have the edge when it
 
 ### Scores
 
-| Angular | Backbone | CanJS | Ember |
-| ------- | -------- | ----- | ----- |
-| 3       | 4 	     | 5     | 4 |
+Angular | Backbone | CanJS | Ember
+------- | -------- | ----- | -----
+3       | 4        | 5     | 4
 
 ## Maturity
 
@@ -199,9 +202,9 @@ __Angular__ seems more stable and proven than Ember. But not as much as Backbone
 
 __CanJS__ may seem like an unproven solution because you cannot find a ton of site built with it. But CanJS comes with a lot more maturity than what you first perceive. CanJS is an extraction of __[JavaScriptMVC](http://javascriptmvc.com/)__ a library that has been around since 2008 and has a ton of experience build in.
 
-| Angular | Backbone | CanJS | Ember |
-| ------- | -------- | ----- | ----- |
-| 4       | 5 	     | 4     | 3 |
+Angular | Backbone | CanJS | Ember
+------- | -------- | ----- | -----
+4       | 5        | 4     | 3
 
 ### Memory leak safety
 
@@ -209,9 +212,9 @@ This is an important consideration if you are single page apps that are intented
 
 __Angular__, __CanJS__ and __Ember__ will deal with this effectively as long as you follow their best practices. __Backbone__ on the other hand requires you to do this work manually in a teardown method.
 
-| Angular | Backbone | CanJS | Ember |
-| ------- | -------- | ----- | ----- |
-| 5       | 3 	     | 5     | 5 |
+Angular | Backbone | CanJS | Ember
+------- | -------- | ----- | -----
+5       | 3 	     | 5     | 5
 
 ## Personal taste
 
