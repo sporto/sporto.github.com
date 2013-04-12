@@ -258,7 +258,11 @@ Well, putting all together this is my tally. Remember this is just my opinion, p
 
 Overall is a tight competition, there are no clear winners or losers. So I guess it all comes down to personal taste or how much weight you apply to each particular factor.
 
+## A note about Backbone
 
+I cannot finish my blog post without saying this. I won't feel like I am offering you value otherwise. Backbone was a great library two years ago, but __there are better things now__. I believe that many people choose Backbone just because of its popularity, it is a vicious circle.
+
+I strongly feel that you should avoid Backbone for new projects because of its lack of features and developer convenience. Choosing Backbone because of the community and the ecosystem is a strong argument, but one that should go away as the other frameworks become more popular. __It is time to move on__.
 
 
 
