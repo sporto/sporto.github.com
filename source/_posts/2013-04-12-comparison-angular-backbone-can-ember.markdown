@@ -225,7 +225,7 @@ __CanJS__ may seem like an unproven solution because you cannot find a ton of si
 
 Angular | Backbone | CanJS | Ember
 ------- | -------- | ----- | -----
-4       | 5        | 3     | 3
+4       | 5        | 4     | 3
 
 ### Memory leak safety
 
@@ -256,7 +256,7 @@ Well, putting all together this is my tally. Remember this is just my opinion, p
 
 <iframe width='500' height='300' frameborder='0' src='https://docs.google.com/spreadsheet/pub?key=0Alu_S-aQLtvvdGpNaWJxMFlQM0pLM1JiSGd5MjJMYnc&single=true&gid=0&range=A1%3AE12&output=html'></iframe>
 
-Overall is a tight competition, there are no clear winners or losers. So I guess it all comes down to personal taste or how much weight you apply to each particular factor.
+If you put the same weight to every factor it is a tight competition, there are no clear winners or losers. So I guess it all comes down to personal taste or how much weight you apply to each particular factor.
 
 ## A note about Backbone
 
