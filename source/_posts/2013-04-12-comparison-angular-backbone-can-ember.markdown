@@ -254,7 +254,7 @@ There is no way to score this.
 
 Well, putting all together this is my tally. Remember this is just my opinion, please let me know if you think I have scored a library really wrong.
 
-<iframe width='500' height='300' frameborder='0' src='https://docs.google.com/spreadsheet/pub?key=0Alu_S-aQLtvvdGpNaWJxMFlQM0pLM1JiSGd5MjJMYnc&single=true&gid=0&range=A1%3AE12&output=html'></iframe>
+<iframe width="100%" height="600" src="http://jsfiddle.net/sporto/5JVxh/embedded/result" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
 
 If you put the same weight to every factor it is a tight competition, there are no clear winners or losers. So I guess it all comes down to personal taste or how much weight you apply to each particular factor.
 
