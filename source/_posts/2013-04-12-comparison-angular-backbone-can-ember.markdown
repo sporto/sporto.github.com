@@ -260,11 +260,11 @@ If you put the same weight to every factor it is a tight competition, there are 
 
 ## A note about Backbone (Impartiality ends here)
 
-I cannot finish my blog post without saying this, I have tried to stay impartial during my post but I want to share my current opinion about Backbone. It was a great library two years ago, but __there are better things now__. I believe that many people choose Backbone just because of its popularity, it is a vicious circle.
+I have tried to stay impartial during my post but I cannot finish it without sharing my current opinion about Backbone. It was a great library two years ago, but I am convinced that __there are better things now__. I believe that many people choose Backbone just because of its popularity, it is a vicious circle.
 
-I strongly feel that you should think twice before using Backbone in new projects. This is mostly because of its lack of features and developer convenience. Backbone can be very tempting because of the big community and the ecosystem, but this advantage will dissapear as the other frameworks become more popular. __It is time to move on__.
+I strongly feel that you should think twice before using Backbone in new projects. This is mostly because of its lack of features and developer convenience. Backbone can be very tempting because of its big community and the ecosystem, but this advantage will dissapear as the other frameworks become more popular.
 
-__Update 18/04/2013__: Made it clear that the last section is just my opinion.
+__Update 18/04/2013__: Made it clear that the last section is just my opinion. Removed the inflammatory "It is time to move on" statement.
 
 
 
