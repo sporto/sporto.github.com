@@ -237,6 +237,19 @@ Angular | Backbone | CanJS | Ember
 ------- | -------- | ----- | -----
 5       | 3 	   | 5     | 5
 
+## Testability
+
+__How easy is to test you code?__
+The keys to have great testable code are __modularity__ (have small pieces that can be tested in isolation) and __dependency injection__ (being able to change dependencies in your tests).
+
+You can do this with any of the frameworks if you learn the right patterns, but it is not easy and it requires you to get out of your way to apply them.
+
+The developers of __Angular__ have taken the bull by the horns and built the whole framework with modularity and dependency injection as core features. Angular shoves the right patterns for testable code upon us.
+
+Angular | Backbone | CanJS | Ember
+------- | -------- | ----- | -----
+5       | 3        | 3     | 3
+
 ## Personal taste
 
 This is probably one of the biggest factors when choosing a library. 
@@ -270,6 +283,7 @@ Backbone can also be very tempting because of its big community and the ecosyste
 
 Because of this I strongly feel that you should think twice before choosing Backbone for your next project.
 
+__Update 20/04/2013__: Added testability.
 __Update 18/04/2013__: Made it clear that the last section is just my opinion. Removed the inflammatory "It is time to move on" statement.
 
 
