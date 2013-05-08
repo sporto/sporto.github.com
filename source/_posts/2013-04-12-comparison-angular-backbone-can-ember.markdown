@@ -244,11 +244,13 @@ The keys to have great testable code are __modularity__ (have small pieces that 
 
 You can do this with any of the frameworks if you learn the right patterns, but it is not easy and it requires you to get out of your way to apply them.
 
-The developers of __Angular__ have taken the bull by the horns and built the whole framework with modularity and dependency injection as core features. Angular shoves the right patterns for testable code upon us.
+Modularity and dependency injection are core features of __Angular__, it actively discourages you from doing things in any other way. This usually leads to code that is easier to test. Because of this I consider Angular to has an advantage in this area.
 
 Angular | Backbone | CanJS | Ember
 ------- | -------- | ----- | -----
-5       | 3        | 3     | 3
+5       | 4        | 4     | 4
+
+__Update 2013-05-08__: Updated testability to explain better the Angular approach.
 
 ## Personal taste
 
@@ -283,8 +285,8 @@ Backbone can also be very tempting because of its big community and the ecosyste
 
 Because of this I strongly feel that you should think twice before choosing Backbone for your next project.
 
-__Update 20/04/2013__: Added testability.
-__Update 18/04/2013__: Made it clear that the last section is just my opinion. Removed the inflammatory "It is time to move on" statement.
+__Update 2013-04-20__: Added testability.
+__Update 2013-04-18__: Made it clear that the last section is just my opinion. Removed the inflammatory "It is time to move on" statement.
 
 
 
