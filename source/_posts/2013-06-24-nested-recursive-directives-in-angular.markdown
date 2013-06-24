@@ -8,7 +8,7 @@ categories:
 
 I learnt a new trick over the weekend using Angular, how to build a recursive tree of objects using directives. In this post I want to share how to do it.
 
-Let's say that you have some data that looks like, it can be as deep as you want:
+Let's say that you have some data that looks like this, it can be as deep as you want:
 
 ```js
 
@@ -32,7 +32,7 @@ Let's say that you have some data that looks like, it can be as deep as you want
 	];
 ```
 
-And using this data you want to build a tree:
+And using this data you want to build a tree, e.g.:
 
 	Europe
 		Italy
@@ -43,7 +43,7 @@ And using this data you want to build a tree:
 		Brasil
 		Peru
 
-So to build something like this you will need some kind of recursive code to go over all the elements and the children.
+So to build something like this you will need some kind of recursive code to loop over all the elements and their children.
 
 Let's start with the html:
 
@@ -68,9 +68,9 @@ First we have a controller 'IndexCtrl' which looks like this:
 	});
 ```
 
-Here I have `$scope.locations` pointing to the array of locations I want to render in my tree. 
+Here we have `$scope.locations` pointing to the array of locations we want to render in our tree. 
 
-Then we need a directive for rendering a collections, the html looks like this:
+Then we need a directive for rendering a collection, the html for the __collection__ looks like this:
 
 
 ```html
@@ -98,9 +98,9 @@ Our directive definition looks like this:
 ```
 
 - __restrict: 'E'__ tells angular that we want to apply this directive to any html tags matching `collection`.
-- __replace: true__ tells angular that we want to replace the tag with the content of template in the directive.
+- __replace: true__ tells angular that we want to replace the tag with the content of specified template in the directive.
 - __scope:__ creates a new scope for the directive.
-- __collection: '='__ tells angular to grab the collection attribute in the directive and create a variable in the directive scope with the same name, `=` means that it should be passed as an object.
+- __collection: '='__ tells angular to use the `collection` attribute in the directive and create a variable in the directive scope with the same name, `=` means that it should be passed as an object.
 - __template: "…"__ is the new html that will be inserted instead of the original tag.
 
 Notice the following code in the template:
@@ -109,7 +109,7 @@ Notice the following code in the template:
 	<member ng-repeat='member in collection' member='member'></member>
 ```
 
-This is another directive, used to render each member of the collection, in this directive we pass the current member as the `member` attribute.
+This is another directive, used to render each member of the collection (we use the build-in ng-repeat for looping), in this directive we pass the current member as the `member` attribute.
 
 The directive for __member__ looks like this:
 
@@ -132,7 +132,7 @@ The directive for __member__ looks like this:
 	})
 ```
 
-This looks a lot like the __collection__ directive, except for the link function. I will explain what is happening here, but before that let me tell you about my first approach for trying to do this.
+This looks a lot like the __collection__ directive, except for the link function. I will explain what is happening here, but before that, let me tell you about my first approach for trying to do this.
 
 The first thing I tried is to simply add the __collection__ directive inside the template:
 
@@ -158,4 +158,4 @@ So instead you need to add the __collection__ directive manually only if there a
 
 Note the line `$compile(element.contents())(scope);`. As the html is appended manually we need to tell angular to re-render the directive.
 
-That is it, [here is the complete example](http://jsbin.com/acibiv/3/). Thanks.
+That is it, [here is the complete example](http://jsbin.com/acibiv/3/edit). Thanks.
