@@ -151,7 +151,7 @@ __Constructor functions__ are the most used way in JavaScript to construct proto
 
 Unfortunatelly they can get confusing, they are in my opinion one of the main reasons why new comers find JavaScript puzzling, but they are a big part of the language and we need to understand them well.
 
-### Functions as contructors
+### Functions as constructors
 
 In JavaScript you create an instance of a function like this:
 

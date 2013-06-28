@@ -24,9 +24,11 @@ I needed the formulas to be accessible as partials so I added them in the view f
 
 In app/views/formulas/_interest.js
 
+```js
 	function formula(principal, rate, years) {
 		return principal * rate * years;
 	}
+```
 	
 ## Using the formulas in my Ruby models
 
@@ -36,6 +38,7 @@ In order to run the JavaScript on the server you will need __therubyracer__ gem,
 
 In app/models/contract.rb:
 
+```ruby
 	class Contract
 
 		def initialize(principal, rate, years)
@@ -50,9 +53,11 @@ In app/models/contract.rb:
 		end
 
 	end
+```
 	
 The JavaScript code is loaded inside the interest method and ran with the provided parameters. In this way the code is accessible as a plain ruby method and only needs to be tested in one place. In my test:
 
+```ruby
 	require 'spec_helper'
 
 	describe "Contract" do
@@ -68,6 +73,7 @@ The JavaScript code is loaded inside the interest method and ran with the provid
 		
 		...
 	end
+```
 	
 ## Loading the formulas in the front-end
 
@@ -79,6 +85,7 @@ In app/views/layouts/application.html.erb:
 	
 In app/views/formulas/_index.html.erb
 
+```js
 	<script>
 		(function (APP) {
 			"use strict";
@@ -89,6 +96,7 @@ In app/views/formulas/_index.html.erb
 
 		})(window.APP || (window.APP = {}));
 	</script>
+```
 	
 This piece of JavaScript creates a global object APP if not found, then an object formulas inside APP and finally adds my interest formula to APP.formulas.interest.
 
@@ -96,7 +104,9 @@ This piece of JavaScript creates a global object APP if not found, then an objec
 
 Once the formulas are loaded as shown above they can be used as:
 
+```js
 	var res = APP.formulas.interest(principal, rate, years);
+```
 	
 ---------------
 
