@@ -11,7 +11,7 @@ There is a typical progression when developing an application. First we start wi
 ```ruby
 	describe User do
 		let(:user) { User.new(name: ‘John’) }
-		it ‘has a name’ do
+		it "has a name" do
 			expect(user.name).to eq(‘John’)
 		end
 	end
@@ -27,7 +27,7 @@ But soon things get complicated, we add more and more models to our application 
 		let(:office) { Workspace.new(name: ‘Melbourne Office’, location: melbourne) }
 		let(:user) { User.new(name: ‘John’, workspace: office) }
 		
-		it ‘has a language ’ do
+		it "has a language" do
 			expect(user.default_language).to eq(english)
 		end
 		
@@ -50,7 +50,7 @@ It is evident that we are just doing too much in our test, we should just be cre
 			office(:language).and_return(:english)
 		end
 		
-		it ‘has a language ’ do
+		it "has a language" do
 			expect(user.default_language).to eq(english)
 		end
 		
@@ -68,6 +68,10 @@ Many experience developers will tell us that the solution to this conodrum is to
 But guess what will happen? We will go and fix the integration test and then we will back to green. But wait, we forgot to fix the unit tests but everything passes! Unfortunatelly we cannot rely on due dilligence of people fixing all that should be fixed. 
 
 Now we are even in a worst situation, our tests are all green but our app is broken. __So integration tests are not a reliable solution.__
+
+Your application:
+
+![Broken bridge](http://www.3dm3.com/portfolio/files/1/4/7/7/5/9/broken_bridge__by_kash.jpg)
 
 # Safe mocking / stubbing
 
@@ -87,7 +91,7 @@ From all the libraries I have tried, (Bogus)[https://github.com/psyho/bogus] is 
 			stub(:office).language { english }
 		end
 		
-		it ‘has a language ’ do
+		it "has a language" do
 			expect(user.default_language).to eq(english)
 		end
 		
