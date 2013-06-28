@@ -212,7 +212,7 @@ Every function in JavaScript has a special property called ‘__prototype__’.
 As confusing as it may sound, this ‘__prototype__’ property is not the real prototype (__\_\_proto\_\___) of the function. 
 
 ```js
-	foo.__proto__ === foo.prototype //=> false
+	Foo.__proto__ === Foo.prototype //=> false
 ```
 
 This of course generates a lot of confusion as people use the term '__prototype__' to refer to different things. I think that a good clarification is to always refer to the special '__prototype__' property of functions as '__the function prototype__', never just '__prototype__'.
