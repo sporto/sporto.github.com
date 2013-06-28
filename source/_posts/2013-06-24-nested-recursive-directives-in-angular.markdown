@@ -79,7 +79,7 @@ Then we need a directive for rendering a collection, the html for the __collecti
 	</div>
 ```
 
-This directive take a `collection` parameter which are the locations we want to render.
+This directive takes a `collection` parameter which are the locations we want to render.
 
 
 Our directive definition looks like this:
