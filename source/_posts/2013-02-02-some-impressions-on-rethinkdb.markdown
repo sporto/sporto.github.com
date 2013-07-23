@@ -21,3 +21,15 @@ Some rough edges I came accross are:
 - At the moment you cannot connect instances of RethinkDB on different architectures, e.g. Ubuntu to Mac, 32 bits to 64 bits. Again this is in their list of things to address in the future.
 
 At the end of our exploration we ended up with a flat data structure so we reverted back to our established SQL solution. But I look forward to use RethinkDB again soon. 
+
+__Update July 2013__
+
+Since I wrote this post some issues on RethinkDB has already been fixed. I was using rethink 1.5 at the time. Fixed issues are:
+
+- "Queries that require boolean logic (e.g. ‘where user.id IN (1,2,3) and user.active = 1’ in SQL)" was addressed by the inclusion of array operations in RethinkDB 1.6. The equivalent ReQL command would be either of the following:
+
+		r.table('users').filter(lambda user: r.expr([1,2,3]).contains(user['id']) & (user['active'] == 1))
+		r.table('users').filter(lambda user: r.all(r.expr([1,2,3]).contains(user['id']), user['active'] == 1))
+
+- JavaScript expressions (via the r.js command) have an optional timeout flag so the user can prevent single expressions from taking down the server, since RethinkDB 1.5 (see issue #69: https://github.com/rethinkdb/rethinkdb/issues/69)
+
