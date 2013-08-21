@@ -1,34 +1,38 @@
 ---
 layout: post
-title: "Concurrency: JavaScript vs Go"
+title: "Comparing Concurrency in Node and Go"
 date: 2013-08-18 07:40
 comments: true
 categories: 
 ---
 
-The Go programming language has capture my interest latelly, there are a few things I like about it very much:
+The [Go programming language](http://golang.org/) has capture my attention lately. There are several things I really like about:
 
-- Simplicity: It is a language with a small set of constructs
-- Static typing: I want to know that my code is correct without having to write ridicuslous tests like checking what happens when you pass the wrong type to a function
-- No classes: Instead of classes Go simply uses interfaces to determine what objects has what methods
-- Concurrency primitives: Go has baked in all the necessary language constructs for dealing with concurrency in a clean and coherent way
+- Simplicity: Go is a small language but still very flexible, I appreciate this simplicity as it can be learnt fairly quick.
+- Static typing: I like knowing that my code is correct without having to write a bunch of test you to deal with the lack of static typing.
+- No classes: Instead of classes Go simply uses interfaces to determine what objects has what methods, I personally find this a flexible and powerful approach.
+- Concurrency primitives: Go has baked in all the necessary language constructs for dealing with concurrency in a clean and coherent way.
 
-As part of learning Go I wanted to see how it concurrency model compares to what we have in Node. So I created a simple prototype that captures a common pattern:
+As part of learning Go I wanted to compare how concurrency compares to Node. For this I created a simple prototype that captures a common pattern:
 
-- Fetch a value from an API (value x)
-- Grab another value from the API (value y) - in parallel with step 1
-- Send those two values to the API
+<img src="https://docs.google.com/drawings/d/1I-CqdRyXtQ0ZVFPh1kn8-jVC3jWMRgVYmv6EIH2NDxk/pub?w=486&amp;h=216">
 
-I made a simple Node server for this. (The code is here)[https://gist.github.com/sporto/6258909#file-server-js]. This server has the following API:
+- Fetch two values from different urls in parallel.
+- When those two values have arrived, send them together to another url.
 
-- server/x => returns "Hello"
-- server/y => returns "World"
-- server/concat?x=value&y=value => takes two values and returns the values concatenated
+The Server
+-----------
 
-The Node Version
+I made a simple Node server for this. [The code is here](https://gist.github.com/sporto/6258909#file-server-js). This server has the following API:
+
+- http://localhost:8080/x => returns "Hello"
+- http://localhost:8080/y => returns "World"
+- http://localhost:8080/concat?x=value&y=value => takes two values and returns them concatenated
+
+The Node Client
 ----------------
 
-For the node code I am using promises, (here is the client code in JavaScript)[https://gist.github.com/sporto/6258909#file-client-js].
+For the Node code I am using promises, [here is the complete client code in JavaScript](https://gist.github.com/sporto/6258909#file-client-js).
 
 Note the following lines:
 
@@ -36,8 +40,9 @@ Note the following lines:
 	var request = require('request');
 	var Q = require('q');
 	 
-	var defX = Q.defer();
-	var defY = Q.defer();
+	var defX = Q.defer(); // will be resolved when x arrives
+	var defY = Q.defer(); // will be resolved when y arrives
+	
 	var oneAndTwo = Q.all([defX.promise, defY.promise]).then(processConcat);
 	 
 	var baseUrl = "http://localhost:8080";
@@ -46,14 +51,16 @@ Note the following lines:
 	request(baseUrl + '/y', makeValueHandler(defY));
 ```
 
-I create two deferreds: defX and defY. Then I create a promise that is the combination of defX and defY. Immediatelly after that I make the first two calls to the server in parallel. When those to calls are done the deferreds will be resolved and the function `processConcat` will be called with the results (in the correct order). 
+I create two deferreds: defX and defY. Then I create a promise that is the combination of defX and defY. 
 
-The JavaScript code is not complex but is not straighforward either, you still need to jump around when reading the source code to understand exactly what is happening.
+Immediately after that I make the first two calls to the server in parallel. When those to calls are done the deferreds will be resolved and the function `processConcat` will be called with the results (in the correct order). 
 
-The Go Version
+The JavaScript code is not complex but is not completely straightforward either, you still need to scan up and down when reading the source code to understand exactly what is happening.
+
+The Go Client
 --------------
 
-The complete client in (Go is here)[https://gist.github.com/sporto/6258909#file-client-go].
+The complete client in [Go is here]([https://gist.github.com/sporto/6258909#file-client-go).
 
 The key lines of code are below:
 
@@ -70,11 +77,17 @@ The key lines of code are below:
 	processConcat(x, y)
 ```
 
-Here we create two channels, one for value x and the other for value y. Immediatelly after that we fetch the values from the server but using the special `go` keyword. This means that those call will be made in their own processes and thus in parallel.
+Here we create two channels (a way of communicating when using concurrent processes in Go), one for value x and the other for value y. 
+
+Immediately after that we fetch the values from the server but using the special `go` keyword. This means that those call will be made in their own processes so they will not block. These two requests happen in parallel.
 
 The next two lines wait for the results of the API calls, the results are communicated using the channels. 
 
-The Go code looks like typical sync code but it is all happing in parallel thanks to the goroutines. So this code is as fast (event faster) than the Node version but a lot simpler to understand.
+The Go code looks a lot like typical sync code but still it is all happing in parallel thanks to the goroutines. So this code is as fast (event faster) than the Node version but simpler to understand IMO.
 
+Conclusion
+----------
+
+I am excited about Go, it has a lot to offer in multiple spaces. I will like to explore how something like Node Streams will look in Go.
 
 
