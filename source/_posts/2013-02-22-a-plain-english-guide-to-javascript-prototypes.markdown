@@ -112,7 +112,7 @@ Note that the property 'kind' now exists in both person and zack.
 Object.create
 ---------------
 
-As explained before __\_\_proto\_\___ is not a well supported way of assigning prototypes to objects. So the next simplest way is using __Object.create()__. This is available in ES5, but old browsers / engines can be shimmed using this [es5-hhim](https://github.com/kriskowal/es5-shim).
+As explained before __\_\_proto\_\___ is not a well supported way of assigning prototypes to objects. So the next simplest way is using __Object.create()__. This is available in ES5, but old browsers / engines can be shimmed using this [es5-shim](https://github.com/kriskowal/es5-shim).
 
 ```js
 	var person = {
