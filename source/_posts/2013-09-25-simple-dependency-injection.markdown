@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Simple Dependency Injection"
+title: "Simple Dependency Injection in Ruby"
 date: 2013-09-25 21:12
 comments: true
 categories: 
@@ -67,9 +67,11 @@ What do we gain:
 
 In your test you can simply do this:
 
+```ruby
   car = Car.new
   car.engine = FakeEngine
 
   car.start
+```
 
 So that's it, __DI doesn't have to be complicated at all in ruby__.
