@@ -60,7 +60,7 @@ The JavaScript code is not complex but is not completely straightforward either,
 The Go Client
 --------------
 
-The complete client in [Go is here]([https://gist.github.com/sporto/6258909#file-client-go).
+The complete client in [Go is here](https://gist.github.com/sporto/6258909#file-client-go).
 
 The key lines of code are below:
 
