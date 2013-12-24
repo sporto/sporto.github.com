@@ -26,7 +26,7 @@ Prototype inheritance chains can go as long as you want. But in general it is no
 The \_\_proto\_\_ object
 ------------------
 
-To understand prototype chains in JavaScript there is nothing as simple as the __\_\_proto\_\___ property. Unfortunatelly __\_\_proto\_\___ is not part of the standard interface of JavaScript, not at least until ES6. So you shouldn't use it in production code. But anyway it makes explaining prototypes easy.
+To understand prototype chains in JavaScript there is nothing as simple as the __\_\_proto\_\___ property. Unfortunately __\_\_proto\_\___ is not part of the standard interface of JavaScript, not at least until ES6. So you shouldn't use it in production code. But anyway it makes explaining prototypes easy.
 
 ```js
 	// let's create an alien object
@@ -149,7 +149,7 @@ There is no such thing as Object.setPrototype.
 
 __Constructor functions__ are the most used way in JavaScript to construct prototype chains. The popularity of __constructor functions__ comes from the fact that this was the only original way for constructing types. It is also an important consideration the fact that many engines are highly optimized for constructor functions.
 
-Unfortunatelly they can get confusing, they are in my opinion one of the main reasons why new comers find JavaScript puzzling, but they are a big part of the language and we need to understand them well.
+Unfortunately they can get confusing, they are in my opinion one of the main reasons why new comers find JavaScript puzzling, but they are a big part of the language and we need to understand them well.
 
 ### Functions as constructors
 
