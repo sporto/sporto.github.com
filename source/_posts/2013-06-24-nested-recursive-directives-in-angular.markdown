@@ -159,3 +159,5 @@ So instead you need to add the __collection__ directive manually only if there a
 Note the line `$compile(element.contents())(scope);`. As the html is appended manually we need to tell angular to re-render the directive.
 
 That is it, [here is the complete example](http://jsbin.com/acibiv/3/edit). Thanks.
+
+__Update 2013-12-31__: Please read the comments, there are some good suggestions on how to do this better.
