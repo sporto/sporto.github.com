@@ -10,7 +10,8 @@ Here is a simple tutorial on how to build a filtered list in CanJS. For example,
 
 Our mustache template would like something like this:
 
-```js
+{% raw %}
+```
   <script type="text/mustache" id="view">
    <h2>Birthday this month</h2>
 
@@ -21,6 +22,7 @@ Our mustache template would like something like this:
    </ul>
   </script>
 ```
+{% endraw %}
 
 `people` is a CanJS model list , `birthdayThisMonth` is a Mustache helper. This Mustache helper looks like this:
 
@@ -48,12 +50,11 @@ birthdayThisMonth: function (people, options) {
         }
   }
 }
- ```
+```
  
 Then we just need to pass the helper to the view (or declare it as global helper):
 
 ```js
-
 var helpers = {
   birthdayThisMonth: function (...) { ... }
 }

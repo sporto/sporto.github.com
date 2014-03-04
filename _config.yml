@@ -2,7 +2,7 @@
 #      Main Configs       #
 # ----------------------- #
 
-url: http://sporto.github.com
+url: http://sporto.github.io
 title: Sebastian's Blog
 subtitle: Mostly about Javascript, Ruby on Rails and other web stuff
 author: Sebastian Porto
@@ -63,7 +63,7 @@ default_asides: [asides/recent_posts.html, asides/github.html, asides/delicious.
 # ----------------------- #
 
 # Github repositories
-github_user:
+github_user: sporto
 github_repo_count: 0
 github_show_profile_link: true
 github_skip_forks: true
