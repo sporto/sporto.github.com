@@ -3,7 +3,7 @@ layout: post
 title: "Comparing Concurrency in Node and Go"
 date: 2013-08-18 07:40
 comments: true
-categories: 
+categories: golang node javascript
 ---
 
 The [Go programming language](http://golang.org/) has capture my attention lately. There are several things I really like about:

@@ -4,7 +4,7 @@ title: "Embracing Async with Deferreds and Promises"
 date: 2012-09-22
 comments: true
 external-url:
-categories:
+categories: javascript
 ---
 
 Deferred and promises are a very powerful tool for handling asynchronous events. In this blog post I will explain what they are and when to use them.

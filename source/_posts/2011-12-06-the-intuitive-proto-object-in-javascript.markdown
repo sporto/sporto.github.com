@@ -3,7 +3,7 @@ layout: post
 title: "The Intuitive Proto Object in JavaScript"
 date: 2011-11-06 09:25
 comments: true
-categories: 
+categories: javascript
 ---
 
 Javascript is meant to be a prototypical language. But unfortunately it is a half done prototypical language. Internally it works like this but externally it tries to looks like something else. To understand this let's look at the __proto__ property.

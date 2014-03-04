@@ -4,7 +4,7 @@ title: "My experience with Backbone, Ember and CanJS"
 date: 2012-08-18
 comments: true
 external-url:
-categories:
+categories: backbone ember canjs javascript
 ---
 
 Before coming to the JavaScript world I was doing Flex development, so I was quite familiar with MVC paradigm in the front-end side of applications. 

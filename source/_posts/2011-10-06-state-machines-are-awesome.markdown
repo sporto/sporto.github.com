@@ -3,7 +3,7 @@ layout: post
 title: "State machines are awesome"
 date: 2011-10-06 09:29
 comments: true
-categories: 
+categories: general
 ---
 
 

@@ -3,7 +3,7 @@ layout: post
 title: "A plain english guide to JavaScript prototypes"
 date: 2013-02-22 10:21
 comments: true
-categories: 
+categories: javascript
 ---
 
 When I first started learning about JavaScript object model my reaction was of horror and disbelief. I was totally puzzled by its prototype nature as it was my first encounter with a prototype based language. I didn't help that JavaScript has a unique take on prototypes as it adds the concept of __function constructors__. I bet that many of you have had similar experience.

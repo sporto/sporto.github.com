@@ -3,7 +3,7 @@ layout: post
 title: "Safe testing in Rails"
 date: 2013-06-27 12:41
 comments: true
-categories: 
+categories: rails ruby
 ---
 
 There is a typical progression when developing an application. First we start with something simple, with a few models, things are simple to test. At this stage we can afford to build all the objects we need in our test without too much concern for speed and complexity.

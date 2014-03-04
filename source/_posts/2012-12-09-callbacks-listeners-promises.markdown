@@ -3,7 +3,7 @@ layout: post
 title: "Asynchronous JS: Callbacks, Listeners, Control Flow Libs and Promises"
 date: 2012-12-09 16:59
 comments: true
-categories: 
+categories: javascript
 ---
 
 When it comes to dealing with **asynchronous** development in JavaScript there are many tool you can use. This post explains four of these tools and what their advantages are. These are Callbacks, Listeners, Control Flow Libraries and Promises.

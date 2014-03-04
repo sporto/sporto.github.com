@@ -3,7 +3,7 @@ layout: post
 title: "A comparison of Angular, Backbone, CanJS and Ember"
 date: 2013-04-12 19:00
 comments: true
-categories: javascript, mvc
+categories: javascript mvc angular canjs ember backbone
 ---
 
 Selecting a JavaScript MVC framework can be hard work. There are so many factors to consider and so many options out there that selecting a framework can be overwhelming. To have an idea of all the possible alternatives have a look at [TodoMVC](http://todomvc.com/).

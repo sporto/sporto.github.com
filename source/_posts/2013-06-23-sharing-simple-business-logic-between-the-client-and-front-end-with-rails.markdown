@@ -3,7 +3,7 @@ layout: post
 title: "Sharing simple business logic between the client and front end with Rails"
 date: 2013-06-23 08:26
 comments: true
-categories: 
+categories: javascript ruby rails
 ---
 
 Recently I was trying to find out a way of sharing some business logic between the client and the server. We have a reactive UI where results get calculated as you change values. These are complex formulas we rather not write in both Ruby and JavaScript so we don't have to maintain them in two places.

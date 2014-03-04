@@ -3,7 +3,7 @@ layout: post
 title: "Finding the bounding box of an SVG path in Ruby"
 date: 2011-06-06 09:32
 comments: true
-categories: 
+categories: ruby
 ---
 
 Here is a way for finding out the bounding box (left, right, width and height) of an SVG path in Ruby. You will need [ImageMagick](http://www.imagemagick.org/) and [RMagick](http://rmagick.rubyforge.org/) for this. In Javascript this is quite simple using the getBBox method, but I couldn't find a similar thing in Ruby.

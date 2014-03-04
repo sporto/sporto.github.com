@@ -3,7 +3,7 @@ layout: post
 title: "Simple Dependency Injection in Ruby"
 date: 2013-09-25 21:12
 comments: true
-categories: 
+categories: ruby
 ---
 
 Some time ago I read the book [Practical Object-Oriented Design in Ruby](http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330) by Sandi Metz, while an excellent book there is one thing that bothered me while reading it. 

@@ -3,7 +3,7 @@ layout: post
 title: "A Pattern for Service Objects in Rails"
 date: 2012-11-15 21:59
 comments: true
-categories: 
+categories: ruby rails
 ---
 
 Service Objects in Rails allows to neatly separate the business logic of your application in reausable components. This post describes our implementation of this pattern.

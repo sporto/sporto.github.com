@@ -3,7 +3,7 @@ layout: post
 title: "Building nested recursive directives in Angular"
 date: 2013-06-24 11:18
 comments: true
-categories: 
+categories: javascript angular
 ---
 
 I learnt a new trick over the weekend using Angular, how to build a recursive tree of objects using directives. In this post I want to share how to do it.

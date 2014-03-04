@@ -3,7 +3,7 @@ layout: post
 title: "Some impressions on RethinkDB"
 date: 2013-02-02 08:52
 comments: true
-categories: 
+categories: rethinkdb databases 
 ---
 
 Tried RethinkDB for a week. Overall it gave me a very good impression. 

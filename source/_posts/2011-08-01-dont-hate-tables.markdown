@@ -3,7 +3,7 @@ layout: post
 title: "Don't hate tables"
 date: 2011-08-01 09:30
 comments: true
-categories: 
+categories: html
 ---
 
 Recently I was maintaining a project were the original developer did everything using lists to present data in rows and columns like a table. 
