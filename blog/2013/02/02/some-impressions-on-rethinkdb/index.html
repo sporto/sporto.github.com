@@ -1,0 +1,345 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Some Impressions on RethinkDB - Sebastian's Blog</title>
+  <meta name="author" content="Sebastian Porto">
+
+  
+  <meta name="description" content="Tried RethinkDB for a week. Overall it gave me a very good impression. Very easy to setup and run
+Setting up sharding and replication is quite simple &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://sporto.github.com/blog/2013/02/02/some-impressions-on-rethinkdb">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Sebastian's Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=Lato:100,300,400" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-34169292-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+	
+    <h2>Mostly about Javascript, Ruby on Rails and other web stuff</h2>
+  
+  <h1><a href="/">Sebastian's Blog</a></h1>
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:sporto.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Some Impressions on RethinkDB</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-02-02T08:52:00+11:00" pubdate data-updated="true">Feb 2<span>nd</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Tried RethinkDB for a week. Overall it gave me a very good impression.</p>
+
+<ul>
+<li>Very easy to setup and run</li>
+<li>Setting up sharding and replication is quite simple as well</li>
+<li>The composable query language is a big plus. I really like the way I can build queries in my code by adding refinements if I need them. Reminds me of ActiveRecord in Rails.</li>
+<li>The admin interface is gorgeus and super useful, but I wish I could save my queries.</li>
+<li>The developers are very active in IRC and the forum, they responded all my questions very quickly.</li>
+</ul>
+
+
+<p>Some rough edges I came accross are:</p>
+
+<ul>
+<li>Queries that require boolean logic (e.g. ‘where user.id IN (1,2,3) and user.active = 1’ in SQL) are very cumbersome in RethinkDB right now. The good thing is that this is being addressed on the next release.</li>
+<li>I manage to send several JavaScript expressions to the server that made RethinkDB spawn a bunch of processes that ate the machine CPU very quickly, making the DB almost unusable, I had to kill RethinkDB several times because of this. It would be nice if RethinkDB will  prevent this.</li>
+<li>At the moment you cannot connect instances of RethinkDB on different architectures, e.g. Ubuntu to Mac, 32 bits to 64 bits. Again this is in their list of things to address in the future.</li>
+</ul>
+
+
+<p>At the end of our exploration we ended up with a flat data structure so we reverted back to our established SQL solution. But I look forward to use RethinkDB again soon.</p>
+
+<p><strong>Update July 2013</strong></p>
+
+<p>Since I wrote this post some issues on RethinkDB has already been fixed. I was using rethink 1.5 at the time. Fixed issues are:</p>
+
+<ul>
+<li><p>&ldquo;Queries that require boolean logic (e.g. ‘where user.id IN (1,2,3) and user.active = 1’ in SQL)&rdquo; was addressed by the inclusion of array operations in RethinkDB 1.6. The equivalent ReQL command would be either of the following:</p>
+
+<pre><code>  r.table('users').filter(lambda user: r.expr([1,2,3]).contains(user['id']) &amp; (user['active'] == 1))
+  r.table('users').filter(lambda user: r.all(r.expr([1,2,3]).contains(user['id']), user['active'] == 1))
+</code></pre></li>
+<li><p>JavaScript expressions (via the r.js command) have an optional timeout flag so the user can prevent single expressions from taking down the server, since RethinkDB 1.5 (see issue #69: <a href="https://github.com/rethinkdb/rethinkdb/issues/69">https://github.com/rethinkdb/rethinkdb/issues/69</a>)</p></li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Sebastian Porto</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-02-02T08:52:00+11:00" pubdate data-updated="true">Feb 2<span>nd</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/databases/'>databases</a>, <a class='category' href='/blog/categories/rethinkdb/'>rethinkdb</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://sporto.github.com/blog/2013/02/02/some-impressions-on-rethinkdb/" data-via="sebasporto" data-counturl="http://sporto.github.com/blog/2013/02/02/some-impressions-on-rethinkdb/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/12/09/callbacks-listeners-promises/" title="Previous Post: Asynchronous JS: Callbacks, Listeners, Control Flow Libs and Promises">&laquo; Asynchronous JS: Callbacks, Listeners, Control Flow Libs and Promises</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/02/22/a-plain-english-guide-to-javascript-prototypes/" title="Next Post: A plain english guide to JavaScript prototypes">A plain english guide to JavaScript prototypes &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/03/20/avoiding-memory-leaks-with-canjs/">Avoiding Memory Leaks With CanJS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/04/form-validations-with-canjs/">Form Validations With CanJS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/04/creating-filtered-lists-in-canjs/">Creating Filtered Lists in CanJS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/09/25/simple-dependency-injection/">Simple Dependency Injection in Ruby</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/08/18/concurrency-node-vs-go/">Comparing Concurrency in Node and Go</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/27/safe-testing-in-rails/">Safe Testing in Rails</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/24/nested-recursive-directives-in-angular/">Building Nested Recursive Directives in Angular</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/23/sharing-simple-business-logic-between-the-client-and-front-end-with-rails/">Sharing Simple Business Logic Between the Client and Front End With Rails</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/04/12/comparison-angular-backbone-can-ember/">A Comparison of Angular, Backbone, CanJS and Ember</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/22/a-plain-english-guide-to-javascript-prototypes/">A Plain English Guide to JavaScript Prototypes</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/sporto">@sporto</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'sporto',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>On Delicious</h1>
+  <div id="delicious"></div>
+  <script type="text/javascript" src="http://feeds.delicious.com/v2/json/sebasporto?count=3&amp;sort=date&amp;callback=renderDeliciousLinks"></script>
+  <p><a href="http://delicious.com/sebasporto">My Delicious Bookmarks &raquo;</a></p>
+</section>
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Sebastian Porto -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'sportoblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://sporto.github.com/blog/2013/02/02/some-impressions-on-rethinkdb/';
+        var disqus_url = 'http://sporto.github.com/blog/2013/02/02/some-impressions-on-rethinkdb/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

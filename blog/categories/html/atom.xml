@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: html | Sebastian's Blog]]></title>
+  <link href="http://sporto.github.com/blog/categories/html/atom.xml" rel="self"/>
+  <link href="http://sporto.github.com/"/>
+  <updated>2014-07-08T11:23:21+10:00</updated>
+  <id>http://sporto.github.com/</id>
+  <author>
+    <name><![CDATA[Sebastian Porto]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Don't hate tables]]></title>
+    <link href="http://sporto.github.com/blog/2011/08/01/dont-hate-tables/"/>
+    <updated>2011-08-01T09:30:00+10:00</updated>
+    <id>http://sporto.github.com/blog/2011/08/01/dont-hate-tables</id>
+    <content type="html"><![CDATA[<p>Recently I was maintaining a project were the original developer did everything using lists to present data in rows and columns like a table.</p>
+
+<p>So to present something like this:</p>
+
+<pre><code>&lt;table&gt;
+    &lt;tr&gt;
+        &lt;th &gt;Cosher &lt;/th&gt;
+        &lt;td&gt;To treat with special fondness.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;th style='padding-right:12px;'&gt;Flamboyant &lt;/th&gt;
+        &lt;td&gt;strikingly bold or brilliant; showy: flamboyant colors.&lt;/td&gt;
+    &lt;/tr&gt;
+&lt;/table&gt;
+&lt;br /&gt;
+</code></pre>
+
+<p>they were using a ul like this:</p>
+
+<pre><code>&lt;ul&gt;
+    &lt;li&gt;Cosher &lt;span&gt;To treat with special fondness.&lt;/span&gt;&lt;/li&gt;
+    &lt;li&gt;Flamboyant&lt;span&gt;strikingly bold or brilliant; showy: flamboyant colors.&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+
+<p>And then styling the list using CSS to make it look like a table.</p>
+
+<p>This is a little less markup than a normal table but what for? It seems to me like the &lsquo;no tables&rsquo; mantra taken to the extreme. This is perfectly appropriate content for a table. And using a table makes better sense because:</p>
+
+<ul>
+<li>Developer looking at the code will immediately know what the intention is</li>
+<li>The code is easier to maintain because you don&rsquo;t have to fight with the css to make something look like a table when it is not</li>
+<li>The display is consistent in any browser</li>
+<li>People disabling CSS will still see a table</li>
+</ul>
+
+
+<p>So please use tables when appropriate, don&rsquo;t hate them.</p>
+]]></content>
+  </entry>
+  
+</feed>

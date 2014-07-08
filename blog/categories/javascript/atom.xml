@@ -1,0 +1,620 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: javascript | Sebastian's Blog]]></title>
+  <link href="http://sporto.github.com/blog/categories/javascript/atom.xml" rel="self"/>
+  <link href="http://sporto.github.com/"/>
+  <updated>2014-07-08T11:23:21+10:00</updated>
+  <id>http://sporto.github.com/</id>
+  <author>
+    <name><![CDATA[Sebastian Porto]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Form validations with CanJS]]></title>
+    <link href="http://sporto.github.com/blog/2014/03/04/form-validations-with-canjs/"/>
+    <updated>2014-03-04T23:29:30+11:00</updated>
+    <id>http://sporto.github.com/blog/2014/03/04/form-validations-with-canjs</id>
+    <content type="html"><![CDATA[<p>During my time using CanJS I haven&rsquo;t found a canonical way of doing form validations with it, so here I want to share the way I am doing them at the moment.</p>
+
+<p>First let&rsquo;s start with a model:</p>
+
+<p>```js
+var Person = can.Map({</p>
+
+<pre><code>init: function () {
+    this.validatePresenceOf('firstName');
+    this.validatePresenceOf('lastName');
+}
+</code></pre>
+
+<p>}, {});
+```</p>
+
+<p>This model is using the <a href="http://canjs.com/docs/can.Map.validations.html">validation plug-in</a> to mix-in the validation functions.</p>
+
+<p>Then we need a control:</p>
+
+<p>```js
+var Control = can.Control({</p>
+
+<pre><code>init: function (ele, options) {
+    this.person = new Person();
+    this.errors = new can.Map();
+
+    var args = {person: this.person, errors: this.errors};
+    var view = can.view('view', args);    
+    this.element.html(view);
+},
+
+'form submit': function () {
+    // get errors from person if any
+    var errors = this.person.errors();
+
+    // pass the errors to our errors observable
+    this.errors.attr(errors, true);  
+
+    if (errors) {
+        console.log(errors);
+    } else {
+        // proceed to saving here
+    }
+    return false;
+}
+</code></pre>
+
+<p>});
+```</p>
+
+<p>Note how I create a errors can.Map and pass it to the view. This map will allow me to show any validation errors to the user. In form submit we retrieve the errors from the form (using the validation plug-in) and pass those errors to the errors can.Map.</p>
+
+<p>Our view looks like this:</p>
+
+<p>
+```</p>
+
+<script type="text/mustache" id="view">
+
+    <form>
+        <label for="first_name">First Name:</label>
+        <input type="text" can-value='person.firstName' name="first_name" />
+        {{showErrors errors 'firstName'}}
+        <br>
+
+        <label for="last_name">Last Name:</label>
+        <input type="text" can-value='person.lastName' name="last_name" />
+        {{showErrors errors 'lastName'}}
+        <br>    
+
+        <input type="submit" value="Save" />
+    </form>
+</script>
+
+
+<p>```
+</p>
+
+<p>Note the <code>showErrors</code> helper. Which looks like this:</p>
+
+<p>```js
+Mustache.registerHelper(&lsquo;showErrors&rsquo;, function (errors, prop) {</p>
+
+<pre><code>var attr = errors.attr(prop);
+if (attr) {
+    return prop + ' ' + attr[0];
+} else {
+    return '';  
+}
+</code></pre>
+
+<p>});
+```</p>
+
+<p>This helper will display the error an error to the user if there is any.</p>
+
+<p>Here is a <a href="http://jsbin.com/jofeq/5/edit?html,js,output">fiddle</a> with a complete example.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Creating filtered lists in CanJS]]></title>
+    <link href="http://sporto.github.com/blog/2014/03/04/creating-filtered-lists-in-canjs/"/>
+    <updated>2014-03-04T21:56:00+11:00</updated>
+    <id>http://sporto.github.com/blog/2014/03/04/creating-filtered-lists-in-canjs</id>
+    <content type="html"><![CDATA[<p>Here is a simple tutorial on how to build a filtered list in CanJS. For example, lets say that we have a list of people and we want to display people that have birthdays this month.</p>
+
+<p>Our mustache template would like something like this:</p>
+
+<p>
+```</p>
+
+<script type="text/mustache" id="view">
+    <h2>Birthday this month</h2>
+
+    <ul> 
+        {{#birthdayThisMonth people}}
+            <li>{{name}} - {{birthdate}}</li>
+        {{/birthdayThisMonth}}
+    </ul>
+</script>
+
+
+<p>```
+</p>
+
+<p><code>people</code> is a CanJS model list , <code>birthdayThisMonth</code> is a Mustache helper. This Mustache helper looks like this:</p>
+
+<p>```js
+birthdayThisMonth: function (people, options) {</p>
+
+<pre><code>var person, bd, bdMonth, thisMonth;
+
+if (people &amp;&amp; people.length) {
+    var res = [];
+    for (var a = 0; a &lt; people.length; a++) {
+        person = people[a];
+        bd = person.attr('birthdate');
+        bdMonth = new Date(bd).getMonth();
+        thisMonth = (new Date).getMonth();
+
+        if (bdMonth === thisMonth) {
+            // we want to display this birthday
+            // so add this to the array
+            // options.fn is a function that will return the final string using the mustache template
+            res.push(options.fn(person));
+        }
+    }
+    // we have an array, but we need to return a string
+    return res.join(' ');
+}
+</code></pre>
+
+<p>}
+```</p>
+
+<p>Then we just need to pass the helper to the view (or declare it as global helper):</p>
+
+<p>```js
+var helpers = {</p>
+
+<pre><code>birthdayThisMonth: function (...) { ... }
+</code></pre>
+
+<p>}
+var view = can.view(&lsquo;view&rsquo;, {people: people}, helpers);
+```</p>
+
+<p>JsBin <a href="http://jsbin.com/moriq/1/edit?html,js,output">here</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Comparing Concurrency in Node and Go]]></title>
+    <link href="http://sporto.github.com/blog/2013/08/18/concurrency-node-vs-go/"/>
+    <updated>2013-08-18T07:40:00+10:00</updated>
+    <id>http://sporto.github.com/blog/2013/08/18/concurrency-node-vs-go</id>
+    <content type="html"><![CDATA[<p>The <a href="http://golang.org/">Go programming language</a> has capture my attention lately. There are several things I really like about:</p>
+
+<ul>
+<li>Simplicity: Go is a small language but still very flexible, I appreciate this simplicity as it can be learnt fairly quick.</li>
+<li>Static typing: I like knowing that my code is correct without having to write a bunch of test you to deal with the lack of static typing.</li>
+<li>No classes: Instead of classes Go simply uses interfaces to determine what objects has what methods, I personally find this a flexible and powerful approach.</li>
+<li>Concurrency primitives: Go has baked in all the necessary language constructs for dealing with concurrency in a clean and coherent way.</li>
+</ul>
+
+
+<p>As part of learning Go I wanted to compare how concurrency compares to Node. For this I created a simple prototype that captures a common pattern:</p>
+
+<p><img src="https://docs.google.com/drawings/d/1I-CqdRyXtQ0ZVFPh1kn8-jVC3jWMRgVYmv6EIH2NDxk/pub?w=486&amp;h=216"></p>
+
+<ul>
+<li>Fetch two values from different urls in parallel.</li>
+<li>When those two values have arrived, send them together to another url.</li>
+</ul>
+
+
+<h2>The Server</h2>
+
+<p>I made a simple Node server for this. <a href="https://gist.github.com/sporto/6258909#file-server-js">The code is here</a>. This server has the following API:</p>
+
+<ul>
+<li><a href="http://localhost:8080/x">http://localhost:8080/x</a> => returns &ldquo;Hello&rdquo;</li>
+<li><a href="http://localhost:8080/y">http://localhost:8080/y</a> => returns &ldquo;World&rdquo;</li>
+<li><a href="http://localhost:8080/concat?x=value&amp;y=value">http://localhost:8080/concat?x=value&amp;y=value</a> => takes two values and returns them concatenated</li>
+</ul>
+
+
+<h2>The Node Client</h2>
+
+<p>For the Node code I am using promises, <a href="https://gist.github.com/sporto/6258909#file-client-js">here is the complete client code in JavaScript</a>.</p>
+
+<p>Note the following lines:</p>
+
+<p>```js</p>
+
+<pre><code>var request = require('request');
+var Q = require('q');
+
+var defX = Q.defer(); // will be resolved when x arrives
+var defY = Q.defer(); // will be resolved when y arrives
+
+var oneAndTwo = Q.all([defX.promise, defY.promise]).then(processConcat);
+
+var baseUrl = "http://localhost:8080";
+
+request(baseUrl + '/x', makeValueHandler(defX));
+request(baseUrl + '/y', makeValueHandler(defY));
+</code></pre>
+
+<p>```</p>
+
+<p>I create two deferreds: defX and defY. Then I create a promise that is the combination of defX and defY.</p>
+
+<p>Immediately after that I make the first two calls to the server in parallel. When those to calls are done the deferreds will be resolved and the function <code>processConcat</code> will be called with the results (in the correct order).</p>
+
+<p>The JavaScript code is not complex but is not completely straightforward either, you still need to scan up and down when reading the source code to understand exactly what is happening.</p>
+
+<h2>The Go Client</h2>
+
+<p>The complete client in <a href="https://gist.github.com/sporto/6258909#file-client-go">Go is here</a>.</p>
+
+<p>The key lines of code are below:</p>
+
+<p>```go</p>
+
+<pre><code>var cx chan string = make(chan string)
+var cy chan string = make(chan string)
+
+go getValue("/x", cx)
+go getValue("/y", cy)
+
+x := &lt;-cx
+y := &lt;-cy
+
+processConcat(x, y)
+</code></pre>
+
+<p>```</p>
+
+<p>Here we create two channels (a way of communicating when using concurrent processes in Go), one for value x and the other for value y.</p>
+
+<p>Immediately after that we fetch the values from the server but using the special <code>go</code> keyword. This means that those call will be made in their own processes so they will not block. These two requests happen in parallel.</p>
+
+<p>The next two lines wait for the results of the API calls, the results are communicated using the channels.</p>
+
+<p>The Go code looks a lot like typical sync code but still it is all happing in parallel thanks to the goroutines. So this code is as fast (event faster) than the Node version but simpler to understand IMO.</p>
+
+<h2>Conclusion</h2>
+
+<p>I am excited about Go, it has a lot to offer in multiple spaces. I will like to explore how something like Node Streams will look in Go.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Building nested recursive directives in Angular]]></title>
+    <link href="http://sporto.github.com/blog/2013/06/24/nested-recursive-directives-in-angular/"/>
+    <updated>2013-06-24T11:18:00+10:00</updated>
+    <id>http://sporto.github.com/blog/2013/06/24/nested-recursive-directives-in-angular</id>
+    <content type="html"><![CDATA[<p>I learnt a new trick over the weekend using Angular, how to build a recursive tree of objects using directives. In this post I want to share how to do it.</p>
+
+<p>Let&rsquo;s say that you have some data that looks like this, it can be as deep as you want:</p>
+
+<p>```js</p>
+
+<pre><code>[
+    {   name: 'Europe',
+        children: [
+            {   name: 'Italy',
+                children: [
+                    {   name: 'Rome'    },
+                    {   name: 'Milan'   }
+                ]}, 
+            {   name: 'Spain'}
+        ]
+    }, 
+    {   name: 'South America',
+        children: [
+            {   name: 'Brasil'  },
+            {   name: 'Peru'    }
+        ]
+    }
+];
+</code></pre>
+
+<p>```</p>
+
+<p>And using this data you want to build a tree, e.g.:</p>
+
+<pre><code>Europe
+    Italy
+        Rome
+        Milan
+    Spain
+South America
+    Brasil
+    Peru
+</code></pre>
+
+<p>So to build something like this you will need some kind of recursive code to loop over all the elements and their children.</p>
+
+<p>Let&rsquo;s start with the html:</p>
+
+<p>```html</p>
+
+<pre><code>&lt;html ng-app='APP'&gt;
+    ...
+    &lt;div ng-controller="IndexCtrl"&gt;
+
+    &lt;/div&gt;
+    ...
+&lt;/html&gt;
+</code></pre>
+
+<p>```</p>
+
+<p>First we have a controller &lsquo;IndexCtrl&rsquo; which looks like this:</p>
+
+<p>```js</p>
+
+<pre><code>var app = angular.module('APP', []);
+
+
+app.controller('IndexCtrl', function ($scope) {
+    $scope.locations = [ ..this is the array of locations shown above ..]; 
+});
+</code></pre>
+
+<p>```</p>
+
+<p>Here we have <code>$scope.locations</code> pointing to the array of locations we want to render in our tree.</p>
+
+<p>Then we need a directive for rendering a collection, the html for the <strong>collection</strong> looks like this:</p>
+
+<p>```html</p>
+
+<pre><code>&lt;div ng-controller="IndexCtrl"&gt;
+    &lt;collection collection='locations'&gt;&lt;/collection&gt;
+&lt;/div&gt;
+</code></pre>
+
+<p>```</p>
+
+<p>This directive takes a <code>collection</code> parameter which are the locations we want to render.</p>
+
+<p>Our directive definition looks like this:</p>
+
+<p>```js</p>
+
+<pre><code>app.directive('collection', function () {
+    return {
+        restrict: "E",
+        replace: true,
+        scope: {
+            collection: '='
+        },
+        template: "&lt;ul&gt;&lt;member ng-repeat='member in collection' member='member'&gt;&lt;/member&gt;&lt;/ul&gt;"
+    }
+})
+</code></pre>
+
+<p>```</p>
+
+<ul>
+<li><strong>restrict: &lsquo;E&rsquo;</strong> tells angular that we want to apply this directive to any html tags matching <code>collection</code>.</li>
+<li><strong>replace: true</strong> tells angular that we want to replace the tag with the content of specified template in the directive.</li>
+<li><strong>scope:</strong> creates a new scope for the directive.</li>
+<li><strong>collection: &lsquo;=&rsquo;</strong> tells angular to use the <code>collection</code> attribute in the directive and create a variable in the directive scope with the same name, <code>=</code> means that it should be passed as an object.</li>
+<li><strong>template: &ldquo;…&rdquo;</strong> is the new html that will be inserted instead of the original tag.</li>
+</ul>
+
+
+<p>Notice the following code in the template:</p>
+
+<p>```html</p>
+
+<pre><code>&lt;member ng-repeat='member in collection' member='member'&gt;&lt;/member&gt;
+</code></pre>
+
+<p>```</p>
+
+<p>This is another directive, used to render each member of the collection (we use the build-in ng-repeat for looping), in this directive we pass the current member as the <code>member</code> attribute.</p>
+
+<p>The directive for <strong>member</strong> looks like this:</p>
+
+<p>```js</p>
+
+<pre><code>app.directive('member', function ($compile) {
+    return {
+        restrict: "E",
+        replace: true,
+        scope: {
+            member: '='
+        },
+        template: "&lt;li&gt;&lt;/li&gt;",
+        link: function (scope, element, attrs) {
+            if (angular.isArray(scope.member.children)) {
+                element.append("&lt;collection collection='member.children'&gt;&lt;/collection&gt;"); 
+                $compile(element.contents())(scope)
+            }
+        }
+    }
+})
+</code></pre>
+
+<p>```</p>
+
+<p>This looks a lot like the <strong>collection</strong> directive, except for the link function. I will explain what is happening here, but before that, let me tell you about my first approach for trying to do this.</p>
+
+<p>The first thing I tried is to simply add the <strong>collection</strong> directive inside the template:</p>
+
+<p>```js</p>
+
+<pre><code>template: "&lt;li&gt; &lt;collection collection='member.children'&gt;&lt;/collection&gt;&lt;/li&gt;"
+</code></pre>
+
+<p>```</p>
+
+<p>But this doesn&rsquo;t work, it throws angular into an endless loop, because it tries to render the collection directive regardless if the member has children or not.</p>
+
+<p>So instead you need to add the <strong>collection</strong> directive manually only if there are children, thus the link function:</p>
+
+<p>```js</p>
+
+<pre><code>link: function (scope, element, attrs) {
+    //check if this member has children
+    if (angular.isArray(scope.member.children)) {
+        // append the collection directive to this element
+        element.append("&lt;collection collection='member.children'&gt;&lt;/collection&gt;"); 
+        // we need to tell angular to render the directive
+        $compile(element.contents())(scope);
+    }
+}
+</code></pre>
+
+<p>```</p>
+
+<p>Note the line <code>$compile(element.contents())(scope);</code>. As the html is appended manually we need to tell angular to re-render the directive.</p>
+
+<p>That is it, <a href="http://jsbin.com/acibiv/3/edit">here is the complete example</a>. Thanks.</p>
+
+<p><strong>Update 2013-12-31</strong>: Please read the comments, there are some good suggestions on how to do this better.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Sharing simple business logic between the client and front end with Rails]]></title>
+    <link href="http://sporto.github.com/blog/2013/06/23/sharing-simple-business-logic-between-the-client-and-front-end-with-rails/"/>
+    <updated>2013-06-23T08:26:00+10:00</updated>
+    <id>http://sporto.github.com/blog/2013/06/23/sharing-simple-business-logic-between-the-client-and-front-end-with-rails</id>
+    <content type="html"><![CDATA[<p>Recently I was trying to find out a way of sharing some business logic between the client and the server. We have a reactive UI where results get calculated as you change values. These are complex formulas we rather not write in both Ruby and JavaScript so we don&rsquo;t have to maintain them in two places.</p>
+
+<p>The easiest solution would have been to make ajax calls to the server with the parameters get the results. But we wanted a UI that reacts immediately so needed to have the code loaded in the browser.</p>
+
+<p>So this a solution I come up with, in summary:</p>
+
+<ul>
+<li>Formulas are stored as plain JavaScript</li>
+<li>Ruby Models load and use those formulas using V8</li>
+<li>The formulas are served to the front end as partials</li>
+</ul>
+
+
+<p>Here is a rundown of what I did step by step. I will use a simple interest formula in this example.</p>
+
+<h2>Storing the formulas</h2>
+
+<p>I needed the formulas to be accessible as partials so I added them in the view folder:</p>
+
+<p>In app/views/formulas/_interest.js</p>
+
+<p>```js</p>
+
+<pre><code>function formula(principal, rate, years) {
+    return principal * rate * years;
+}
+</code></pre>
+
+<p>```</p>
+
+<h2>Using the formulas in my Ruby models</h2>
+
+<p>In order to run the JavaScript on the server you will need <strong>therubyracer</strong> gem, in Gemfile:</p>
+
+<pre><code>gem 'therubyracer'
+</code></pre>
+
+<p>In app/models/contract.rb:</p>
+
+<p>```ruby</p>
+
+<pre><code>class Contract
+
+    def initialize(principal, rate, years)
+        @principal, @rate, @years = principal, rate, years
+    end
+
+    def interest
+        cxt = V8::Context.new
+        source = Rails.root.join('app', 'views', 'formulas', '_interest.js')
+        cxt.load(source)
+        cxt.eval("formula(#{@principal}, #{@rate}, #{@years})")
+    end
+
+end
+</code></pre>
+
+<p>```</p>
+
+<p>The JavaScript code is loaded inside the interest method and ran with the provided parameters. In this way the code is accessible as a plain ruby method and only needs to be tested in one place. In my test:</p>
+
+<p>```ruby</p>
+
+<pre><code>require 'spec_helper'
+
+describe "Contract" do
+
+    let(:principal) { 100 }
+    let(:rate) { 0.5 }
+    let(:years) { 5 }
+    let(:contract) { Contract.new(principal, rate, years) }
+
+    it "returns the right interest" do
+        expect(contract.interest).to eq(250)
+    end
+
+    ...
+end
+</code></pre>
+
+<p>```</p>
+
+<h2>Loading the formulas in the front-end</h2>
+
+<p>I couldn&rsquo;t find a way of injecting the JS code into the assets pipeline, so instead I just loaded in a partial that gets loaded in the application layout.</p>
+
+<p>In app/views/layouts/application.html.erb:</p>
+
+<pre><code>&lt;%= render 'formulas/index' %&gt;
+</code></pre>
+
+<p>In app/views/formulas/_index.html.erb</p>
+
+<p>```js</p>
+
+<pre><code>&lt;script&gt;
+    (function (APP) {
+        "use strict";
+        (function (formulas) {
+            formulas.interest = &lt;%= render 'formulas/interest.js' %&gt;
+            ...
+        })(APP.formulas || (APP.formulas = {}));
+
+    })(window.APP || (window.APP = {}));
+&lt;/script&gt;
+</code></pre>
+
+<p>```</p>
+
+<p>This piece of JavaScript creates a global object APP if not found, then an object formulas inside APP and finally adds my interest formula to APP.formulas.interest.</p>
+
+<h2>Using the formulas in the front end</h2>
+
+<p>Once the formulas are loaded as shown above they can be used as:</p>
+
+<p>```js</p>
+
+<pre><code>var res = APP.formulas.interest(principal, rate, years);
+</code></pre>
+
+<p>```</p>
+
+<hr />
+
+<p>So this is a way of sharing code between the back and the front end. If you how how could be improved or of a cleaner way altogether I would love to hear about it, maybe some DSL that can be used in both places.</p>
+]]></content>
+  </entry>
+  
+</feed>

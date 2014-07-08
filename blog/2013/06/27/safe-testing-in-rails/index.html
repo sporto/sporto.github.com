@@ -1,0 +1,448 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Safe Testing in Rails - Sebastian's Blog</title>
+  <meta name="author" content="Sebastian Porto">
+
+  
+  <meta name="description" content="There is a typical progression when developing an application. First we start with something simple, with a few models, things are simple to test. At &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://sporto.github.com/blog/2013/06/27/safe-testing-in-rails">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Sebastian's Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=Lato:100,300,400" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-34169292-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+	
+    <h2>Mostly about Javascript, Ruby on Rails and other web stuff</h2>
+  
+  <h1><a href="/">Sebastian's Blog</a></h1>
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:sporto.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Safe Testing in Rails</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-27T12:41:00+10:00" pubdate data-updated="true">Jun 27<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>There is a typical progression when developing an application. First we start with something simple, with a few models, things are simple to test. At this stage we can afford to build all the objects we need in our test without too much concern for speed and complexity.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">describe</span> <span class="no">User</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">let</span><span class="p">(</span><span class="ss">:user</span><span class="p">)</span> <span class="p">{</span> <span class="no">User</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="nb">name</span><span class="p">:</span> <span class="err">‘</span><span class="no">John</span><span class="err">’</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>  <span class="n">it</span> <span class="s2">&quot;has a name&quot;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">expect</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">eq</span><span class="p">(</span><span class="err">‘</span><span class="no">John</span><span class="err">’</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>But soon things get complicated, we add more and more models to our application that depend on each other. Tests reflect this as well, we have to create a lot of objects in our tests to test simple things.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">describe</span> <span class="no">User</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">let</span><span class="p">(</span><span class="ss">:english</span><span class="p">)</span> <span class="p">{</span> <span class="no">Language</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="nb">name</span><span class="p">:</span> <span class="err">‘</span><span class="no">English</span><span class="err">’</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>  <span class="n">let</span><span class="p">(</span><span class="ss">:australia</span><span class="p">)</span> <span class="p">{</span> <span class="no">Location</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="nb">name</span><span class="p">:</span> <span class="err">‘</span><span class="no">Australia</span><span class="err">’</span><span class="p">,</span> <span class="ss">language</span><span class="p">:</span> <span class="err">‘</span><span class="n">english</span><span class="err">’</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>  <span class="n">let</span><span class="p">(</span><span class="ss">:melbourne</span><span class="p">)</span> <span class="p">{</span> <span class="no">Location</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="nb">name</span><span class="p">:</span> <span class="err">‘</span><span class="no">Melbourne</span><span class="err">’</span><span class="p">,</span> <span class="ss">parent</span><span class="p">:</span> <span class="n">australia</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>  <span class="n">let</span><span class="p">(</span><span class="ss">:office</span><span class="p">)</span> <span class="p">{</span> <span class="no">Workspace</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="nb">name</span><span class="p">:</span> <span class="err">‘</span><span class="no">Melbourne</span> <span class="no">Office</span><span class="err">’</span><span class="p">,</span> <span class="ss">location</span><span class="p">:</span> <span class="n">melbourne</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>  <span class="n">let</span><span class="p">(</span><span class="ss">:user</span><span class="p">)</span> <span class="p">{</span> <span class="no">User</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="nb">name</span><span class="p">:</span> <span class="err">‘</span><span class="no">John</span><span class="err">’</span><span class="p">,</span> <span class="ss">workspace</span><span class="p">:</span> <span class="n">office</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="n">it</span> <span class="s2">&quot;has a language&quot;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">expect</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">default_language</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">eq</span><span class="p">(</span><span class="n">english</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The example above creates all the objects that are needed to test <code>user.default_language</code>. We need to know a lot about our application just to run a test. Soon our test become a burden to write and very slow to run.</p>
+
+<h2>Mocks, Stubs!</h2>
+
+<p>It is evident that we are just doing too much in our test, we should just be creating the object we care about and mock the rest. Let&rsquo;s rewrite this using doubles and stubs:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">describe</span> <span class="no">User</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">let</span><span class="p">(</span><span class="ss">:english</span><span class="p">)</span> <span class="p">{</span> <span class="n">double</span><span class="o">.</span><span class="n">as_null_object</span><span class="p">}</span>
+</span><span class='line'>  <span class="n">let</span><span class="p">(</span><span class="ss">:office</span><span class="p">)</span> <span class="p">{</span> <span class="n">double</span><span class="o">.</span><span class="n">as_null_object</span> <span class="p">}</span>
+</span><span class='line'>  <span class="n">let</span><span class="p">(</span><span class="ss">:user</span><span class="p">)</span> <span class="p">{</span> <span class="no">User</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="nb">name</span><span class="p">:</span> <span class="err">‘</span><span class="no">John</span><span class="err">’</span><span class="p">,</span> <span class="ss">workspace</span><span class="p">:</span> <span class="n">office</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="n">before</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">office</span><span class="p">(</span><span class="ss">:language</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span><span class="p">(</span><span class="ss">:english</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="n">it</span> <span class="s2">&quot;has a language&quot;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">expect</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">default_language</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">eq</span><span class="p">(</span><span class="n">english</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is faster and simpler, we are just creating the object under test (user) and doubles for the other objects. We don’t need know about all the relationships in our application, just knowing the interface we care about in the objects directly related is enough. In this case just knowing that office responds to language is all we need.</p>
+
+<p>But there is of course a problem. What happens in office doesn’t respond to language anymore? Say that someone changes <code>office.language</code> to <code>office.default_language</code>. Our test will still pass! <strong>We have created an alterative universe in our test.</strong></p>
+
+<h2>Integration test</h2>
+
+<p>Many experience developers will tell us that the solution to this conodrum is to have good integration test. That is partially true, integration tests are likely to fail when the interface between the objects is changed.</p>
+
+<p>But guess what will happen? We will go and fix the integration test and then we will back to green. But wait, we forgot to fix the unit tests but everything passes! Unfortunatelly we cannot rely on due dilligence of people fixing all that should be fixed.</p>
+
+<p>Now we are even in a worst situation, our tests are all green but our app is broken. <strong>So integration tests are not a reliable solution.</strong></p>
+
+<p>Your application:</p>
+
+<p><img src="http://www.3dm3.com/portfolio/files/1/4/7/7/5/9/broken_bridge__by_kash.jpg" alt="Broken bridge" /></p>
+
+<h1>Safe mocking / stubbing</h1>
+
+<p>We still want the benefits of lean, fast tests but without the dangers of alternative realities. So what is the solution?</p>
+
+<p>I found that safe testing libraries are the best solution out there. This library will take care of checking that the methods you call actually exist in the mocked object. This frees us to still use doubles and stubs in our test without worring about the possibility of getting out of sync with the real application.</p>
+
+<p>From all the libraries I have tried, (Bogus)[<a href="https://github.com/psyho/bogus">https://github.com/psyho/bogus</a>] is the most complete one. A test using Bogus will look like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">describe</span> <span class="no">User</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">fake</span><span class="p">(</span><span class="ss">:english</span><span class="p">)</span> <span class="p">{</span> <span class="no">Language</span><span class="p">}</span>
+</span><span class='line'>  <span class="n">fake</span><span class="p">(</span><span class="ss">:office</span><span class="p">)</span> <span class="p">{</span> <span class="no">Workspace</span> <span class="p">}</span>
+</span><span class='line'>  <span class="n">let</span><span class="p">(</span><span class="ss">:user</span><span class="p">)</span> <span class="p">{</span> <span class="no">User</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="nb">name</span><span class="p">:</span> <span class="err">‘</span><span class="no">John</span><span class="err">’</span><span class="p">,</span> <span class="ss">workspace</span><span class="p">:</span> <span class="n">office</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="n">before</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">stub</span><span class="p">(</span><span class="ss">:office</span><span class="p">)</span><span class="o">.</span><span class="n">language</span> <span class="p">{</span> <span class="n">english</span> <span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="n">it</span> <span class="s2">&quot;has a language&quot;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">expect</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">default_language</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">eq</span><span class="p">(</span><span class="n">english</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  
+</span><span class='line'> <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Bogus will check that <code>office.language</code> is an actual method and that it takes the number of parameters we send. In this way we can have the benefits of stubbing and mocking without the drawbacks. I highly recommend that you try it in your project.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Sebastian Porto</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-27T12:41:00+10:00" pubdate data-updated="true">Jun 27<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/rails/'>rails</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://sporto.github.com/blog/2013/06/27/safe-testing-in-rails/" data-via="sebasporto" data-counturl="http://sporto.github.com/blog/2013/06/27/safe-testing-in-rails/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/06/24/nested-recursive-directives-in-angular/" title="Previous Post: Building nested recursive directives in Angular">&laquo; Building nested recursive directives in Angular</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/08/18/concurrency-node-vs-go/" title="Next Post: Comparing Concurrency in Node and Go">Comparing Concurrency in Node and Go &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/03/20/avoiding-memory-leaks-with-canjs/">Avoiding Memory Leaks With CanJS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/04/form-validations-with-canjs/">Form Validations With CanJS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/04/creating-filtered-lists-in-canjs/">Creating Filtered Lists in CanJS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/09/25/simple-dependency-injection/">Simple Dependency Injection in Ruby</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/08/18/concurrency-node-vs-go/">Comparing Concurrency in Node and Go</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/27/safe-testing-in-rails/">Safe Testing in Rails</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/24/nested-recursive-directives-in-angular/">Building Nested Recursive Directives in Angular</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/23/sharing-simple-business-logic-between-the-client-and-front-end-with-rails/">Sharing Simple Business Logic Between the Client and Front End With Rails</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/04/12/comparison-angular-backbone-can-ember/">A Comparison of Angular, Backbone, CanJS and Ember</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/22/a-plain-english-guide-to-javascript-prototypes/">A Plain English Guide to JavaScript Prototypes</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/sporto">@sporto</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'sporto',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>On Delicious</h1>
+  <div id="delicious"></div>
+  <script type="text/javascript" src="http://feeds.delicious.com/v2/json/sebasporto?count=3&amp;sort=date&amp;callback=renderDeliciousLinks"></script>
+  <p><a href="http://delicious.com/sebasporto">My Delicious Bookmarks &raquo;</a></p>
+</section>
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Sebastian Porto -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'sportoblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://sporto.github.com/blog/2013/06/27/safe-testing-in-rails/';
+        var disqus_url = 'http://sporto.github.com/blog/2013/06/27/safe-testing-in-rails/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

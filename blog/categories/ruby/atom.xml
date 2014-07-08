@@ -1,0 +1,490 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: ruby | Sebastian's Blog]]></title>
+  <link href="http://sporto.github.com/blog/categories/ruby/atom.xml" rel="self"/>
+  <link href="http://sporto.github.com/"/>
+  <updated>2014-07-08T11:23:21+10:00</updated>
+  <id>http://sporto.github.com/</id>
+  <author>
+    <name><![CDATA[Sebastian Porto]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Simple Dependency Injection in Ruby]]></title>
+    <link href="http://sporto.github.com/blog/2013/09/25/simple-dependency-injection/"/>
+    <updated>2013-09-25T21:12:00+10:00</updated>
+    <id>http://sporto.github.com/blog/2013/09/25/simple-dependency-injection</id>
+    <content type="html"><![CDATA[<p>Some time ago I read the book <a href="http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330">Practical Object-Oriented Design in Ruby</a> by Sandi Metz, while an excellent book there is one thing that bothered me while reading it.</p>
+
+<p>That is the pattern for dependecy injection proposed on the book. It goes something like this:</p>
+
+<p>```ruby
+  class Car</p>
+
+<pre><code>def initialise(engine)
+  @engine = engine
+end
+
+def start
+  engine.start
+end
+</code></pre>
+
+<p>  end</p>
+
+<p>  car = Car.new(engine)
+```</p>
+
+<p>In this example the class Car takes an <code>engine</code> dependecy, each time you want to create a car you have to pass an engine to it. This can easily become a cumbersome way of instantiating objects because you need to know a lot about your object just to create them. In this case I need to know that Car takes an engine and specifically which engine depending on the type of car I want to create.</p>
+
+<p>To deal with this the suggested solution is to use an <strong>injector</strong>. See the definition in <a href="http://en.wikipedia.org/wiki/Dependency_injection">wikipedia</a>. The injector is in charge of creating the instances you need and injecting the right dependecies.</p>
+
+<p>Although this is a powerful pattern I believe it mostly an unnecessary complication, specially in dynamic languages like ruby. Let me explain why.</p>
+
+<h2>What do we want to achieve with DI?</h2>
+
+<p>The main reason for using DI is to be able to swap the dependencies of an object at run time, this is mostly useful for testing. To achieve this there is a dead simple way to do it without having to deal with the complexity of injectors.</p>
+
+<h2>The simple way to do it</h2>
+
+<p>Instead of passing the dependecy when instantiating an object, we can simply let the object have default dependecies.</p>
+
+<p>```ruby
+  class Car</p>
+
+<pre><code>attr_writer :engine
+
+def start
+  engine.start
+end
+
+def engine
+  @engine ||= Engine.new
+end
+</code></pre>
+
+<p>  end</p>
+
+<p>  car = Car.new
+```</p>
+
+<p>If we just create a car we get a default engine for it, so we don&rsquo;t need to bother with injectors.</p>
+
+<p>What do we gain:</p>
+
+<ul>
+<li>External code doesn&rsquo;t need to know about the internals of our objects</li>
+<li>We have sane default dependecies</li>
+<li>We can easily swap the dependecies at run time</li>
+</ul>
+
+
+<p>In your test you can simply do this:</p>
+
+<p>```ruby
+  car = Car.new
+  car.engine = FakeEngine</p>
+
+<p>  car.start
+```</p>
+
+<p>So that&rsquo;s it, <strong>DI doesn&rsquo;t have to be complicated at all in ruby</strong>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Safe testing in Rails]]></title>
+    <link href="http://sporto.github.com/blog/2013/06/27/safe-testing-in-rails/"/>
+    <updated>2013-06-27T12:41:00+10:00</updated>
+    <id>http://sporto.github.com/blog/2013/06/27/safe-testing-in-rails</id>
+    <content type="html"><![CDATA[<p>There is a typical progression when developing an application. First we start with something simple, with a few models, things are simple to test. At this stage we can afford to build all the objects we need in our test without too much concern for speed and complexity.</p>
+
+<p>```ruby</p>
+
+<pre><code>describe User do
+    let(:user) { User.new(name: ‘John’) }
+    it "has a name" do
+        expect(user.name).to eq(‘John’)
+    end
+end
+</code></pre>
+
+<p>```</p>
+
+<p>But soon things get complicated, we add more and more models to our application that depend on each other. Tests reflect this as well, we have to create a lot of objects in our tests to test simple things.</p>
+
+<p>```ruby</p>
+
+<pre><code>describe User do
+    let(:english) { Language.new(name: ‘English’) }
+    let(:australia) { Location.new(name: ‘Australia’, language: ‘english’) }
+    let(:melbourne) { Location.new(name: ‘Melbourne’, parent: australia) }
+    let(:office) { Workspace.new(name: ‘Melbourne Office’, location: melbourne) }
+    let(:user) { User.new(name: ‘John’, workspace: office) }
+
+    it "has a language" do
+        expect(user.default_language).to eq(english)
+    end
+
+end
+</code></pre>
+
+<p>```</p>
+
+<p>The example above creates all the objects that are needed to test <code>user.default_language</code>. We need to know a lot about our application just to run a test. Soon our test become a burden to write and very slow to run.</p>
+
+<h2>Mocks, Stubs!</h2>
+
+<p>It is evident that we are just doing too much in our test, we should just be creating the object we care about and mock the rest. Let&rsquo;s rewrite this using doubles and stubs:</p>
+
+<p>```ruby</p>
+
+<pre><code>describe User do
+    let(:english) { double.as_null_object}
+    let(:office) { double.as_null_object } 
+    let(:user) { User.new(name: ‘John’, workspace: office) }
+
+    before do
+        office(:language).and_return(:english)
+    end
+
+    it "has a language" do
+        expect(user.default_language).to eq(english)
+    end
+
+end 
+</code></pre>
+
+<p>```</p>
+
+<p>This is faster and simpler, we are just creating the object under test (user) and doubles for the other objects. We don’t need know about all the relationships in our application, just knowing the interface we care about in the objects directly related is enough. In this case just knowing that office responds to language is all we need.</p>
+
+<p>But there is of course a problem. What happens in office doesn’t respond to language anymore? Say that someone changes <code>office.language</code> to <code>office.default_language</code>. Our test will still pass! <strong>We have created an alterative universe in our test.</strong></p>
+
+<h2>Integration test</h2>
+
+<p>Many experience developers will tell us that the solution to this conodrum is to have good integration test. That is partially true, integration tests are likely to fail when the interface between the objects is changed.</p>
+
+<p>But guess what will happen? We will go and fix the integration test and then we will back to green. But wait, we forgot to fix the unit tests but everything passes! Unfortunatelly we cannot rely on due dilligence of people fixing all that should be fixed.</p>
+
+<p>Now we are even in a worst situation, our tests are all green but our app is broken. <strong>So integration tests are not a reliable solution.</strong></p>
+
+<p>Your application:</p>
+
+<p><img src="http://www.3dm3.com/portfolio/files/1/4/7/7/5/9/broken_bridge__by_kash.jpg" alt="Broken bridge" /></p>
+
+<h1>Safe mocking / stubbing</h1>
+
+<p>We still want the benefits of lean, fast tests but without the dangers of alternative realities. So what is the solution?</p>
+
+<p>I found that safe testing libraries are the best solution out there. This library will take care of checking that the methods you call actually exist in the mocked object. This frees us to still use doubles and stubs in our test without worring about the possibility of getting out of sync with the real application.</p>
+
+<p>From all the libraries I have tried, (Bogus)[<a href="https://github.com/psyho/bogus">https://github.com/psyho/bogus</a>] is the most complete one. A test using Bogus will look like this:</p>
+
+<p>```ruby</p>
+
+<pre><code>describe User do
+    fake(:english) { Language}
+    fake(:office) { Workspace } 
+    let(:user) { User.new(name: ‘John’, workspace: office) }
+
+    before do
+        stub(:office).language { english }
+    end
+
+    it "has a language" do
+        expect(user.default_language).to eq(english)
+    end
+
+ end 
+</code></pre>
+
+<p>```</p>
+
+<p>Bogus will check that <code>office.language</code> is an actual method and that it takes the number of parameters we send. In this way we can have the benefits of stubbing and mocking without the drawbacks. I highly recommend that you try it in your project.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Sharing simple business logic between the client and front end with Rails]]></title>
+    <link href="http://sporto.github.com/blog/2013/06/23/sharing-simple-business-logic-between-the-client-and-front-end-with-rails/"/>
+    <updated>2013-06-23T08:26:00+10:00</updated>
+    <id>http://sporto.github.com/blog/2013/06/23/sharing-simple-business-logic-between-the-client-and-front-end-with-rails</id>
+    <content type="html"><![CDATA[<p>Recently I was trying to find out a way of sharing some business logic between the client and the server. We have a reactive UI where results get calculated as you change values. These are complex formulas we rather not write in both Ruby and JavaScript so we don&rsquo;t have to maintain them in two places.</p>
+
+<p>The easiest solution would have been to make ajax calls to the server with the parameters get the results. But we wanted a UI that reacts immediately so needed to have the code loaded in the browser.</p>
+
+<p>So this a solution I come up with, in summary:</p>
+
+<ul>
+<li>Formulas are stored as plain JavaScript</li>
+<li>Ruby Models load and use those formulas using V8</li>
+<li>The formulas are served to the front end as partials</li>
+</ul>
+
+
+<p>Here is a rundown of what I did step by step. I will use a simple interest formula in this example.</p>
+
+<h2>Storing the formulas</h2>
+
+<p>I needed the formulas to be accessible as partials so I added them in the view folder:</p>
+
+<p>In app/views/formulas/_interest.js</p>
+
+<p>```js</p>
+
+<pre><code>function formula(principal, rate, years) {
+    return principal * rate * years;
+}
+</code></pre>
+
+<p>```</p>
+
+<h2>Using the formulas in my Ruby models</h2>
+
+<p>In order to run the JavaScript on the server you will need <strong>therubyracer</strong> gem, in Gemfile:</p>
+
+<pre><code>gem 'therubyracer'
+</code></pre>
+
+<p>In app/models/contract.rb:</p>
+
+<p>```ruby</p>
+
+<pre><code>class Contract
+
+    def initialize(principal, rate, years)
+        @principal, @rate, @years = principal, rate, years
+    end
+
+    def interest
+        cxt = V8::Context.new
+        source = Rails.root.join('app', 'views', 'formulas', '_interest.js')
+        cxt.load(source)
+        cxt.eval("formula(#{@principal}, #{@rate}, #{@years})")
+    end
+
+end
+</code></pre>
+
+<p>```</p>
+
+<p>The JavaScript code is loaded inside the interest method and ran with the provided parameters. In this way the code is accessible as a plain ruby method and only needs to be tested in one place. In my test:</p>
+
+<p>```ruby</p>
+
+<pre><code>require 'spec_helper'
+
+describe "Contract" do
+
+    let(:principal) { 100 }
+    let(:rate) { 0.5 }
+    let(:years) { 5 }
+    let(:contract) { Contract.new(principal, rate, years) }
+
+    it "returns the right interest" do
+        expect(contract.interest).to eq(250)
+    end
+
+    ...
+end
+</code></pre>
+
+<p>```</p>
+
+<h2>Loading the formulas in the front-end</h2>
+
+<p>I couldn&rsquo;t find a way of injecting the JS code into the assets pipeline, so instead I just loaded in a partial that gets loaded in the application layout.</p>
+
+<p>In app/views/layouts/application.html.erb:</p>
+
+<pre><code>&lt;%= render 'formulas/index' %&gt;
+</code></pre>
+
+<p>In app/views/formulas/_index.html.erb</p>
+
+<p>```js</p>
+
+<pre><code>&lt;script&gt;
+    (function (APP) {
+        "use strict";
+        (function (formulas) {
+            formulas.interest = &lt;%= render 'formulas/interest.js' %&gt;
+            ...
+        })(APP.formulas || (APP.formulas = {}));
+
+    })(window.APP || (window.APP = {}));
+&lt;/script&gt;
+</code></pre>
+
+<p>```</p>
+
+<p>This piece of JavaScript creates a global object APP if not found, then an object formulas inside APP and finally adds my interest formula to APP.formulas.interest.</p>
+
+<h2>Using the formulas in the front end</h2>
+
+<p>Once the formulas are loaded as shown above they can be used as:</p>
+
+<p>```js</p>
+
+<pre><code>var res = APP.formulas.interest(principal, rate, years);
+</code></pre>
+
+<p>```</p>
+
+<hr />
+
+<p>So this is a way of sharing code between the back and the front end. If you how how could be improved or of a cleaner way altogether I would love to hear about it, maybe some DSL that can be used in both places.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[A Pattern for Service Objects in Rails]]></title>
+    <link href="http://sporto.github.com/blog/2012/11/15/a-pattern-for-service-objects-in-rails/"/>
+    <updated>2012-11-15T21:59:00+11:00</updated>
+    <id>http://sporto.github.com/blog/2012/11/15/a-pattern-for-service-objects-in-rails</id>
+    <content type="html"><![CDATA[<p>Service Objects in Rails allows to neatly separate the business logic of your application in reausable components. This post describes our implementation of this pattern.</p>
+
+<p>We went through the usual story, we started by putting some business logic in controllers and some in models, then decided that all this logic should go in the models and ended up with very fat models tightly coupled to each other.</p>
+
+<p>So when looking for alternatives patterns for organising the business logic I came across the idea of having separated objects to handle this business logic. Somewhere I saw this pattern labeled as &lsquo;Service objects&rsquo; (SO). This was way before this very interesting post <a href="http://blog.codeclimate.com/blog/2012/10/17/7-ways-to-decompose-fat-activerecord-models/">7 Patterns to Refactor Fat ActiveRecord Models</a></p>
+
+<p>The discussions often involved the Single Responsibility Principle (SLP), so most of the examples shown a class with only one public method on it. At first I totally dismissed this as a kind of functional pattern that didn&rsquo;t fit into the OOP world of Ruby.</p>
+
+<p>But my pain with the fat models made me look into this again. So I decided to give it a try. Since then I have grown very fond of this approach because of the following:</p>
+
+<ul>
+<li>As this objects have little code they are easy to reason about</li>
+<li>They are very easy to compose (use one inside the other)</li>
+<li>They encapsulate the business logic neatly, so you never has to repeat the same logic in different places</li>
+<li>They use dependency injection (DI) heavily so they are loosely couple with the rest of the application</li>
+<li>Using DI makes it very easy to swap the dependencies in testing</li>
+<li>But still they have sensible dependency defaults, I don&rsquo;t see the point in injecting dependencies all the time when in 90% of the cases you just need the defaults</li>
+</ul>
+
+
+<p>Let me show the pattern we are using:</p>
+
+<p>```ruby</p>
+
+<p>class FindInvoicesForClientService</p>
+
+<p>  def call(client, args={})</p>
+
+<pre><code>  ...
+  invoices = find_invoices_service.(some_args)
+  ...
+</code></pre>
+
+<p>  end</p>
+
+<p>  def find_invoices_service</p>
+
+<pre><code>  @find_invoices_service ||= FindInvoicesService.new
+</code></pre>
+
+<p>  end</p>
+
+<p>  def find_invoices_service=(obj)</p>
+
+<pre><code>  @find_invoices_service = obj
+</code></pre>
+
+<p>  end
+end</p>
+
+<p>service = FindInvoicesForClientService.new
+service.(client, args)</p>
+
+<h1>in test we just swap the dependencies</h1>
+
+<p>collaborator = double.as_null_object
+collaborator.stub(:call).and_return(invoices)
+service.find_invoices_service = collaborator</p>
+
+<p>```</p>
+
+<p>The key points in our version are:</p>
+
+<ul>
+<li>the class has only one public method (call)</li>
+<li>dependencies are only passed if needed, the class has some sensible defaults that will be used 90% of the time</li>
+<li>each dependency injector has its own method instead of a attr_accessor, this is so you can prepare the dependencies if needed</li>
+</ul>
+
+
+<p>This has been a great pattern for us, we have hundreds of these objects that can be easily composed as needed. This pattern has made our code seriously easier to work with.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Finding the bounding box of an SVG path in Ruby]]></title>
+    <link href="http://sporto.github.com/blog/2011/06/06/finding-the-bounding-box-of-an-svg-path-in-ruby/"/>
+    <updated>2011-06-06T09:32:00+10:00</updated>
+    <id>http://sporto.github.com/blog/2011/06/06/finding-the-bounding-box-of-an-svg-path-in-ruby</id>
+    <content type="html"><![CDATA[<p>Here is a way for finding out the bounding box (left, right, width and height) of an SVG path in Ruby. You will need <a href="http://www.imagemagick.org/">ImageMagick</a> and <a href="http://rmagick.rubyforge.org/">RMagick</a> for this. In Javascript this is quite simple using the getBBox method, but I couldn&rsquo;t find a similar thing in Ruby.</p>
+
+<p>First install ImageMagick if you don&rsquo;t have it already. I like to use Homebrew:</p>
+
+<pre><code>brew install imagemagick
+</code></pre>
+
+<p>Then install RMagick</p>
+
+<pre><code>gem install rmagick
+</code></pre>
+
+<p>With these two requirements in place you can find the bounding box using a script like this:</p>
+
+<p>```ruby</p>
+
+<pre><code>require 'rubygems'
+require 'RMagick'
+
+def find_bounding_box(path)
+    include Magick  
+
+    #create a drawing object
+    drawing = Magick::Draw.new
+
+
+    #create a new image for finding out the offset
+    canvas = Image.new(1500,1000) {self.background_color = 'white' }
+
+    #draw the path into the canvas image
+    drawing.path path
+    drawing.draw canvas
+
+    #trim the whitespace of the image
+    canvas.trim!    
+
+    #here is the bounding box information we are looking for
+    { :x=&gt; canvas.page.x, :y=&gt;canvas.page.y, :width=&gt; canvas.columns, :height=&gt; canvas.rows}
+end
+</code></pre>
+
+<p>```</p>
+
+<p>Let&rsquo;s test it:</p>
+
+<p>```ruby</p>
+
+<pre><code>svg_path = "M555.545,95.489c-9.67,4.589-19.34,9.178-29.01,13.767c9.097,19.235,18.194,38.47,27.291,57.705c9.667-4.598,19.335-9.196,29.002-13.794C573.733,133.941,564.64,114.715,555.545,95.489z"
+
+bbox = find_bounding_box(svg_path)
+
+puts "x="+bbox[:x].to_s
+puts "y="+bbox[:y].to_s
+puts "width="+bbox[:width].to_s
+puts "height="+bbox[:height].to_s
+</code></pre>
+
+<p>```</p>
+]]></content>
+  </entry>
+  
+</feed>

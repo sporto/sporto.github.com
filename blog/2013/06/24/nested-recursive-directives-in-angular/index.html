@@ -1,0 +1,536 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Building Nested Recursive Directives in Angular - Sebastian's Blog</title>
+  <meta name="author" content="Sebastian Porto">
+
+  
+  <meta name="description" content="I learnt a new trick over the weekend using Angular, how to build a recursive tree of objects using directives. In this post I want to share how to &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://sporto.github.com/blog/2013/06/24/nested-recursive-directives-in-angular">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Sebastian's Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=Lato:100,300,400" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-34169292-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+	
+    <h2>Mostly about Javascript, Ruby on Rails and other web stuff</h2>
+  
+  <h1><a href="/">Sebastian's Blog</a></h1>
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:sporto.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Building Nested Recursive Directives in Angular</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-24T11:18:00+10:00" pubdate data-updated="true">Jun 24<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I learnt a new trick over the weekend using Angular, how to build a recursive tree of objects using directives. In this post I want to share how to do it.</p>
+
+<p>Let&rsquo;s say that you have some data that looks like this, it can be as deep as you want:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'>   <span class="p">[</span>
+</span><span class='line'>      <span class="p">{</span>    <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Europe&#39;</span><span class="p">,</span>
+</span><span class='line'>          <span class="nx">children</span><span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>              <span class="p">{</span>    <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Italy&#39;</span><span class="p">,</span>
+</span><span class='line'>                  <span class="nx">children</span><span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>                      <span class="p">{</span>    <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Rome&#39;</span> <span class="p">},</span>
+</span><span class='line'>                      <span class="p">{</span>    <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Milan&#39;</span>    <span class="p">}</span>
+</span><span class='line'>                  <span class="p">]},</span>
+</span><span class='line'>              <span class="p">{</span>    <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Spain&#39;</span><span class="p">}</span>
+</span><span class='line'>          <span class="p">]</span>
+</span><span class='line'>      <span class="p">},</span>
+</span><span class='line'>      <span class="p">{</span>    <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;South America&#39;</span><span class="p">,</span>
+</span><span class='line'>          <span class="nx">children</span><span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>              <span class="p">{</span>    <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Brasil&#39;</span>   <span class="p">},</span>
+</span><span class='line'>              <span class="p">{</span>    <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Peru&#39;</span> <span class="p">}</span>
+</span><span class='line'>          <span class="p">]</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>  <span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And using this data you want to build a tree, e.g.:</p>
+
+<pre><code>Europe
+    Italy
+        Rome
+        Milan
+    Spain
+South America
+    Brasil
+    Peru
+</code></pre>
+
+<p>So to build something like this you will need some kind of recursive code to loop over all the elements and their children.</p>
+
+<p>Let&rsquo;s start with the html:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;html</span> <span class="na">ng-app=</span><span class="s">&#39;APP&#39;</span><span class="nt">&gt;</span>
+</span><span class='line'>  ...
+</span><span class='line'>  <span class="nt">&lt;div</span> <span class="na">ng-controller=</span><span class="s">&quot;IndexCtrl&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>  ...
+</span><span class='line'><span class="nt">&lt;/html&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>First we have a controller &lsquo;IndexCtrl&rsquo; which looks like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">&#39;APP&#39;</span><span class="p">,</span> <span class="p">[]);</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="nx">app</span><span class="p">.</span><span class="nx">controller</span><span class="p">(</span><span class="s1">&#39;IndexCtrl&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">$scope</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">$scope</span><span class="p">.</span><span class="nx">locations</span> <span class="o">=</span> <span class="p">[</span> <span class="p">..</span><span class="k">this</span> <span class="nx">is</span> <span class="nx">the</span> <span class="nx">array</span> <span class="nx">of</span> <span class="nx">locations</span> <span class="nx">shown</span> <span class="nx">above</span> <span class="p">..];</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Here we have <code>$scope.locations</code> pointing to the array of locations we want to render in our tree.</p>
+
+<p>Then we need a directive for rendering a collection, the html for the <strong>collection</strong> looks like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">ng-controller=</span><span class="s">&quot;IndexCtrl&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;collection</span> <span class="na">collection=</span><span class="s">&#39;locations&#39;</span><span class="nt">&gt;&lt;/collection&gt;</span>
+</span><span class='line'><span class="nt">&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This directive takes a <code>collection</code> parameter which are the locations we want to render.</p>
+
+<p>Our directive definition looks like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">app</span><span class="p">.</span><span class="nx">directive</span><span class="p">(</span><span class="s1">&#39;collection&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">restrict</span><span class="o">:</span> <span class="s2">&quot;E&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">replace</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">scope</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>          <span class="nx">collection</span><span class="o">:</span> <span class="s1">&#39;=&#39;</span>
+</span><span class='line'>      <span class="p">},</span>
+</span><span class='line'>      <span class="nx">template</span><span class="o">:</span> <span class="s2">&quot;&lt;ul&gt;&lt;member ng-repeat=&#39;member in collection&#39; member=&#39;member&#39;&gt;&lt;/member&gt;&lt;/ul&gt;&quot;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li><strong>restrict: &lsquo;E&rsquo;</strong> tells angular that we want to apply this directive to any html tags matching <code>collection</code>.</li>
+<li><strong>replace: true</strong> tells angular that we want to replace the tag with the content of specified template in the directive.</li>
+<li><strong>scope:</strong> creates a new scope for the directive.</li>
+<li><strong>collection: &lsquo;=&rsquo;</strong> tells angular to use the <code>collection</code> attribute in the directive and create a variable in the directive scope with the same name, <code>=</code> means that it should be passed as an object.</li>
+<li><strong>template: &ldquo;…&rdquo;</strong> is the new html that will be inserted instead of the original tag.</li>
+</ul>
+
+
+<p>Notice the following code in the template:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;member</span> <span class="na">ng-repeat=</span><span class="s">&#39;member in collection&#39;</span> <span class="na">member=</span><span class="s">&#39;member&#39;</span><span class="nt">&gt;&lt;/member&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is another directive, used to render each member of the collection (we use the build-in ng-repeat for looping), in this directive we pass the current member as the <code>member</code> attribute.</p>
+
+<p>The directive for <strong>member</strong> looks like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">app</span><span class="p">.</span><span class="nx">directive</span><span class="p">(</span><span class="s1">&#39;member&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">$compile</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">restrict</span><span class="o">:</span> <span class="s2">&quot;E&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">replace</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">scope</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>          <span class="nx">member</span><span class="o">:</span> <span class="s1">&#39;=&#39;</span>
+</span><span class='line'>      <span class="p">},</span>
+</span><span class='line'>      <span class="nx">template</span><span class="o">:</span> <span class="s2">&quot;&lt;li&gt;&lt;/li&gt;&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">link</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">scope</span><span class="p">,</span> <span class="nx">element</span><span class="p">,</span> <span class="nx">attrs</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>          <span class="k">if</span> <span class="p">(</span><span class="nx">angular</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">scope</span><span class="p">.</span><span class="nx">member</span><span class="p">.</span><span class="nx">children</span><span class="p">))</span> <span class="p">{</span>
+</span><span class='line'>              <span class="nx">element</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s2">&quot;&lt;collection collection=&#39;member.children&#39;&gt;&lt;/collection&gt;&quot;</span><span class="p">);</span>
+</span><span class='line'>              <span class="nx">$compile</span><span class="p">(</span><span class="nx">element</span><span class="p">.</span><span class="nx">contents</span><span class="p">())(</span><span class="nx">scope</span><span class="p">)</span>
+</span><span class='line'>          <span class="p">}</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This looks a lot like the <strong>collection</strong> directive, except for the link function. I will explain what is happening here, but before that, let me tell you about my first approach for trying to do this.</p>
+
+<p>The first thing I tried is to simply add the <strong>collection</strong> directive inside the template:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">template</span><span class="o">:</span> <span class="s2">&quot;&lt;li&gt; &lt;collection collection=&#39;member.children&#39;&gt;&lt;/collection&gt;&lt;/li&gt;&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>But this doesn&rsquo;t work, it throws angular into an endless loop, because it tries to render the collection directive regardless if the member has children or not.</p>
+
+<p>So instead you need to add the <strong>collection</strong> directive manually only if there are children, thus the link function:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">link</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">scope</span><span class="p">,</span> <span class="nx">element</span><span class="p">,</span> <span class="nx">attrs</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="c1">//check if this member has children</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="nx">angular</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">scope</span><span class="p">.</span><span class="nx">member</span><span class="p">.</span><span class="nx">children</span><span class="p">))</span> <span class="p">{</span>
+</span><span class='line'>      <span class="c1">// append the collection directive to this element</span>
+</span><span class='line'>      <span class="nx">element</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s2">&quot;&lt;collection collection=&#39;member.children&#39;&gt;&lt;/collection&gt;&quot;</span><span class="p">);</span>
+</span><span class='line'>      <span class="c1">// we need to tell angular to render the directive</span>
+</span><span class='line'>      <span class="nx">$compile</span><span class="p">(</span><span class="nx">element</span><span class="p">.</span><span class="nx">contents</span><span class="p">())(</span><span class="nx">scope</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note the line <code>$compile(element.contents())(scope);</code>. As the html is appended manually we need to tell angular to re-render the directive.</p>
+
+<p>That is it, <a href="http://jsbin.com/acibiv/3/edit">here is the complete example</a>. Thanks.</p>
+
+<p><strong>Update 2013-12-31</strong>: Please read the comments, there are some good suggestions on how to do this better.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Sebastian Porto</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-24T11:18:00+10:00" pubdate data-updated="true">Jun 24<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/angular/'>angular</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://sporto.github.com/blog/2013/06/24/nested-recursive-directives-in-angular/" data-via="sebasporto" data-counturl="http://sporto.github.com/blog/2013/06/24/nested-recursive-directives-in-angular/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/06/23/sharing-simple-business-logic-between-the-client-and-front-end-with-rails/" title="Previous Post: Sharing simple business logic between the client and front end with Rails">&laquo; Sharing simple business logic between the client and front end with Rails</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/06/27/safe-testing-in-rails/" title="Next Post: Safe testing in Rails">Safe testing in Rails &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/03/20/avoiding-memory-leaks-with-canjs/">Avoiding Memory Leaks With CanJS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/04/form-validations-with-canjs/">Form Validations With CanJS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/04/creating-filtered-lists-in-canjs/">Creating Filtered Lists in CanJS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/09/25/simple-dependency-injection/">Simple Dependency Injection in Ruby</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/08/18/concurrency-node-vs-go/">Comparing Concurrency in Node and Go</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/27/safe-testing-in-rails/">Safe Testing in Rails</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/24/nested-recursive-directives-in-angular/">Building Nested Recursive Directives in Angular</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/23/sharing-simple-business-logic-between-the-client-and-front-end-with-rails/">Sharing Simple Business Logic Between the Client and Front End With Rails</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/04/12/comparison-angular-backbone-can-ember/">A Comparison of Angular, Backbone, CanJS and Ember</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/22/a-plain-english-guide-to-javascript-prototypes/">A Plain English Guide to JavaScript Prototypes</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/sporto">@sporto</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'sporto',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>On Delicious</h1>
+  <div id="delicious"></div>
+  <script type="text/javascript" src="http://feeds.delicious.com/v2/json/sebasporto?count=3&amp;sort=date&amp;callback=renderDeliciousLinks"></script>
+  <p><a href="http://delicious.com/sebasporto">My Delicious Bookmarks &raquo;</a></p>
+</section>
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Sebastian Porto -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'sportoblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://sporto.github.com/blog/2013/06/24/nested-recursive-directives-in-angular/';
+        var disqus_url = 'http://sporto.github.com/blog/2013/06/24/nested-recursive-directives-in-angular/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

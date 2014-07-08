@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: node | Sebastian's Blog]]></title>
+  <link href="http://sporto.github.com/blog/categories/node/atom.xml" rel="self"/>
+  <link href="http://sporto.github.com/"/>
+  <updated>2014-07-08T11:23:21+10:00</updated>
+  <id>http://sporto.github.com/</id>
+  <author>
+    <name><![CDATA[Sebastian Porto]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Comparing Concurrency in Node and Go]]></title>
+    <link href="http://sporto.github.com/blog/2013/08/18/concurrency-node-vs-go/"/>
+    <updated>2013-08-18T07:40:00+10:00</updated>
+    <id>http://sporto.github.com/blog/2013/08/18/concurrency-node-vs-go</id>
+    <content type="html"><![CDATA[<p>The <a href="http://golang.org/">Go programming language</a> has capture my attention lately. There are several things I really like about:</p>
+
+<ul>
+<li>Simplicity: Go is a small language but still very flexible, I appreciate this simplicity as it can be learnt fairly quick.</li>
+<li>Static typing: I like knowing that my code is correct without having to write a bunch of test you to deal with the lack of static typing.</li>
+<li>No classes: Instead of classes Go simply uses interfaces to determine what objects has what methods, I personally find this a flexible and powerful approach.</li>
+<li>Concurrency primitives: Go has baked in all the necessary language constructs for dealing with concurrency in a clean and coherent way.</li>
+</ul>
+
+
+<p>As part of learning Go I wanted to compare how concurrency compares to Node. For this I created a simple prototype that captures a common pattern:</p>
+
+<p><img src="https://docs.google.com/drawings/d/1I-CqdRyXtQ0ZVFPh1kn8-jVC3jWMRgVYmv6EIH2NDxk/pub?w=486&amp;h=216"></p>
+
+<ul>
+<li>Fetch two values from different urls in parallel.</li>
+<li>When those two values have arrived, send them together to another url.</li>
+</ul>
+
+
+<h2>The Server</h2>
+
+<p>I made a simple Node server for this. <a href="https://gist.github.com/sporto/6258909#file-server-js">The code is here</a>. This server has the following API:</p>
+
+<ul>
+<li><a href="http://localhost:8080/x">http://localhost:8080/x</a> => returns &ldquo;Hello&rdquo;</li>
+<li><a href="http://localhost:8080/y">http://localhost:8080/y</a> => returns &ldquo;World&rdquo;</li>
+<li><a href="http://localhost:8080/concat?x=value&amp;y=value">http://localhost:8080/concat?x=value&amp;y=value</a> => takes two values and returns them concatenated</li>
+</ul>
+
+
+<h2>The Node Client</h2>
+
+<p>For the Node code I am using promises, <a href="https://gist.github.com/sporto/6258909#file-client-js">here is the complete client code in JavaScript</a>.</p>
+
+<p>Note the following lines:</p>
+
+<p>```js</p>
+
+<pre><code>var request = require('request');
+var Q = require('q');
+
+var defX = Q.defer(); // will be resolved when x arrives
+var defY = Q.defer(); // will be resolved when y arrives
+
+var oneAndTwo = Q.all([defX.promise, defY.promise]).then(processConcat);
+
+var baseUrl = "http://localhost:8080";
+
+request(baseUrl + '/x', makeValueHandler(defX));
+request(baseUrl + '/y', makeValueHandler(defY));
+</code></pre>
+
+<p>```</p>
+
+<p>I create two deferreds: defX and defY. Then I create a promise that is the combination of defX and defY.</p>
+
+<p>Immediately after that I make the first two calls to the server in parallel. When those to calls are done the deferreds will be resolved and the function <code>processConcat</code> will be called with the results (in the correct order).</p>
+
+<p>The JavaScript code is not complex but is not completely straightforward either, you still need to scan up and down when reading the source code to understand exactly what is happening.</p>
+
+<h2>The Go Client</h2>
+
+<p>The complete client in <a href="https://gist.github.com/sporto/6258909#file-client-go">Go is here</a>.</p>
+
+<p>The key lines of code are below:</p>
+
+<p>```go</p>
+
+<pre><code>var cx chan string = make(chan string)
+var cy chan string = make(chan string)
+
+go getValue("/x", cx)
+go getValue("/y", cy)
+
+x := &lt;-cx
+y := &lt;-cy
+
+processConcat(x, y)
+</code></pre>
+
+<p>```</p>
+
+<p>Here we create two channels (a way of communicating when using concurrent processes in Go), one for value x and the other for value y.</p>
+
+<p>Immediately after that we fetch the values from the server but using the special <code>go</code> keyword. This means that those call will be made in their own processes so they will not block. These two requests happen in parallel.</p>
+
+<p>The next two lines wait for the results of the API calls, the results are communicated using the channels.</p>
+
+<p>The Go code looks a lot like typical sync code but still it is all happing in parallel thanks to the goroutines. So this code is as fast (event faster) than the Node version but simpler to understand IMO.</p>
+
+<h2>Conclusion</h2>
+
+<p>I am excited about Go, it has a lot to offer in multiple spaces. I will like to explore how something like Node Streams will look in Go.</p>
+]]></content>
+  </entry>
+  
+</feed>

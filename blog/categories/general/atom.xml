@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: general | Sebastian's Blog]]></title>
+  <link href="http://sporto.github.com/blog/categories/general/atom.xml" rel="self"/>
+  <link href="http://sporto.github.com/"/>
+  <updated>2014-07-08T11:23:21+10:00</updated>
+  <id>http://sporto.github.com/</id>
+  <author>
+    <name><![CDATA[Sebastian Porto]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[State machines are awesome]]></title>
+    <link href="http://sporto.github.com/blog/2011/10/06/state-machines-are-awesome/"/>
+    <updated>2011-10-06T09:29:00+11:00</updated>
+    <id>http://sporto.github.com/blog/2011/10/06/state-machines-are-awesome</id>
+    <content type="html"><![CDATA[<p>Being mostly a self taught developer, nobody ever taught me what a state machine was. When I finally stumbled upon them I realised I have been missing out by not using them before.</p>
+
+<p>When I first started learning about them I couldn&rsquo;t find a good explanation in plain english. So here is my attempt to explain state machines in a simple way and why you should use them.</p>
+
+<p>The code examples below are in Ruby using the <a href="https://github.com/pluginaweek/state_machine">state_machine</a> gem. But this are general concepts for any language.</p>
+
+<h2>What is a state machine?</h2>
+
+<p>In essence a state machine tracks the state of an object and describes the actions that this object can perform at any given time.</p>
+
+<p>A state machine has several components: states, events and transitions.</p>
+
+<h2>States</h2>
+
+<p>Let&rsquo;s say we have an &lsquo;order&rsquo; object. We could use a state machine to track the state of our order. The order could have the following states:</p>
+
+<ul>
+<li>Open</li>
+<li>Placed</li>
+<li>Held</li>
+<li>Cancelled</li>
+<li>Shipped</li>
+<li>Returned</li>
+</ul>
+
+
+<p>The subject of the state machine can be in only one state at any given  time. The order can either be &lsquo;Held&rsquo; or &lsquo;Shipped&rsquo;. These are the states. And we can have only one.</p>
+
+<p>If we want to have two states at the same time we would need to have two state machine running in parallel.</p>
+
+<h2>Events</h2>
+
+<p>We can define events that our state machine can perform. For example:</p>
+
+<ul>
+<li>Create</li>
+<li>Cancel</li>
+<li>Hold</li>
+<li>Ship</li>
+<li>Return</li>
+</ul>
+
+
+<p>Not all events can be called at any time, the available events are dependant on the current state of the object.  A state machine manages this logic for us.</p>
+
+<p>In Ruby (using state_machine) we could do something like this:</p>
+
+<pre><code>order.can_cancel? #ask if the order can be cancelled at this time
+order.cancel #send the cancel event to the order
+</code></pre>
+
+<p>The following diagram shows the state machine flow.</p>
+
+<p><img src="https://docs.google.com/drawings/pub?id=178_CnXn19xnNumvnBY8BxIsJQ245rdoyzvUOwN-MQqM&amp;w=528&amp;h=413"></p>
+
+<p>So as you can see in the diagram there are predetermined paths that the state machine can follow. It can move from the &lsquo;Created&rsquo; state to the &lsquo;Placed&rsquo; state but not to the &lsquo;Shipped&rsquo; state.</p>
+
+<p>The state machine will complain if you try to call an event that is not permitted depending on the current state.</p>
+
+<h2>Transitions</h2>
+
+<p>Finally, when an event is called it may trigger a transition. For example the &lsquo;cancel&rsquo; event could trigger the following transitions:</p>
+
+<ul>
+<li>&lsquo;placed&rsquo; to &lsquo;cancelled&rsquo;</li>
+<li>&lsquo;held&rsquo; to &lsquo;cancelled&rsquo;</li>
+<li>&lsquo;any&rsquo; to &lsquo;cancelled&rsquo;</li>
+</ul>
+
+
+<p>Transitions are useful for triggering processes that should occur in particular cases. For example sending an email when the state of an order changes from &lsquo;placed&rsquo; to &lsquo;cancelled&rsquo;.</p>
+
+<h2>So why you should use state machines?</h2>
+
+<p>If it is not clear already the main reason to user them is because a state machine can manage all the complexity of knowing what events and states are available at any given time.</p>
+
+<p>So, that&rsquo;s my understanding of state machines so far. I am sure I am missing out some stuff but I believe that the basics are here.</p>
+]]></content>
+  </entry>
+  
+</feed>

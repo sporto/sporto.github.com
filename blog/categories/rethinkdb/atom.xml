@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: rethinkdb | Sebastian's Blog]]></title>
+  <link href="http://sporto.github.com/blog/categories/rethinkdb/atom.xml" rel="self"/>
+  <link href="http://sporto.github.com/"/>
+  <updated>2014-07-08T11:23:21+10:00</updated>
+  <id>http://sporto.github.com/</id>
+  <author>
+    <name><![CDATA[Sebastian Porto]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Some impressions on RethinkDB]]></title>
+    <link href="http://sporto.github.com/blog/2013/02/02/some-impressions-on-rethinkdb/"/>
+    <updated>2013-02-02T08:52:00+11:00</updated>
+    <id>http://sporto.github.com/blog/2013/02/02/some-impressions-on-rethinkdb</id>
+    <content type="html"><![CDATA[<p>Tried RethinkDB for a week. Overall it gave me a very good impression.</p>
+
+<ul>
+<li>Very easy to setup and run</li>
+<li>Setting up sharding and replication is quite simple as well</li>
+<li>The composable query language is a big plus. I really like the way I can build queries in my code by adding refinements if I need them. Reminds me of ActiveRecord in Rails.</li>
+<li>The admin interface is gorgeus and super useful, but I wish I could save my queries.</li>
+<li>The developers are very active in IRC and the forum, they responded all my questions very quickly.</li>
+</ul>
+
+
+<p>Some rough edges I came accross are:</p>
+
+<ul>
+<li>Queries that require boolean logic (e.g. ‘where user.id IN (1,2,3) and user.active = 1’ in SQL) are very cumbersome in RethinkDB right now. The good thing is that this is being addressed on the next release.</li>
+<li>I manage to send several JavaScript expressions to the server that made RethinkDB spawn a bunch of processes that ate the machine CPU very quickly, making the DB almost unusable, I had to kill RethinkDB several times because of this. It would be nice if RethinkDB will  prevent this.</li>
+<li>At the moment you cannot connect instances of RethinkDB on different architectures, e.g. Ubuntu to Mac, 32 bits to 64 bits. Again this is in their list of things to address in the future.</li>
+</ul>
+
+
+<p>At the end of our exploration we ended up with a flat data structure so we reverted back to our established SQL solution. But I look forward to use RethinkDB again soon.</p>
+
+<p><strong>Update July 2013</strong></p>
+
+<p>Since I wrote this post some issues on RethinkDB has already been fixed. I was using rethink 1.5 at the time. Fixed issues are:</p>
+
+<ul>
+<li><p>&ldquo;Queries that require boolean logic (e.g. ‘where user.id IN (1,2,3) and user.active = 1’ in SQL)&rdquo; was addressed by the inclusion of array operations in RethinkDB 1.6. The equivalent ReQL command would be either of the following:</p>
+
+<pre><code>  r.table('users').filter(lambda user: r.expr([1,2,3]).contains(user['id']) &amp; (user['active'] == 1))
+  r.table('users').filter(lambda user: r.all(r.expr([1,2,3]).contains(user['id']), user['active'] == 1))
+</code></pre></li>
+<li><p>JavaScript expressions (via the r.js command) have an optional timeout flag so the user can prevent single expressions from taking down the server, since RethinkDB 1.5 (see issue #69: <a href="https://github.com/rethinkdb/rethinkdb/issues/69">https://github.com/rethinkdb/rethinkdb/issues/69</a>)</p></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

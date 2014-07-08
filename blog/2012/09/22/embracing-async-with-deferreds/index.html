@@ -1,0 +1,683 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Embracing Async With Deferreds and Promises - Sebastian's Blog</title>
+  <meta name="author" content="Sebastian Porto">
+
+  
+  <meta name="description" content="Deferred and promises are a very powerful tool for handling asynchronous events. In this blog post I will explain what they are and when to use them &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://sporto.github.com/blog/2012/09/22/embracing-async-with-deferreds">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Sebastian's Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=Lato:100,300,400" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-34169292-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+	
+    <h2>Mostly about Javascript, Ruby on Rails and other web stuff</h2>
+  
+  <h1><a href="/">Sebastian's Blog</a></h1>
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:sporto.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Embracing Async With Deferreds and Promises</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-09-22T00:00:00+10:00" pubdate data-updated="true">Sep 22<span>nd</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Deferred and promises are a very powerful tool for handling asynchronous events. In this blog post I will explain what they are and when to use them.</p>
+
+<h2>Let&rsquo;s create gretting cards</h2>
+
+<p>As an example let’s say that we are building a UI for a greeting cards making application. Our UI may look something like this:</p>
+
+<p><img src="/images/deferreds/image01.png"></p>
+
+<p>The user can select an animation, select the music and then click next. Our event flow will look like this:</p>
+
+<p><img src="/images/deferreds/image02.png"></p>
+
+<p>In this first case we know everything we need from the beginning. When the user clicks &lsquo;next&rsquo; we know which animation and which music to load. After we are done loading these assets we will show the greeting card. To do this is code we have several options:</p>
+
+<h3>We can count the assets already loaded:</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">assetsToLoad</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">loader</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;load&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>  <span class="nx">assetsToLoad</span> <span class="o">--</span><span class="p">;</span>
+</span><span class='line'>      <span class="k">if</span><span class="p">(</span><span class="nx">assetsToLoad</span><span class="o">===</span><span class="mi">0</span><span class="p">)</span> <span class="nx">show</span><span class="p">();</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">loader</span><span class="p">.</span><span class="nx">load</span><span class="p">(</span><span class="nx">anim</span><span class="p">);</span>
+</span><span class='line'><span class="nx">loader</span><span class="p">.</span><span class="nx">load</span><span class="p">(</span><span class="nx">music</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This code simply keeps a count of assets loaded and when all are loaded it shows the card.</p>
+
+<h3>We can use a library like <a href="https://github.com/caolan/async">Async</a>:</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">async</span><span class="p">.</span><span class="nx">parallel</span><span class="p">([</span>
+</span><span class='line'>  <span class="nx">loadAnim</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">loadMusic</span><span class="p">,</span>
+</span><span class='line'><span class="p">],</span> <span class="nx">show</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We simply tell the library that we want to load these two assets in parallel and then call &lsquo;show&rsquo; when done. The library takes care of all the details for us. A library like this is great but we need to know everything that we need to load at the start.</p>
+
+<h2>Not knowing everything from the beginning</h2>
+
+<p>Now let’s imagine that we don’t want a ‘Next’ button anymore in our UI:</p>
+
+<p><img src="/images/deferreds/image04.png"></p>
+
+<p>Here we just want to show the greeting card automatically after the user has selected the animation and the music. Maybe not the best user experience but it works for our example. We don&rsquo;t know the order in which the user will select the assets.</p>
+
+<p>If we want to stick with the previous way of doing thing (knowing everything at the start). Our event flow will looks something like this:</p>
+
+<p><img src="/images/deferreds/image05.png"></p>
+
+<p>In the above flow we are waiting idle while the user is busy selecting the music. We don&rsquo;t want this, we want to take advantage of this time to load the assets the user has already chosen. So our event flow should look more like this:</p>
+
+<p><img src="/images/deferreds/image06.png"></p>
+
+<p>In this flow we start loading the animation as soon as the user has selected it. While the user is busy selecting the music the animation is loading in the background. As soon as the user select the music we start loading it too in paralell.</p>
+
+<p>A library like as Async is not useful in this case anymore. We can however still count like before or we could use conditional like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">onVideoLoaded</span><span class="p">(){</span>
+</span><span class='line'>      <span class="nx">checkIfAllLoaded</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">function</span> <span class="nx">onMusicLoaded</span><span class="p">(){</span>
+</span><span class='line'>      <span class="nx">checkIfAllLoaded</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">function</span> <span class="nx">checkIfAllLoaded</span><span class="p">(){</span>
+</span><span class='line'>      <span class="k">if</span><span class="p">(</span><span class="nx">videoLoaded</span> <span class="o">&amp;&amp;</span> <span class="nx">musicLoaded</span> <span class="o">&amp;&amp;</span> <span class="err">…</span> <span class="p">)</span> <span class="nx">show</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This works but it is not very elegant and becomes hard to maintain quickly.</p>
+
+<h2>Deferreds to the rescue</h2>
+
+<p>Here is where Deferreds shine. But let me explain what they are first. In a nutshell a Deferred is contract for an event that will happen in the future. Easier to explain this with some code:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// we create a Deferred</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">def</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">Deferred</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// we add a listener to the Deferred</span>
+</span><span class='line'><span class="c1">// when the Deferred is done then do something</span>
+</span><span class='line'><span class="nx">def</span><span class="p">.</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">val</span><span class="p">){</span>
+</span><span class='line'>      <span class="c1">//… do something</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//… later</span>
+</span><span class='line'><span class="c1">// we mark the Deferred as done</span>
+</span><span class='line'><span class="c1">// this will trigger the listener added above</span>
+</span><span class='line'><span class="nx">def</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">val</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We create an Deferred object that accepts listeners like ‘done’. At some point in our application we set this deferreds as done (‘resolve’). This will trigger all the listeners.</p>
+
+<p>There are many Deferred implementations like jQuery (1.5+), <a href="https://github.com/wookiehangover/underscore.deferred">underscore deferreds</a>, <a href="https://github.com/kriszyp/promised-io">promised-IO</a>. My examples are using jQuery but the concepts are pretty much the same for all of them.</p>
+
+<h2>Aggregation</h2>
+
+<p>A deferred can also be aggregated (I will explain promises later):</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// We create two deferreds</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">def1</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">Deferred</span><span class="p">();</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">def2</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">Deferred</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// We combine them together using the ‘when’ function. </span>
+</span><span class='line'><span class="c1">// This creates a new object (Promise) that is the aggregation of the two Deferreds. </span>
+</span><span class='line'><span class="c1">// We add a listener ‘done’ to the aggregated Promise.</span>
+</span><span class='line'><span class="nx">$</span><span class="p">.</span><span class="nx">when</span><span class="p">(</span><span class="nx">def1</span><span class="p">,</span> <span class="nx">def2</span><span class="p">).</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">one</span><span class="p">,</span> <span class="nx">two</span><span class="p">){</span>
+</span><span class='line'>      <span class="c1">//… do something with one and two;</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//… later</span>
+</span><span class='line'><span class="nx">def1</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">val</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//… even later</span>
+</span><span class='line'><span class="nx">def2</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">val</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In this case when def1 and def2 are resolved the listener in the combined Promise will trigger.</p>
+
+<p>So going back to our greeting cards example. To do this:</p>
+
+<p><img src="/images/deferreds/image06.png"></p>
+
+<p>We can simply code it like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">animDef</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">Deferred</span><span class="p">();</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">musicDef</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">Deferred</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">$</span><span class="p">.</span><span class="nx">when</span><span class="p">(</span><span class="nx">animDef</span><span class="p">,</span> <span class="nx">musicDef</span><span class="p">).</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>      <span class="nx">show</span><span class="p">();</span>  
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//when the music is loaded</span>
+</span><span class='line'><span class="nx">musicDef</span><span class="p">.</span><span class="nx">resolve</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//when the animation is loaded</span>
+</span><span class='line'><span class="nx">animDef</span><span class="p">.</span><span class="nx">resolve</span><span class="p">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>No conditions, no counting. Quite elegant if you ask me.</p>
+
+<h2>What if it is already resolved?</h2>
+
+<p>Deferreds have another neat trick. Let&rsquo;s say that the user selects the music first and it completely loads before we even start loading the animation.</p>
+
+<p><img src="/images/deferreds/image07.png"></p>
+
+<p>By the time we add our aggregated listener the Deferred for the music has already been resolved:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">animDef</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">Deferred</span><span class="p">();</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">musicDef</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">Deferred</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//…later</span>
+</span><span class='line'><span class="nx">musicDef</span><span class="p">.</span><span class="nx">resolve</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//…even later</span>
+</span><span class='line'><span class="nx">$</span><span class="p">.</span><span class="nx">when</span><span class="p">(</span><span class="nx">animDef</span><span class="p">,</span> <span class="nx">musicDef</span><span class="p">).</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>      <span class="nx">show</span><span class="p">();</span>  
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>No problems! The aggregated listener will still triggers, it knows that the Deferred is already resolved and acts as expected. This is something you cannot with common event listeners!</p>
+
+<h2>Fail and reject</h2>
+
+<p>Deferred can also be rejected as well:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">def</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">Deferred</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">def</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">result</span><span class="p">){</span>
+</span><span class='line'>      <span class="c1">//do something</span>
+</span><span class='line'>  <span class="p">})</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">fail</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>      <span class="c1">//fallback</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//…later, something bad happened</span>
+</span><span class='line'><span class="nx">def</span><span class="p">.</span><span class="nx">reject</span><span class="p">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This gives us a way of handling errors and providing fallbacks.</p>
+
+<h2>Promises</h2>
+
+<p>A promise is mostly like a Deferred but it doesn’t provide the methods to resolve and reject it. This is useful when you want to give a reference to the Deferred to another object so it can add listeners but you don&rsquo;t want to give that object the power to resolve the Deferred.</p>
+
+<p>Let&rsquo;s say you have a caller object with code like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// create a loader object</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">loader</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Loader</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// ask the loader to load something</span>
+</span><span class='line'><span class="c1">// it receives a promise back</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">promise</span> <span class="o">=</span> <span class="nx">loader</span><span class="p">.</span><span class="nx">load</span><span class="p">(</span><span class="err">…</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// add listeners to the promise</span>
+</span><span class='line'><span class="nx">promise</span><span class="p">.</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="p">...</span><span class="k">do</span> <span class="nx">something</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This caller receives a Promise from the loader object, it can add listeners to the Promise or aggregate it with other Promises. But it cannot resolve or reject them. Trying to do something like:</p>
+
+<pre><code>promise.resolve();
+</code></pre>
+
+<p>will fail.</p>
+
+<p>The code in the loader object will look something like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">load</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">def</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">Deferred</span><span class="p">();</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">def</span><span class="p">.</span><span class="nx">promise</span><span class="p">();</span> <span class="c1">// it returns the promise</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//..later</span>
+</span><span class='line'><span class="kd">function</span> <span class="nx">onLoad</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">def</span><span class="p">.</span><span class="nx">resolve</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note the def.promise() method which creates the promise. The jQuery ajax methods does exactly this, it gives you a promise back when called.</p>
+
+<p>You can combine promises to you heart content:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">promise1</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">when</span><span class="p">(</span><span class="nx">animDef</span><span class="p">,</span> <span class="nx">musDef</span><span class="p">);</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">promise2</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">when</span><span class="p">(</span><span class="nx">msgDef</span><span class="p">,</span> <span class="nx">bgDef</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">$</span><span class="p">.</span><span class="nx">when</span><span class="p">(</span><span class="nx">promise1</span><span class="p">,</span> <span class="nx">promise2</span><span class="p">).</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>      <span class="c1">//… do something with anim, music message and background</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Using Deferreds you can easily code something like this. Where you have many actions happening at the same time, each without a clear start and ending and depending on each other.</p>
+
+<p><img src="/images/deferreds/image08.png"></p>
+
+<h2>Conclusion</h2>
+
+<p>In conclusion Deferreds are best suited in situations where:</p>
+
+<ul>
+<li>You have several actions happening at the same time e.g. loaders</li>
+<li>You don’t know where the action starts and when it finishes e.g. user interaction</li>
+<li>You have other actions that depend on the completion of multiple other actions</li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Sebastian Porto</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-09-22T00:00:00+10:00" pubdate data-updated="true">Sep 22<span>nd</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/javascript/'>javascript</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://sporto.github.com/blog/2012/09/22/embracing-async-with-deferreds/" data-via="sebasporto" data-counturl="http://sporto.github.com/blog/2012/09/22/embracing-async-with-deferreds/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/08/18/backbone-ember-canjs/" title="Previous Post: My experience with Backbone, Ember and CanJS">&laquo; My experience with Backbone, Ember and CanJS</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/11/15/a-pattern-for-service-objects-in-rails/" title="Next Post: A Pattern for Service Objects in Rails">A Pattern for Service Objects in Rails &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/03/20/avoiding-memory-leaks-with-canjs/">Avoiding Memory Leaks With CanJS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/04/form-validations-with-canjs/">Form Validations With CanJS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/04/creating-filtered-lists-in-canjs/">Creating Filtered Lists in CanJS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/09/25/simple-dependency-injection/">Simple Dependency Injection in Ruby</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/08/18/concurrency-node-vs-go/">Comparing Concurrency in Node and Go</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/27/safe-testing-in-rails/">Safe Testing in Rails</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/24/nested-recursive-directives-in-angular/">Building Nested Recursive Directives in Angular</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/23/sharing-simple-business-logic-between-the-client-and-front-end-with-rails/">Sharing Simple Business Logic Between the Client and Front End With Rails</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/04/12/comparison-angular-backbone-can-ember/">A Comparison of Angular, Backbone, CanJS and Ember</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/22/a-plain-english-guide-to-javascript-prototypes/">A Plain English Guide to JavaScript Prototypes</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/sporto">@sporto</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'sporto',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>On Delicious</h1>
+  <div id="delicious"></div>
+  <script type="text/javascript" src="http://feeds.delicious.com/v2/json/sebasporto?count=3&amp;sort=date&amp;callback=renderDeliciousLinks"></script>
+  <p><a href="http://delicious.com/sebasporto">My Delicious Bookmarks &raquo;</a></p>
+</section>
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Sebastian Porto -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'sportoblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://sporto.github.com/blog/2012/09/22/embracing-async-with-deferreds/';
+        var disqus_url = 'http://sporto.github.com/blog/2012/09/22/embracing-async-with-deferreds/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

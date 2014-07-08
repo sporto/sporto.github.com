@@ -1,0 +1,392 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>A Pattern for Service Objects in Rails - Sebastian's Blog</title>
+  <meta name="author" content="Sebastian Porto">
+
+  
+  <meta name="description" content="Service Objects in Rails allows to neatly separate the business logic of your application in reausable components. This post describes our &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://sporto.github.com/blog/2012/11/15/a-pattern-for-service-objects-in-rails">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Sebastian's Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=Lato:100,300,400" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-34169292-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+	
+    <h2>Mostly about Javascript, Ruby on Rails and other web stuff</h2>
+  
+  <h1><a href="/">Sebastian's Blog</a></h1>
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:sporto.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">A Pattern for Service Objects in Rails</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-11-15T21:59:00+11:00" pubdate data-updated="true">Nov 15<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Service Objects in Rails allows to neatly separate the business logic of your application in reausable components. This post describes our implementation of this pattern.</p>
+
+<p>We went through the usual story, we started by putting some business logic in controllers and some in models, then decided that all this logic should go in the models and ended up with very fat models tightly coupled to each other.</p>
+
+<p>So when looking for alternatives patterns for organising the business logic I came across the idea of having separated objects to handle this business logic. Somewhere I saw this pattern labeled as &lsquo;Service objects&rsquo; (SO). This was way before this very interesting post <a href="http://blog.codeclimate.com/blog/2012/10/17/7-ways-to-decompose-fat-activerecord-models/">7 Patterns to Refactor Fat ActiveRecord Models</a></p>
+
+<p>The discussions often involved the Single Responsibility Principle (SLP), so most of the examples shown a class with only one public method on it. At first I totally dismissed this as a kind of functional pattern that didn&rsquo;t fit into the OOP world of Ruby.</p>
+
+<p>But my pain with the fat models made me look into this again. So I decided to give it a try. Since then I have grown very fond of this approach because of the following:</p>
+
+<ul>
+<li>As this objects have little code they are easy to reason about</li>
+<li>They are very easy to compose (use one inside the other)</li>
+<li>They encapsulate the business logic neatly, so you never has to repeat the same logic in different places</li>
+<li>They use dependency injection (DI) heavily so they are loosely couple with the rest of the application</li>
+<li>Using DI makes it very easy to swap the dependencies in testing</li>
+<li>But still they have sensible dependency defaults, I don&rsquo;t see the point in injecting dependencies all the time when in 90% of the cases you just need the defaults</li>
+</ul>
+
+
+<p>Let me show the pattern we are using:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">FindInvoicesForClientService</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">{})</span>
+</span><span class='line'>      <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span><span class='line'>      <span class="n">invoices</span> <span class="o">=</span> <span class="n">find_invoices_service</span><span class="o">.</span><span class="p">(</span><span class="n">some_args</span><span class="p">)</span>
+</span><span class='line'>      <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">find_invoices_service</span>
+</span><span class='line'>      <span class="vi">@find_invoices_service</span> <span class="o">||=</span> <span class="no">FindInvoicesService</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">find_invoices_service</span><span class="o">=</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+</span><span class='line'>      <span class="vi">@find_invoices_service</span> <span class="o">=</span> <span class="n">obj</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">service</span> <span class="o">=</span> <span class="no">FindInvoicesForClientService</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="n">service</span><span class="o">.</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># in test we just swap the dependencies</span>
+</span><span class='line'><span class="n">collaborator</span> <span class="o">=</span> <span class="n">double</span><span class="o">.</span><span class="n">as_null_object</span>
+</span><span class='line'><span class="n">collaborator</span><span class="o">.</span><span class="n">stub</span><span class="p">(</span><span class="ss">:call</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span><span class="p">(</span><span class="n">invoices</span><span class="p">)</span>
+</span><span class='line'><span class="n">service</span><span class="o">.</span><span class="n">find_invoices_service</span> <span class="o">=</span> <span class="n">collaborator</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The key points in our version are:</p>
+
+<ul>
+<li>the class has only one public method (call)</li>
+<li>dependencies are only passed if needed, the class has some sensible defaults that will be used 90% of the time</li>
+<li>each dependency injector has its own method instead of a attr_accessor, this is so you can prepare the dependencies if needed</li>
+</ul>
+
+
+<p>This has been a great pattern for us, we have hundreds of these objects that can be easily composed as needed. This pattern has made our code seriously easier to work with.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Sebastian Porto</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-11-15T21:59:00+11:00" pubdate data-updated="true">Nov 15<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/rails/'>rails</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://sporto.github.com/blog/2012/11/15/a-pattern-for-service-objects-in-rails/" data-via="sebasporto" data-counturl="http://sporto.github.com/blog/2012/11/15/a-pattern-for-service-objects-in-rails/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/09/22/embracing-async-with-deferreds/" title="Previous Post: Embracing Async with Deferreds and Promises">&laquo; Embracing Async with Deferreds and Promises</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/12/05/amd/" title="Next Post: AMD, is not one or the other">AMD, is not one or the other &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/03/20/avoiding-memory-leaks-with-canjs/">Avoiding Memory Leaks With CanJS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/04/form-validations-with-canjs/">Form Validations With CanJS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/04/creating-filtered-lists-in-canjs/">Creating Filtered Lists in CanJS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/09/25/simple-dependency-injection/">Simple Dependency Injection in Ruby</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/08/18/concurrency-node-vs-go/">Comparing Concurrency in Node and Go</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/27/safe-testing-in-rails/">Safe Testing in Rails</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/24/nested-recursive-directives-in-angular/">Building Nested Recursive Directives in Angular</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/23/sharing-simple-business-logic-between-the-client-and-front-end-with-rails/">Sharing Simple Business Logic Between the Client and Front End With Rails</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/04/12/comparison-angular-backbone-can-ember/">A Comparison of Angular, Backbone, CanJS and Ember</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/22/a-plain-english-guide-to-javascript-prototypes/">A Plain English Guide to JavaScript Prototypes</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/sporto">@sporto</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'sporto',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>On Delicious</h1>
+  <div id="delicious"></div>
+  <script type="text/javascript" src="http://feeds.delicious.com/v2/json/sebasporto?count=3&amp;sort=date&amp;callback=renderDeliciousLinks"></script>
+  <p><a href="http://delicious.com/sebasporto">My Delicious Bookmarks &raquo;</a></p>
+</section>
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Sebastian Porto -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'sportoblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://sporto.github.com/blog/2012/11/15/a-pattern-for-service-objects-in-rails/';
+        var disqus_url = 'http://sporto.github.com/blog/2012/11/15/a-pattern-for-service-objects-in-rails/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

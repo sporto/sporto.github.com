@@ -1,0 +1,386 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>State Machines Are Awesome - Sebastian's Blog</title>
+  <meta name="author" content="Sebastian Porto">
+
+  
+  <meta name="description" content="Being mostly a self taught developer, nobody ever taught me what a state machine was. When I finally stumbled upon them I realised I have been &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://sporto.github.com/blog/2011/10/06/state-machines-are-awesome">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Sebastian's Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=Lato:100,300,400" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-34169292-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+	
+    <h2>Mostly about Javascript, Ruby on Rails and other web stuff</h2>
+  
+  <h1><a href="/">Sebastian's Blog</a></h1>
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:sporto.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">State Machines Are Awesome</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-10-06T09:29:00+11:00" pubdate data-updated="true">Oct 6<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Being mostly a self taught developer, nobody ever taught me what a state machine was. When I finally stumbled upon them I realised I have been missing out by not using them before.</p>
+
+<p>When I first started learning about them I couldn&rsquo;t find a good explanation in plain english. So here is my attempt to explain state machines in a simple way and why you should use them.</p>
+
+<p>The code examples below are in Ruby using the <a href="https://github.com/pluginaweek/state_machine">state_machine</a> gem. But this are general concepts for any language.</p>
+
+<h2>What is a state machine?</h2>
+
+<p>In essence a state machine tracks the state of an object and describes the actions that this object can perform at any given time.</p>
+
+<p>A state machine has several components: states, events and transitions.</p>
+
+<h2>States</h2>
+
+<p>Let&rsquo;s say we have an &lsquo;order&rsquo; object. We could use a state machine to track the state of our order. The order could have the following states:</p>
+
+<ul>
+<li>Open</li>
+<li>Placed</li>
+<li>Held</li>
+<li>Cancelled</li>
+<li>Shipped</li>
+<li>Returned</li>
+</ul>
+
+
+<p>The subject of the state machine can be in only one state at any given  time. The order can either be &lsquo;Held&rsquo; or &lsquo;Shipped&rsquo;. These are the states. And we can have only one.</p>
+
+<p>If we want to have two states at the same time we would need to have two state machine running in parallel.</p>
+
+<h2>Events</h2>
+
+<p>We can define events that our state machine can perform. For example:</p>
+
+<ul>
+<li>Create</li>
+<li>Cancel</li>
+<li>Hold</li>
+<li>Ship</li>
+<li>Return</li>
+</ul>
+
+
+<p>Not all events can be called at any time, the available events are dependant on the current state of the object.  A state machine manages this logic for us.</p>
+
+<p>In Ruby (using state_machine) we could do something like this:</p>
+
+<pre><code>order.can_cancel? #ask if the order can be cancelled at this time
+order.cancel #send the cancel event to the order
+</code></pre>
+
+<p>The following diagram shows the state machine flow.</p>
+
+<p><img src="https://docs.google.com/drawings/pub?id=178_CnXn19xnNumvnBY8BxIsJQ245rdoyzvUOwN-MQqM&amp;w=528&amp;h=413"></p>
+
+<p>So as you can see in the diagram there are predetermined paths that the state machine can follow. It can move from the &lsquo;Created&rsquo; state to the &lsquo;Placed&rsquo; state but not to the &lsquo;Shipped&rsquo; state.</p>
+
+<p>The state machine will complain if you try to call an event that is not permitted depending on the current state.</p>
+
+<h2>Transitions</h2>
+
+<p>Finally, when an event is called it may trigger a transition. For example the &lsquo;cancel&rsquo; event could trigger the following transitions:</p>
+
+<ul>
+<li>&lsquo;placed&rsquo; to &lsquo;cancelled&rsquo;</li>
+<li>&lsquo;held&rsquo; to &lsquo;cancelled&rsquo;</li>
+<li>&lsquo;any&rsquo; to &lsquo;cancelled&rsquo;</li>
+</ul>
+
+
+<p>Transitions are useful for triggering processes that should occur in particular cases. For example sending an email when the state of an order changes from &lsquo;placed&rsquo; to &lsquo;cancelled&rsquo;.</p>
+
+<h2>So why you should use state machines?</h2>
+
+<p>If it is not clear already the main reason to user them is because a state machine can manage all the complexity of knowing what events and states are available at any given time.</p>
+
+<p>So, that&rsquo;s my understanding of state machines so far. I am sure I am missing out some stuff but I believe that the basics are here.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Sebastian Porto</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-10-06T09:29:00+11:00" pubdate data-updated="true">Oct 6<span>th</span>, 2011</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/general/'>general</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://sporto.github.com/blog/2011/10/06/state-machines-are-awesome/" data-via="sebasporto" data-counturl="http://sporto.github.com/blog/2011/10/06/state-machines-are-awesome/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2011/08/01/dont-hate-tables/" title="Previous Post: Don't hate tables">&laquo; Don't hate tables</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2011/11/06/the-intuitive-proto-object-in-javascript/" title="Next Post: The Intuitive Proto Object in JavaScript">The Intuitive Proto Object in JavaScript &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/03/20/avoiding-memory-leaks-with-canjs/">Avoiding Memory Leaks With CanJS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/04/form-validations-with-canjs/">Form Validations With CanJS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/04/creating-filtered-lists-in-canjs/">Creating Filtered Lists in CanJS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/09/25/simple-dependency-injection/">Simple Dependency Injection in Ruby</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/08/18/concurrency-node-vs-go/">Comparing Concurrency in Node and Go</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/27/safe-testing-in-rails/">Safe Testing in Rails</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/24/nested-recursive-directives-in-angular/">Building Nested Recursive Directives in Angular</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/23/sharing-simple-business-logic-between-the-client-and-front-end-with-rails/">Sharing Simple Business Logic Between the Client and Front End With Rails</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/04/12/comparison-angular-backbone-can-ember/">A Comparison of Angular, Backbone, CanJS and Ember</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/22/a-plain-english-guide-to-javascript-prototypes/">A Plain English Guide to JavaScript Prototypes</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/sporto">@sporto</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'sporto',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>On Delicious</h1>
+  <div id="delicious"></div>
+  <script type="text/javascript" src="http://feeds.delicious.com/v2/json/sebasporto?count=3&amp;sort=date&amp;callback=renderDeliciousLinks"></script>
+  <p><a href="http://delicious.com/sebasporto">My Delicious Bookmarks &raquo;</a></p>
+</section>
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Sebastian Porto -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'sportoblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://sporto.github.com/blog/2011/10/06/state-machines-are-awesome/';
+        var disqus_url = 'http://sporto.github.com/blog/2011/10/06/state-machines-are-awesome/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

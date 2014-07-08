@@ -1,0 +1,419 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Comparing Concurrency in Node and Go - Sebastian's Blog</title>
+  <meta name="author" content="Sebastian Porto">
+
+  
+  <meta name="description" content="The Go programming language has capture my attention lately. There are several things I really like about: Simplicity: Go is a small language but &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://sporto.github.com/blog/2013/08/18/concurrency-node-vs-go">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Sebastian's Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=Lato:100,300,400" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-34169292-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+	
+    <h2>Mostly about Javascript, Ruby on Rails and other web stuff</h2>
+  
+  <h1><a href="/">Sebastian's Blog</a></h1>
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:sporto.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Comparing Concurrency in Node and Go</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-18T07:40:00+10:00" pubdate data-updated="true">Aug 18<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>The <a href="http://golang.org/">Go programming language</a> has capture my attention lately. There are several things I really like about:</p>
+
+<ul>
+<li>Simplicity: Go is a small language but still very flexible, I appreciate this simplicity as it can be learnt fairly quick.</li>
+<li>Static typing: I like knowing that my code is correct without having to write a bunch of test you to deal with the lack of static typing.</li>
+<li>No classes: Instead of classes Go simply uses interfaces to determine what objects has what methods, I personally find this a flexible and powerful approach.</li>
+<li>Concurrency primitives: Go has baked in all the necessary language constructs for dealing with concurrency in a clean and coherent way.</li>
+</ul>
+
+
+<p>As part of learning Go I wanted to compare how concurrency compares to Node. For this I created a simple prototype that captures a common pattern:</p>
+
+<p><img src="https://docs.google.com/drawings/d/1I-CqdRyXtQ0ZVFPh1kn8-jVC3jWMRgVYmv6EIH2NDxk/pub?w=486&amp;h=216"></p>
+
+<ul>
+<li>Fetch two values from different urls in parallel.</li>
+<li>When those two values have arrived, send them together to another url.</li>
+</ul>
+
+
+<h2>The Server</h2>
+
+<p>I made a simple Node server for this. <a href="https://gist.github.com/sporto/6258909#file-server-js">The code is here</a>. This server has the following API:</p>
+
+<ul>
+<li><a href="http://localhost:8080/x">http://localhost:8080/x</a> => returns &ldquo;Hello&rdquo;</li>
+<li><a href="http://localhost:8080/y">http://localhost:8080/y</a> => returns &ldquo;World&rdquo;</li>
+<li><a href="http://localhost:8080/concat?x=value&amp;y=value">http://localhost:8080/concat?x=value&amp;y=value</a> => takes two values and returns them concatenated</li>
+</ul>
+
+
+<h2>The Node Client</h2>
+
+<p>For the Node code I am using promises, <a href="https://gist.github.com/sporto/6258909#file-client-js">here is the complete client code in JavaScript</a>.</p>
+
+<p>Note the following lines:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;request&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">Q</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;q&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">defX</span> <span class="o">=</span> <span class="nx">Q</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span> <span class="c1">// will be resolved when x arrives</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">defY</span> <span class="o">=</span> <span class="nx">Q</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span> <span class="c1">// will be resolved when y arrives</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">oneAndTwo</span> <span class="o">=</span> <span class="nx">Q</span><span class="p">.</span><span class="nx">all</span><span class="p">([</span><span class="nx">defX</span><span class="p">.</span><span class="nx">promise</span><span class="p">,</span> <span class="nx">defY</span><span class="p">.</span><span class="nx">promise</span><span class="p">]).</span><span class="nx">then</span><span class="p">(</span><span class="nx">processConcat</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">baseUrl</span> <span class="o">=</span> <span class="s2">&quot;http://localhost:8080&quot;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">request</span><span class="p">(</span><span class="nx">baseUrl</span> <span class="o">+</span> <span class="s1">&#39;/x&#39;</span><span class="p">,</span> <span class="nx">makeValueHandler</span><span class="p">(</span><span class="nx">defX</span><span class="p">));</span>
+</span><span class='line'><span class="nx">request</span><span class="p">(</span><span class="nx">baseUrl</span> <span class="o">+</span> <span class="s1">&#39;/y&#39;</span><span class="p">,</span> <span class="nx">makeValueHandler</span><span class="p">(</span><span class="nx">defY</span><span class="p">));</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I create two deferreds: defX and defY. Then I create a promise that is the combination of defX and defY.</p>
+
+<p>Immediately after that I make the first two calls to the server in parallel. When those to calls are done the deferreds will be resolved and the function <code>processConcat</code> will be called with the results (in the correct order).</p>
+
+<p>The JavaScript code is not complex but is not completely straightforward either, you still need to scan up and down when reading the source code to understand exactly what is happening.</p>
+
+<h2>The Go Client</h2>
+
+<p>The complete client in <a href="https://gist.github.com/sporto/6258909#file-client-go">Go is here</a>.</p>
+
+<p>The key lines of code are below:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="kd">var</span> <span class="nx">cx</span> <span class="kd">chan</span> <span class="kt">string</span> <span class="p">=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="kt">string</span><span class="p">)</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">cy</span> <span class="kd">chan</span> <span class="kt">string</span> <span class="p">=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="kt">string</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">go</span> <span class="nx">getValue</span><span class="p">(</span><span class="s">&quot;/x&quot;</span><span class="p">,</span> <span class="nx">cx</span><span class="p">)</span>
+</span><span class='line'><span class="k">go</span> <span class="nx">getValue</span><span class="p">(</span><span class="s">&quot;/y&quot;</span><span class="p">,</span> <span class="nx">cy</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">x</span> <span class="o">:=</span> <span class="o">&lt;-</span><span class="nx">cx</span>
+</span><span class='line'><span class="nx">y</span> <span class="o">:=</span> <span class="o">&lt;-</span><span class="nx">cy</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">processConcat</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Here we create two channels (a way of communicating when using concurrent processes in Go), one for value x and the other for value y.</p>
+
+<p>Immediately after that we fetch the values from the server but using the special <code>go</code> keyword. This means that those call will be made in their own processes so they will not block. These two requests happen in parallel.</p>
+
+<p>The next two lines wait for the results of the API calls, the results are communicated using the channels.</p>
+
+<p>The Go code looks a lot like typical sync code but still it is all happing in parallel thanks to the goroutines. So this code is as fast (event faster) than the Node version but simpler to understand IMO.</p>
+
+<h2>Conclusion</h2>
+
+<p>I am excited about Go, it has a lot to offer in multiple spaces. I will like to explore how something like Node Streams will look in Go.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Sebastian Porto</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-18T07:40:00+10:00" pubdate data-updated="true">Aug 18<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/golang/'>golang</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a>, <a class='category' href='/blog/categories/node/'>node</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://sporto.github.com/blog/2013/08/18/concurrency-node-vs-go/" data-via="sebasporto" data-counturl="http://sporto.github.com/blog/2013/08/18/concurrency-node-vs-go/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/06/27/safe-testing-in-rails/" title="Previous Post: Safe testing in Rails">&laquo; Safe testing in Rails</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/09/25/simple-dependency-injection/" title="Next Post: Simple Dependency Injection in Ruby">Simple Dependency Injection in Ruby &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/03/20/avoiding-memory-leaks-with-canjs/">Avoiding Memory Leaks With CanJS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/04/form-validations-with-canjs/">Form Validations With CanJS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/04/creating-filtered-lists-in-canjs/">Creating Filtered Lists in CanJS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/09/25/simple-dependency-injection/">Simple Dependency Injection in Ruby</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/08/18/concurrency-node-vs-go/">Comparing Concurrency in Node and Go</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/27/safe-testing-in-rails/">Safe Testing in Rails</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/24/nested-recursive-directives-in-angular/">Building Nested Recursive Directives in Angular</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/23/sharing-simple-business-logic-between-the-client-and-front-end-with-rails/">Sharing Simple Business Logic Between the Client and Front End With Rails</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/04/12/comparison-angular-backbone-can-ember/">A Comparison of Angular, Backbone, CanJS and Ember</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/22/a-plain-english-guide-to-javascript-prototypes/">A Plain English Guide to JavaScript Prototypes</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/sporto">@sporto</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'sporto',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>On Delicious</h1>
+  <div id="delicious"></div>
+  <script type="text/javascript" src="http://feeds.delicious.com/v2/json/sebasporto?count=3&amp;sort=date&amp;callback=renderDeliciousLinks"></script>
+  <p><a href="http://delicious.com/sebasporto">My Delicious Bookmarks &raquo;</a></p>
+</section>
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Sebastian Porto -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'sportoblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://sporto.github.com/blog/2013/08/18/concurrency-node-vs-go/';
+        var disqus_url = 'http://sporto.github.com/blog/2013/08/18/concurrency-node-vs-go/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

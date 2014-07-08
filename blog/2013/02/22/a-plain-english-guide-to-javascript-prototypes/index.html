@@ -1,0 +1,649 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>A Plain English Guide to JavaScript Prototypes - Sebastian's Blog</title>
+  <meta name="author" content="Sebastian Porto">
+
+  
+  <meta name="description" content="When I first started learning about JavaScript object model my reaction was of horror and disbelief. I was totally puzzled by its prototype nature as &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://sporto.github.com/blog/2013/02/22/a-plain-english-guide-to-javascript-prototypes">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Sebastian's Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=Lato:100,300,400" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-34169292-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+	
+    <h2>Mostly about Javascript, Ruby on Rails and other web stuff</h2>
+  
+  <h1><a href="/">Sebastian's Blog</a></h1>
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:sporto.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">A Plain English Guide to JavaScript Prototypes</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-02-22T10:21:00+11:00" pubdate data-updated="true">Feb 22<span>nd</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>When I first started learning about JavaScript object model my reaction was of horror and disbelief. I was totally puzzled by its prototype nature as it was my first encounter with a prototype based language. I didn&rsquo;t help that JavaScript has a unique take on prototypes as it adds the concept of <strong>function constructors</strong>. I bet that many of you have had similar experience.</p>
+
+<p>But as I used JavaScript more I didn&rsquo;t just learn to understand its object model but also started love parts of it. Thanks to JavaScript I have find out the elegance and flexibility of prototypes languages. I am now quite fond of prototype languages because they have a simpler and more flexible object model than class based languages.</p>
+
+<h2>Prototypes in Javascript</h2>
+
+<p>Most guides / tutorials start explaining JavaScript objects by going directly to ‘<strong>constructor functions</strong>’, I think this is a mistake, as they introduce a fairly complex concept early on making Javascript look difficult and confusing from the start. Let&rsquo;s leave this for later. First let&rsquo;s start with the basics of prototypes.</p>
+
+<h2>Prototype chains (aka prototype inheritance)</h2>
+
+<p>Every object in Javascript has a <strong>prototype</strong>. When a messages reaches an object, JavaScript will attempt to find a property in that object first, if it cannot find it then the message will be sent to the object&rsquo;s prototype and so on. This works just like single parent inheritance in a class based language.</p>
+
+<p><img src="https://docs.google.com/drawings/d/1NdiIkHd9Cg2j6W4QcJ1X3DEhGXD2gacMXRuURcoE5T4/pub?w=960&amp;h=720"></p>
+
+<p>Prototype inheritance chains can go as long as you want. But in general it is not a good idea to make long chains as your code can get difficult to understand and maintain.</p>
+
+<h2>The __proto__ object</h2>
+
+<p>To understand prototype chains in JavaScript there is nothing as simple as the <strong>__proto__</strong> property. Unfortunately <strong>__proto__</strong> is not part of the standard interface of JavaScript, not at least until ES6. So you shouldn&rsquo;t use it in production code. But anyway it makes explaining prototypes easy.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="c1">// let&#39;s create an alien object</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">alien</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">kind</span><span class="o">:</span> <span class="s1">&#39;alien&#39;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// and a person object</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">person</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">kind</span><span class="o">:</span> <span class="s1">&#39;person&#39;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// and an object called &#39;zack&#39;</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">zack</span> <span class="o">=</span> <span class="p">{};</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// assign alien as the prototype of zack</span>
+</span><span class='line'><span class="nx">zack</span><span class="p">.</span><span class="nx">__proto__</span> <span class="o">=</span> <span class="nx">alien</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// zack is now linked to alien</span>
+</span><span class='line'><span class="c1">// it &#39;inherits&#39; the properties of alien</span>
+</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">zack</span><span class="p">.</span><span class="nx">kind</span><span class="p">);</span> <span class="c1">//=&gt; ‘alien’</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// assign person as the prototype of zack</span>
+</span><span class='line'><span class="nx">zack</span><span class="p">.</span><span class="nx">__proto__</span> <span class="o">=</span> <span class="nx">person</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// and now zack is linked to person</span>
+</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">zack</span><span class="p">.</span><span class="nx">kind</span><span class="p">);</span> <span class="c1">//=&gt; ‘person’</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can see the <strong>__proto__</strong> property is very straightforward to understand and use. Even if we shouldn&rsquo;t use <strong>__proto__</strong> in production code, I think that these examples give the best foundation to understand the JavaScript object model.</p>
+
+<p>You can check that one object is the prototype of another by doing:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">alien</span><span class="p">.</span><span class="nx">isPrototypeOf</span><span class="p">(</span><span class="nx">zack</span><span class="p">))</span>
+</span><span class='line'><span class="c1">//=&gt; true</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Prototype lookups are dynamic</h3>
+
+<p>You can add properties to the prototype of an object at any time, the prototype chain lookup will find the new  property as expected.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">person</span> <span class="o">=</span> <span class="p">{}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">zack</span> <span class="o">=</span> <span class="p">{}</span>
+</span><span class='line'><span class="nx">zack</span><span class="p">.</span><span class="nx">__proto__</span> <span class="o">=</span> <span class="nx">person</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// zack doesn&#39;t respond to kind at this point</span>
+</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">zack</span><span class="p">.</span><span class="nx">kind</span><span class="p">);</span> <span class="c1">//=&gt; undefined</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// let&#39;s add kind to person</span>
+</span><span class='line'><span class="nx">person</span><span class="p">.</span><span class="nx">kind</span> <span class="o">=</span> <span class="s1">&#39;person&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// now zack responds to kind</span>
+</span><span class='line'><span class="c1">// because it finds &#39;kind&#39; in person</span>
+</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">zack</span><span class="p">.</span><span class="nx">kind</span><span class="p">);</span> <span class="c1">//=&gt; &#39;person&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>New / updated properties are assigned to the object, not to the prototype</h3>
+
+<p>What happens if you update a property that already exists in the prototype? Let&rsquo;s see:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">person</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">kind</span><span class="o">:</span> <span class="s1">&#39;person&#39;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">zack</span> <span class="o">=</span> <span class="p">{}</span>
+</span><span class='line'><span class="nx">zack</span><span class="p">.</span><span class="nx">__proto__</span> <span class="o">=</span> <span class="nx">person</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">zack</span><span class="p">.</span><span class="nx">kind</span> <span class="o">=</span> <span class="s1">&#39;zack&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">zack</span><span class="p">.</span><span class="nx">kind</span><span class="p">);</span> <span class="c1">//=&gt; &#39;zack&#39;</span>
+</span><span class='line'><span class="c1">// zack now has a &#39;kind&#39; property</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">person</span><span class="p">.</span><span class="nx">kind</span><span class="p">);</span> <span class="c1">//=&gt; &#39;person&#39;</span>
+</span><span class='line'><span class="c1">// person has not being modified</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note that the property &lsquo;kind&rsquo; now exists in both person and zack.</p>
+
+<h2>Object.create</h2>
+
+<p>As explained before <strong>__proto__</strong> is not a well supported way of assigning prototypes to objects. So the next simplest way is using <strong>Object.create()</strong>. This is available in ES5, but old browsers / engines can be shimmed using this <a href="https://github.com/kriskowal/es5-shim">es5-shim</a>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">person</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">kind</span><span class="o">:</span> <span class="s1">&#39;person&#39;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// creates a new object which prototype is person</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">zack</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">person</span><span class="p">);</span>
+</span><span class='line'>  
+</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">zack</span><span class="p">.</span><span class="nx">kind</span><span class="p">);</span> <span class="c1">// =&gt; ‘person’</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can pass an object to Object.create to add specific properties for the new object</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">zack</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">person</span><span class="p">,</span> <span class="p">{</span><span class="nx">age</span><span class="o">:</span> <span class="p">{</span><span class="nx">value</span><span class="o">:</span>  <span class="mi">13</span><span class="p">}</span> <span class="p">});</span>
+</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">zack</span><span class="p">.</span><span class="nx">age</span><span class="p">);</span> <span class="c1">// =&gt; ‘13’</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Yes, the object you need to pass is a bit convoluted, but that is the way it is. See the docs <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Object/create">here</a>.</p>
+
+<h3>Object.getPrototype</h3>
+
+<p>You can get the prototype of an object using Object.getPrototypeOf</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">zack</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">person</span><span class="p">);</span>
+</span><span class='line'><span class="nb">Object</span><span class="p">.</span><span class="nx">getPrototypeOf</span><span class="p">(</span><span class="nx">zack</span><span class="p">);</span> <span class="c1">//=&gt; person</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There is no such thing as Object.setPrototype.</p>
+
+<h2>Constructor Functions</h2>
+
+<p><strong>Constructor functions</strong> are the most used way in JavaScript to construct prototype chains. The popularity of <strong>constructor functions</strong> comes from the fact that this was the only original way for constructing types. It is also an important consideration the fact that many engines are highly optimized for constructor functions.</p>
+
+<p>Unfortunately they can get confusing, they are in my opinion one of the main reasons why new comers find JavaScript puzzling, but they are a big part of the language and we need to understand them well.</p>
+
+<h3>Functions as constructors</h3>
+
+<p>In JavaScript you create an instance of a function like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">function</span> <span class="nx">Foo</span><span class="p">(){}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">foo</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Foo</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//foo is now an instance of Foo</span>
+</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">foo</span> <span class="k">instanceof</span> <span class="nx">Foo</span> <span class="p">)</span> <span class="c1">//=&gt; true</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In essence functions when used with the keyword <strong>new</strong> behave like factories, meaning that they create new objects. The new object they create is linked to the function by its prototype, more on this later. So in JavaScript we call this an <strong>instance</strong> of the function.</p>
+
+<h3>&lsquo;this&rsquo; is assigned implicitly</h3>
+
+<p>When we use &lsquo;<strong>new</strong>&rsquo;, JavaScript injects an implicit reference to the new object being created in the form of the ‘<strong>this</strong>’ keyword. It also returns this reference implicitly at the end of the function.</p>
+
+<p>When we do this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">function</span> <span class="nx">Foo</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">kind</span> <span class="o">=</span> <span class="err">‘</span><span class="nx">foo</span><span class="err">’</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">foo</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Foo</span><span class="p">();</span> 
+</span><span class='line'><span class="nx">foo</span><span class="p">.</span><span class="nx">kind</span> <span class="c1">//=&gt; ‘foo’</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Behind the scenes it is like doing something like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">function</span> <span class="nx">Foo</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="k">this</span> <span class="o">=</span> <span class="p">{};</span> <span class="c1">// this is not valid, just for illustration</span>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">__proto__</span> <span class="o">=</span> <span class="nx">Foo</span><span class="p">.</span><span class="nx">prototype</span><span class="p">;</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">kind</span> <span class="o">=</span> <span class="err">‘</span><span class="nx">foo</span><span class="err">’</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>But keep in mind that the implicit &lsquo;<strong>this</strong>&rsquo; is only assigned to a new object when using &lsquo;<strong>new</strong>&rsquo;. If you forget &lsquo;<strong>new</strong>&rsquo; keyword then &lsquo;<strong>this</strong>&rsquo; will be the global object. Of course forgetting <strong>new</strong> is a cause of multiple bugs, so don&rsquo;t forget <strong>new</strong>.</p>
+
+<p>One convention that I like is capitalizing the first letter of a function when it is intented to be used as a function constructor, so you now straightaway to you are missing the <strong>new</strong> keyword.</p>
+
+<h3>The &lsquo;function prototype&rsquo;</h3>
+
+<p>Every function in JavaScript has a special property called ‘<strong>prototype</strong>’.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">function</span> <span class="nx">Foo</span><span class="p">(){</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">Foo</span><span class="p">.</span><span class="nx">prototype</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As confusing as it may sound, this ‘<strong>prototype</strong>’ property is not the real prototype (<strong>__proto__</strong>) of the function.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">Foo</span><span class="p">.</span><span class="nx">__proto__</span> <span class="o">===</span> <span class="nx">Foo</span><span class="p">.</span><span class="nx">prototype</span> <span class="c1">//=&gt; false</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This of course generates a lot of confusion as people use the term &lsquo;<strong>prototype</strong>&rsquo; to refer to different things. I think that a good clarification is to always refer to the special &lsquo;<strong>prototype</strong>&rsquo; property of functions as &lsquo;<strong>the function prototype</strong>&rsquo;, never just &lsquo;<strong>prototype</strong>&rsquo;.</p>
+
+<p>The ‘<strong>prototype</strong>’ property points to the object that will be asigned as the prototype of instances created with that function when using &lsquo;<strong>new</strong>&rsquo;. Confusing? This is easier to explain with an example:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">function</span> <span class="nx">Person</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">name</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// the function person has a prototype property</span>
+</span><span class='line'><span class="c1">// we can add properties to this function prototype</span>
+</span><span class='line'><span class="nx">Person</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">kind</span> <span class="o">=</span> <span class="err">‘</span><span class="nx">person</span><span class="err">’</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// when we create a new object using new</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">zack</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Person</span><span class="p">(</span><span class="err">‘</span><span class="nx">Zack</span><span class="err">’</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// the prototype of the new object points to person.prototype</span>
+</span><span class='line'><span class="nx">zack</span><span class="p">.</span><span class="nx">__proto__</span> <span class="o">==</span> <span class="nx">Person</span><span class="p">.</span><span class="nx">prototype</span> <span class="c1">//=&gt; true</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// in the new object we have access to properties defined in Person.prototype</span>
+</span><span class='line'><span class="nx">zack</span><span class="p">.</span><span class="nx">kind</span> <span class="c1">//=&gt; person</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>That is mostly everything there is to know about the JavaScript object model. Understanding how <strong>__proto__</strong> and <strong>function.prototype</strong> are related will give you countless hours of joy and satisfaction, or maybe not.</p>
+
+<p>Mistakes, confusing? Let me know.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Sebastian Porto</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-02-22T10:21:00+11:00" pubdate data-updated="true">Feb 22<span>nd</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/javascript/'>javascript</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://sporto.github.com/blog/2013/02/22/a-plain-english-guide-to-javascript-prototypes/" data-via="sebasporto" data-counturl="http://sporto.github.com/blog/2013/02/22/a-plain-english-guide-to-javascript-prototypes/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/02/02/some-impressions-on-rethinkdb/" title="Previous Post: Some impressions on RethinkDB">&laquo; Some impressions on RethinkDB</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/04/12/comparison-angular-backbone-can-ember/" title="Next Post: A comparison of Angular, Backbone, CanJS and Ember">A comparison of Angular, Backbone, CanJS and Ember &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/03/20/avoiding-memory-leaks-with-canjs/">Avoiding Memory Leaks With CanJS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/04/form-validations-with-canjs/">Form Validations With CanJS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/04/creating-filtered-lists-in-canjs/">Creating Filtered Lists in CanJS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/09/25/simple-dependency-injection/">Simple Dependency Injection in Ruby</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/08/18/concurrency-node-vs-go/">Comparing Concurrency in Node and Go</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/27/safe-testing-in-rails/">Safe Testing in Rails</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/24/nested-recursive-directives-in-angular/">Building Nested Recursive Directives in Angular</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/23/sharing-simple-business-logic-between-the-client-and-front-end-with-rails/">Sharing Simple Business Logic Between the Client and Front End With Rails</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/04/12/comparison-angular-backbone-can-ember/">A Comparison of Angular, Backbone, CanJS and Ember</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/22/a-plain-english-guide-to-javascript-prototypes/">A Plain English Guide to JavaScript Prototypes</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/sporto">@sporto</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'sporto',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>On Delicious</h1>
+  <div id="delicious"></div>
+  <script type="text/javascript" src="http://feeds.delicious.com/v2/json/sebasporto?count=3&amp;sort=date&amp;callback=renderDeliciousLinks"></script>
+  <p><a href="http://delicious.com/sebasporto">My Delicious Bookmarks &raquo;</a></p>
+</section>
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Sebastian Porto -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'sportoblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://sporto.github.com/blog/2013/02/22/a-plain-english-guide-to-javascript-prototypes/';
+        var disqus_url = 'http://sporto.github.com/blog/2013/02/22/a-plain-english-guide-to-javascript-prototypes/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

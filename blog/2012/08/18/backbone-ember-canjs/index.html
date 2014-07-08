@@ -1,0 +1,362 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>My Experience With Backbone, Ember and CanJS - Sebastian's Blog</title>
+  <meta name="author" content="Sebastian Porto">
+
+  
+  <meta name="description" content="Before coming to the JavaScript world I was doing Flex development, so I was quite familiar with MVC paradigm in the front-end side of applications. &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://sporto.github.com/blog/2012/08/18/backbone-ember-canjs">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Sebastian's Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=Lato:100,300,400" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-34169292-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+	
+    <h2>Mostly about Javascript, Ruby on Rails and other web stuff</h2>
+  
+  <h1><a href="/">Sebastian's Blog</a></h1>
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:sporto.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">My Experience With Backbone, Ember and CanJS</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-08-18T00:00:00+10:00" pubdate data-updated="true">Aug 18<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Before coming to the JavaScript world I was doing Flex development, so I was quite familiar with MVC paradigm in the front-end side of applications.</p>
+
+<p>When I first started using JavaScript I learnt to do things in the usual way of that time &ndash; which is having the DOM as the source of truth. e.g. We will add elements to the DOM and if we wanted to know the length of a collection we will just use jQuery to ask the DOM for how many elements there were.</p>
+
+<p>I soon grew tired of this way of doing things, it was just messy.</p>
+
+<h2>Backbone</h2>
+
+<p><a href="http://backbonejs.org/">Backbone</a> captured a lot of attention when it came up, it was the first MVC framework that looked easy to get into. So I decided to try it. It was a great start, the structure of my code started to resemble a lot more what I was used to in Flex e.g. collections, views, controllers.</p>
+
+<p>But there were many times where I would think &ldquo;What? Do I need to do this myself? Shouldn&rsquo;t Backbone take care of this?&rdquo;. For example when a collection changed the view needed to know and I had to hook all these events myself.</p>
+
+<p>Another thing that was a let down is that there is no build-in way of doing live binding in the views. You have to do this yourself e.g. re-render a view manually when something changes (via events). Also doing nested views was more complex that it needed to be.</p>
+
+<p>Backbone just left me wanting a lot more from an MVC framework. So I decided that Backbone was not my cup of tea, it wasn&rsquo;t really doing enough useful things for me.</p>
+
+<h2>Ember</h2>
+
+<p><a href="http://emberjs.com/">Ember</a> also came up with quite a hype and it looked like the perfect fit for everything I was expecting. It has live binding, a great object model and an excellent template engine.</p>
+
+<p>It takes a while to learn as it deviates quite a bit from the usual way of doing JavaScript, Ember relies heavily on binding instead of events. I got a lot into it, even did a talk about it in my local user group.</p>
+
+<p>I liked it but I wasn&rsquo;t completely happy with it because:</p>
+
+<ul>
+<li>It is huge, totally overkill for small projects or mobile apps.</li>
+<li>Performance wise it is not that good either, quite slow compared to Backbone. <a href="http://jsfiddle.net/jashkenas/CGSd5/">http://jsfiddle.net/jashkenas/CGSd5/</a></li>
+<li>It is hard to debug, when something fails it gives you very obscure error messages that are hard to track back to the source.</li>
+<li>It adds scripts tags around elements, which breaks CSS styling in some cases.</li>
+<li>It required me to declare lots of small components, so for simple things I ended up with too many objects.</li>
+<li>It also force me to declare objects in the global space, I couldn&rsquo;t find a way of not having to do this.</li>
+</ul>
+
+
+<h2>CanJS</h2>
+
+<p>Then came <a href="http://canjs.us/">CanJS</a> (without the hype of the other two), it is a reboot of the venerable JavascriptMVC project. Bitovi has done a great job at making JavascriptMVC a lot more accessible to newcomers.</p>
+
+<p>CanJS looked intriguing, so I decided to use it in my next project. It was a great success for me. It stroked a great balance between Backbone and Ember. The features I like a lot in CanJS are:</p>
+
+<ul>
+<li>It is quite small, just a bit bigger than Backbone. Tiny compared to Ember.</li>
+<li>It is fast (as fast as Backbone). <a href="http://jsfiddle.net/sporto/Ek9am/">http://jsfiddle.net/sporto/Ek9am/</a></li>
+<li>It has live binding out of the box, and they work perfectly well (although I prefer handlebars, I can live with EJS).</li>
+<li>It is a lot more general purpose than Backbone and Ember. For example CanJS has an observable object that can be used in a huge variety of situations, not just when doing MVC.</li>
+</ul>
+
+
+<p>CanJS has become my MVC library of choice. I really recommend you give it a go in your next project.</p>
+
+<h2>The future</h2>
+
+<p>I am planning to keep using CanJS in the future, but <a href="http://www.angularjs.org/">Angular</a> looks very appealing, I really like the declarative way of doing things directly in html without having to use templates. I am planning to give Angular a go soon.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Sebastian Porto</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-08-18T00:00:00+10:00" pubdate data-updated="true">Aug 18<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/backbone/'>backbone</a>, <a class='category' href='/blog/categories/canjs/'>canjs</a>, <a class='category' href='/blog/categories/ember/'>ember</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://sporto.github.com/blog/2012/08/18/backbone-ember-canjs/" data-via="sebasporto" data-counturl="http://sporto.github.com/blog/2012/08/18/backbone-ember-canjs/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2011/11/06/the-intuitive-proto-object-in-javascript/" title="Previous Post: The Intuitive Proto Object in JavaScript">&laquo; The Intuitive Proto Object in JavaScript</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/09/22/embracing-async-with-deferreds/" title="Next Post: Embracing Async with Deferreds and Promises">Embracing Async with Deferreds and Promises &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/03/20/avoiding-memory-leaks-with-canjs/">Avoiding Memory Leaks With CanJS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/04/form-validations-with-canjs/">Form Validations With CanJS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/04/creating-filtered-lists-in-canjs/">Creating Filtered Lists in CanJS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/09/25/simple-dependency-injection/">Simple Dependency Injection in Ruby</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/08/18/concurrency-node-vs-go/">Comparing Concurrency in Node and Go</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/27/safe-testing-in-rails/">Safe Testing in Rails</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/24/nested-recursive-directives-in-angular/">Building Nested Recursive Directives in Angular</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/23/sharing-simple-business-logic-between-the-client-and-front-end-with-rails/">Sharing Simple Business Logic Between the Client and Front End With Rails</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/04/12/comparison-angular-backbone-can-ember/">A Comparison of Angular, Backbone, CanJS and Ember</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/22/a-plain-english-guide-to-javascript-prototypes/">A Plain English Guide to JavaScript Prototypes</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/sporto">@sporto</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'sporto',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>On Delicious</h1>
+  <div id="delicious"></div>
+  <script type="text/javascript" src="http://feeds.delicious.com/v2/json/sebasporto?count=3&amp;sort=date&amp;callback=renderDeliciousLinks"></script>
+  <p><a href="http://delicious.com/sebasporto">My Delicious Bookmarks &raquo;</a></p>
+</section>
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Sebastian Porto -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'sportoblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://sporto.github.com/blog/2012/08/18/backbone-ember-canjs/';
+        var disqus_url = 'http://sporto.github.com/blog/2012/08/18/backbone-ember-canjs/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

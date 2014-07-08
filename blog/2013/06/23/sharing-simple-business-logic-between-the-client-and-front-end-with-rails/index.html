@@ -1,0 +1,462 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Sharing Simple Business Logic Between the Client and Front End With Rails - Sebastian's Blog</title>
+  <meta name="author" content="Sebastian Porto">
+
+  
+  <meta name="description" content="Recently I was trying to find out a way of sharing some business logic between the client and the server. We have a reactive UI where results get &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://sporto.github.com/blog/2013/06/23/sharing-simple-business-logic-between-the-client-and-front-end-with-rails">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Sebastian's Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=Lato:100,300,400" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-34169292-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+	
+    <h2>Mostly about Javascript, Ruby on Rails and other web stuff</h2>
+  
+  <h1><a href="/">Sebastian's Blog</a></h1>
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:sporto.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Sharing Simple Business Logic Between the Client and Front End With Rails</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-23T08:26:00+10:00" pubdate data-updated="true">Jun 23<span>rd</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Recently I was trying to find out a way of sharing some business logic between the client and the server. We have a reactive UI where results get calculated as you change values. These are complex formulas we rather not write in both Ruby and JavaScript so we don&rsquo;t have to maintain them in two places.</p>
+
+<p>The easiest solution would have been to make ajax calls to the server with the parameters get the results. But we wanted a UI that reacts immediately so needed to have the code loaded in the browser.</p>
+
+<p>So this a solution I come up with, in summary:</p>
+
+<ul>
+<li>Formulas are stored as plain JavaScript</li>
+<li>Ruby Models load and use those formulas using V8</li>
+<li>The formulas are served to the front end as partials</li>
+</ul>
+
+
+<p>Here is a rundown of what I did step by step. I will use a simple interest formula in this example.</p>
+
+<h2>Storing the formulas</h2>
+
+<p>I needed the formulas to be accessible as partials so I added them in the view folder:</p>
+
+<p>In app/views/formulas/_interest.js</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">function</span> <span class="nx">formula</span><span class="p">(</span><span class="nx">principal</span><span class="p">,</span> <span class="nx">rate</span><span class="p">,</span> <span class="nx">years</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">principal</span> <span class="o">*</span> <span class="nx">rate</span> <span class="o">*</span> <span class="nx">years</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Using the formulas in my Ruby models</h2>
+
+<p>In order to run the JavaScript on the server you will need <strong>therubyracer</strong> gem, in Gemfile:</p>
+
+<pre><code>gem 'therubyracer'
+</code></pre>
+
+<p>In app/models/contract.rb:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Contract</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">principal</span><span class="p">,</span> <span class="n">rate</span><span class="p">,</span> <span class="n">years</span><span class="p">)</span>
+</span><span class='line'>      <span class="vi">@principal</span><span class="p">,</span> <span class="vi">@rate</span><span class="p">,</span> <span class="vi">@years</span> <span class="o">=</span> <span class="n">principal</span><span class="p">,</span> <span class="n">rate</span><span class="p">,</span> <span class="n">years</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">interest</span>
+</span><span class='line'>      <span class="n">cxt</span> <span class="o">=</span> <span class="ss">V8</span><span class="p">:</span><span class="ss">:Context</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'>      <span class="n">source</span> <span class="o">=</span> <span class="no">Rails</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;app&#39;</span><span class="p">,</span> <span class="s1">&#39;views&#39;</span><span class="p">,</span> <span class="s1">&#39;formulas&#39;</span><span class="p">,</span> <span class="s1">&#39;_interest.js&#39;</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">cxt</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">cxt</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="s2">&quot;formula(</span><span class="si">#{</span><span class="vi">@principal</span><span class="si">}</span><span class="s2">, </span><span class="si">#{</span><span class="vi">@rate</span><span class="si">}</span><span class="s2">, </span><span class="si">#{</span><span class="vi">@years</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The JavaScript code is loaded inside the interest method and ran with the provided parameters. In this way the code is accessible as a plain ruby method and only needs to be tested in one place. In my test:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;spec_helper&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">describe</span> <span class="s2">&quot;Contract&quot;</span> <span class="k">do</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">let</span><span class="p">(</span><span class="ss">:principal</span><span class="p">)</span> <span class="p">{</span> <span class="mi">100</span> <span class="p">}</span>
+</span><span class='line'>  <span class="n">let</span><span class="p">(</span><span class="ss">:rate</span><span class="p">)</span> <span class="p">{</span> <span class="mi">0</span><span class="o">.</span><span class="mi">5</span> <span class="p">}</span>
+</span><span class='line'>  <span class="n">let</span><span class="p">(</span><span class="ss">:years</span><span class="p">)</span> <span class="p">{</span> <span class="mi">5</span> <span class="p">}</span>
+</span><span class='line'>  <span class="n">let</span><span class="p">(</span><span class="ss">:contract</span><span class="p">)</span> <span class="p">{</span> <span class="no">Contract</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">principal</span><span class="p">,</span> <span class="n">rate</span><span class="p">,</span> <span class="n">years</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">it</span> <span class="s2">&quot;returns the right interest&quot;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">expect</span><span class="p">(</span><span class="n">contract</span><span class="o">.</span><span class="n">interest</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">eq</span><span class="p">(</span><span class="mi">250</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Loading the formulas in the front-end</h2>
+
+<p>I couldn&rsquo;t find a way of injecting the JS code into the assets pipeline, so instead I just loaded in a partial that gets loaded in the application layout.</p>
+
+<p>In app/views/layouts/application.html.erb:</p>
+
+<pre><code>&lt;%= render 'formulas/index' %&gt;
+</code></pre>
+
+<p>In app/views/formulas/_index.html.erb</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="o">&lt;</span><span class="nx">script</span><span class="o">&gt;</span>
+</span><span class='line'>  <span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">APP</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
+</span><span class='line'>      <span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">formulas</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>          <span class="nx">formulas</span><span class="p">.</span><span class="nx">interest</span> <span class="o">=</span> <span class="o">&lt;%=</span> <span class="nx">render</span> <span class="s1">&#39;formulas/interest.js&#39;</span> <span class="o">%&gt;</span>
+</span><span class='line'>          <span class="p">...</span>
+</span><span class='line'>      <span class="p">})(</span><span class="nx">APP</span><span class="p">.</span><span class="nx">formulas</span> <span class="o">||</span> <span class="p">(</span><span class="nx">APP</span><span class="p">.</span><span class="nx">formulas</span> <span class="o">=</span> <span class="p">{}));</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="p">})(</span><span class="nb">window</span><span class="p">.</span><span class="nx">APP</span> <span class="o">||</span> <span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">APP</span> <span class="o">=</span> <span class="p">{}));</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/script&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This piece of JavaScript creates a global object APP if not found, then an object formulas inside APP and finally adds my interest formula to APP.formulas.interest.</p>
+
+<h2>Using the formulas in the front end</h2>
+
+<p>Once the formulas are loaded as shown above they can be used as:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">res</span> <span class="o">=</span> <span class="nx">APP</span><span class="p">.</span><span class="nx">formulas</span><span class="p">.</span><span class="nx">interest</span><span class="p">(</span><span class="nx">principal</span><span class="p">,</span> <span class="nx">rate</span><span class="p">,</span> <span class="nx">years</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<p>So this is a way of sharing code between the back and the front end. If you how how could be improved or of a cleaner way altogether I would love to hear about it, maybe some DSL that can be used in both places.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Sebastian Porto</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-23T08:26:00+10:00" pubdate data-updated="true">Jun 23<span>rd</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/javascript/'>javascript</a>, <a class='category' href='/blog/categories/rails/'>rails</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://sporto.github.com/blog/2013/06/23/sharing-simple-business-logic-between-the-client-and-front-end-with-rails/" data-via="sebasporto" data-counturl="http://sporto.github.com/blog/2013/06/23/sharing-simple-business-logic-between-the-client-and-front-end-with-rails/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/04/12/comparison-angular-backbone-can-ember/" title="Previous Post: A comparison of Angular, Backbone, CanJS and Ember">&laquo; A comparison of Angular, Backbone, CanJS and Ember</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/06/24/nested-recursive-directives-in-angular/" title="Next Post: Building nested recursive directives in Angular">Building nested recursive directives in Angular &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/03/20/avoiding-memory-leaks-with-canjs/">Avoiding Memory Leaks With CanJS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/04/form-validations-with-canjs/">Form Validations With CanJS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/04/creating-filtered-lists-in-canjs/">Creating Filtered Lists in CanJS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/09/25/simple-dependency-injection/">Simple Dependency Injection in Ruby</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/08/18/concurrency-node-vs-go/">Comparing Concurrency in Node and Go</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/27/safe-testing-in-rails/">Safe Testing in Rails</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/24/nested-recursive-directives-in-angular/">Building Nested Recursive Directives in Angular</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/23/sharing-simple-business-logic-between-the-client-and-front-end-with-rails/">Sharing Simple Business Logic Between the Client and Front End With Rails</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/04/12/comparison-angular-backbone-can-ember/">A Comparison of Angular, Backbone, CanJS and Ember</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/22/a-plain-english-guide-to-javascript-prototypes/">A Plain English Guide to JavaScript Prototypes</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/sporto">@sporto</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'sporto',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>On Delicious</h1>
+  <div id="delicious"></div>
+  <script type="text/javascript" src="http://feeds.delicious.com/v2/json/sebasporto?count=3&amp;sort=date&amp;callback=renderDeliciousLinks"></script>
+  <p><a href="http://delicious.com/sebasporto">My Delicious Bookmarks &raquo;</a></p>
+</section>
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Sebastian Porto -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'sportoblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://sporto.github.com/blog/2013/06/23/sharing-simple-business-logic-between-the-client-and-front-end-with-rails/';
+        var disqus_url = 'http://sporto.github.com/blog/2013/06/23/sharing-simple-business-logic-between-the-client-and-front-end-with-rails/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

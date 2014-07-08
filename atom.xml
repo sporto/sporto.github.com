@@ -1,113 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
 
-<!DOCTYPE html>
-<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
-<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
-<head>
-  <meta charset="utf-8">
-  <title>Sebastian's Blog</title>
-  <meta name="author" content="Sebastian Porto">
-
-  
-  <meta name="description" content="Avoiding Memory leaks with CanJS If you are building a single page application memory leaks can be a real problem, specially if you are application &hellip;">
-  
-
-  <!-- http://t.co/dKP3o1e -->
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  
-  <link rel="canonical" href="http://sporto.github.com">
-  <link href="/favicon.png" rel="icon">
-  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <link href="/atom.xml" rel="alternate" title="Sebastian's Blog" type="application/atom+xml">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
-  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
-<link href="http://fonts.googleapis.com/css?family=Lato:100,300,400" rel="stylesheet" type="text/css">
-<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-
-  
-  <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-34169292-1']);
-    _gaq.push(['_trackPageview']);
-
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
-
-
-</head>
-
-<body   >
-  <header role="banner"><hgroup>
-	
-    <h2>Mostly about Javascript, Ruby on Rails and other web stuff</h2>
-  
-  <h1><a href="/">Sebastian's Blog</a></h1>
-</hgroup>
-
-</header>
-  <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
-  
-</ul>
-  
-<form action="http://google.com/search" method="get">
-  <fieldset role="search">
-    <input type="hidden" name="q" value="site:sporto.github.com" />
-    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-  </fieldset>
-</form>
-  
-<ul class="main-navigation">
-  <li><a href="/">Blog</a></li>
-  <li><a href="/blog/archives">Archives</a></li>
-</ul>
-
-</nav>
-  <div id="main">
-    <div id="content">
-      <div class="blog-index">
-  
-  
-  
-    <article>
-      
-  <header>
+  <title><![CDATA[Sebastian's Blog]]></title>
+  <link href="http://sporto.github.com/atom.xml" rel="self"/>
+  <link href="http://sporto.github.com/"/>
+  <updated>2014-07-08T11:23:21+10:00</updated>
+  <id>http://sporto.github.com/</id>
+  <author>
+    <name><![CDATA[Sebastian Porto]]></name>
     
-      <h1 class="entry-title"><a href="/blog/2014/03/20/avoiding-memory-leaks-with-canjs/">Avoiding Memory Leaks With CanJS</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
 
   
-
-
-<time datetime="2014-03-20T22:58:14+11:00" pubdate data-updated="true">Mar 20<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Avoiding Memory leaks with CanJS</p>
+  <entry>
+    <title type="html"><![CDATA[Avoiding Memory Leaks With CanJS]]></title>
+    <link href="http://sporto.github.com/blog/2014/03/20/avoiding-memory-leaks-with-canjs/"/>
+    <updated>2014-03-20T22:58:14+11:00</updated>
+    <id>http://sporto.github.com/blog/2014/03/20/avoiding-memory-leaks-with-canjs</id>
+    <content type="html"><![CDATA[<p>Avoiding Memory leaks with CanJS</p>
 
 <p>If you are building a single page application memory leaks can be a real problem, specially if you are application is meant to stay on the screen for long periods of time without the user refreshing it.</p>
 
@@ -284,42 +195,15 @@
 
 
 <p>By removing the elements entirely from the DOM, CanJS will trigger <code>destroy</code> and unbind the events. So that&rsquo;s it, avoiding memory leaks is quite straight forward when following the right patterns.</p>
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/03/04/form-validations-with-canjs/">Form Validations With CanJS</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-03-04T23:29:30+11:00" pubdate data-updated="true">Mar 4<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>During my time using CanJS I haven&rsquo;t found a canonical way of doing form validations with it, so here I want to share the way I am doing them at the moment.</p>
+  <entry>
+    <title type="html"><![CDATA[Form Validations With CanJS]]></title>
+    <link href="http://sporto.github.com/blog/2014/03/04/form-validations-with-canjs/"/>
+    <updated>2014-03-04T23:29:30+11:00</updated>
+    <id>http://sporto.github.com/blog/2014/03/04/form-validations-with-canjs</id>
+    <content type="html"><![CDATA[<p>During my time using CanJS I haven&rsquo;t found a canonical way of doing form validations with it, so here I want to share the way I am doing them at the moment.</p>
 
 <p>First let&rsquo;s start with a model:</p>
 
@@ -462,42 +346,15 @@
 <p>This helper will display the error an error to the user if there is any.</p>
 
 <p>Here is a <a href="http://jsbin.com/jofeq/5/edit?html,js,output">fiddle</a> with a complete example.</p>
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/03/04/creating-filtered-lists-in-canjs/">Creating Filtered Lists in CanJS</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-03-04T21:56:00+11:00" pubdate data-updated="true">Mar 4<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Here is a simple tutorial on how to build a filtered list in CanJS. For example, lets say that we have a list of people and we want to display people that have birthdays this month.</p>
+  <entry>
+    <title type="html"><![CDATA[Creating Filtered Lists in CanJS]]></title>
+    <link href="http://sporto.github.com/blog/2014/03/04/creating-filtered-lists-in-canjs/"/>
+    <updated>2014-03-04T21:56:00+11:00</updated>
+    <id>http://sporto.github.com/blog/2014/03/04/creating-filtered-lists-in-canjs</id>
+    <content type="html"><![CDATA[<p>Here is a simple tutorial on how to build a filtered list in CanJS. For example, lets say that we have a list of people and we want to display people that have birthdays this month.</p>
 
 <p>Our mustache template would like something like this:</p>
 
@@ -584,42 +441,15 @@
 
 
 <p>JsBin <a href="http://jsbin.com/moriq/1/edit?html,js,output">here</a>.</p>
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/09/25/simple-dependency-injection/">Simple Dependency Injection in Ruby</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-09-25T21:12:00+10:00" pubdate data-updated="true">Sep 25<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Some time ago I read the book <a href="http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330">Practical Object-Oriented Design in Ruby</a> by Sandi Metz, while an excellent book there is one thing that bothered me while reading it.</p>
+  <entry>
+    <title type="html"><![CDATA[Simple Dependency Injection in Ruby]]></title>
+    <link href="http://sporto.github.com/blog/2013/09/25/simple-dependency-injection/"/>
+    <updated>2013-09-25T21:12:00+10:00</updated>
+    <id>http://sporto.github.com/blog/2013/09/25/simple-dependency-injection</id>
+    <content type="html"><![CDATA[<p>Some time ago I read the book <a href="http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330">Practical Object-Oriented Design in Ruby</a> by Sandi Metz, while an excellent book there is one thing that bothered me while reading it.</p>
 
 <p>That is the pattern for dependecy injection proposed on the book. It goes something like this:</p>
 
@@ -718,42 +548,15 @@
 
 
 <p>So that&rsquo;s it, <strong>DI doesn&rsquo;t have to be complicated at all in ruby</strong>.</p>
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/08/18/concurrency-node-vs-go/">Comparing Concurrency in Node and Go</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-08-18T07:40:00+10:00" pubdate data-updated="true">Aug 18<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>The <a href="http://golang.org/">Go programming language</a> has capture my attention lately. There are several things I really like about:</p>
+  <entry>
+    <title type="html"><![CDATA[Comparing Concurrency in Node and Go]]></title>
+    <link href="http://sporto.github.com/blog/2013/08/18/concurrency-node-vs-go/"/>
+    <updated>2013-08-18T07:40:00+10:00</updated>
+    <id>http://sporto.github.com/blog/2013/08/18/concurrency-node-vs-go</id>
+    <content type="html"><![CDATA[<p>The <a href="http://golang.org/">Go programming language</a> has capture my attention lately. There are several things I really like about:</p>
 
 <ul>
 <li>Simplicity: Go is a small language but still very flexible, I appreciate this simplicity as it can be learnt fairly quick.</li>
@@ -863,42 +666,15 @@
 <h2>Conclusion</h2>
 
 <p>I am excited about Go, it has a lot to offer in multiple spaces. I will like to explore how something like Node Streams will look in Go.</p>
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/06/27/safe-testing-in-rails/">Safe Testing in Rails</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-27T12:41:00+10:00" pubdate data-updated="true">Jun 27<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>There is a typical progression when developing an application. First we start with something simple, with a few models, things are simple to test. At this stage we can afford to build all the objects we need in our test without too much concern for speed and complexity.</p>
+  <entry>
+    <title type="html"><![CDATA[Safe Testing in Rails]]></title>
+    <link href="http://sporto.github.com/blog/2013/06/27/safe-testing-in-rails/"/>
+    <updated>2013-06-27T12:41:00+10:00</updated>
+    <id>http://sporto.github.com/blog/2013/06/27/safe-testing-in-rails</id>
+    <content type="html"><![CDATA[<p>There is a typical progression when developing an application. First we start with something simple, with a few models, things are simple to test. At this stage we can afford to build all the objects we need in our test without too much concern for speed and complexity.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -1037,42 +813,15 @@
 
 
 <p>Bogus will check that <code>office.language</code> is an actual method and that it takes the number of parameters we send. In this way we can have the benefits of stubbing and mocking without the drawbacks. I highly recommend that you try it in your project.</p>
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/06/24/nested-recursive-directives-in-angular/">Building Nested Recursive Directives in Angular</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-24T11:18:00+10:00" pubdate data-updated="true">Jun 24<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I learnt a new trick over the weekend using Angular, how to build a recursive tree of objects using directives. In this post I want to share how to do it.</p>
+  <entry>
+    <title type="html"><![CDATA[Building Nested Recursive Directives in Angular]]></title>
+    <link href="http://sporto.github.com/blog/2013/06/24/nested-recursive-directives-in-angular/"/>
+    <updated>2013-06-24T11:18:00+10:00</updated>
+    <id>http://sporto.github.com/blog/2013/06/24/nested-recursive-directives-in-angular</id>
+    <content type="html"><![CDATA[<p>I learnt a new trick over the weekend using Angular, how to build a recursive tree of objects using directives. In this post I want to share how to do it.</p>
 
 <p>Let&rsquo;s say that you have some data that looks like this, it can be as deep as you want:</p>
 
@@ -1299,42 +1048,15 @@ South America
 <p>That is it, <a href="http://jsbin.com/acibiv/3/edit">here is the complete example</a>. Thanks.</p>
 
 <p><strong>Update 2013-12-31</strong>: Please read the comments, there are some good suggestions on how to do this better.</p>
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/06/23/sharing-simple-business-logic-between-the-client-and-front-end-with-rails/">Sharing Simple Business Logic Between the Client and Front End With Rails</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-23T08:26:00+10:00" pubdate data-updated="true">Jun 23<span>rd</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Recently I was trying to find out a way of sharing some business logic between the client and the server. We have a reactive UI where results get calculated as you change values. These are complex formulas we rather not write in both Ruby and JavaScript so we don&rsquo;t have to maintain them in two places.</p>
+  <entry>
+    <title type="html"><![CDATA[Sharing Simple Business Logic Between the Client and Front End With Rails]]></title>
+    <link href="http://sporto.github.com/blog/2013/06/23/sharing-simple-business-logic-between-the-client-and-front-end-with-rails/"/>
+    <updated>2013-06-23T08:26:00+10:00</updated>
+    <id>http://sporto.github.com/blog/2013/06/23/sharing-simple-business-logic-between-the-client-and-front-end-with-rails</id>
+    <content type="html"><![CDATA[<p>Recently I was trying to find out a way of sharing some business logic between the client and the server. We have a reactive UI where results get calculated as you change values. These are complex formulas we rather not write in both Ruby and JavaScript so we don&rsquo;t have to maintain them in two places.</p>
 
 <p>The easiest solution would have been to make ajax calls to the server with the parameters get the results. But we wanted a UI that reacts immediately so needed to have the code loaded in the browser.</p>
 
@@ -1487,52 +1209,25 @@ South America
 <hr />
 
 <p>So this is a way of sharing code between the back and the front end. If you how how could be improved or of a cleaner way altogether I would love to hear about it, maybe some DSL that can be used in both places.</p>
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/04/12/comparison-angular-backbone-can-ember/">A Comparison of Angular, Backbone, CanJS and Ember</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-04-12T19:00:00+10:00" pubdate data-updated="true">Apr 12<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Selecting a JavaScript MVC framework can be hard work. There are so many factors to consider and so many options out there that selecting a framework can be overwhelming. To have an idea of all the possible alternatives have a look at <a href="http://todomvc.com/">TodoMVC</a>.</p>
+  <entry>
+    <title type="html"><![CDATA[A Comparison of Angular, Backbone, CanJS and Ember]]></title>
+    <link href="http://sporto.github.com/blog/2013/04/12/comparison-angular-backbone-can-ember/"/>
+    <updated>2013-04-12T19:00:00+10:00</updated>
+    <id>http://sporto.github.com/blog/2013/04/12/comparison-angular-backbone-can-ember</id>
+    <content type="html"><![CDATA[<p>Selecting a JavaScript MVC framework can be hard work. There are so many factors to consider and so many options out there that selecting a framework can be overwhelming. To have an idea of all the possible alternatives have a look at <a href="http://todomvc.com/">TodoMVC</a>.</p>
 
 <p>I have had the opportunity to use four of these frameworks: <a href="http://angularjs.org/">Angular</a>, <a href="http://backbonejs.org/">Backbone</a>, <a href="http://canjs.us/">CanJS</a> and <a href="http://emberjs.com/">Ember</a>. So I decided to create a comparison to help you decide which one to use. I will go through several factors that you might want to consider when choosing one.</p>
 
 <p>To each factor I have assigned a score between 1 and 5. Where 1 is poor and 5 is great. I have tried to be impartial in my comparison, but of course my objectivity is heavily compromised as the scores are based mostly on my personal experience.</p>
 
 <p>
-<img src="/images/logos/angular.png" width="160" height="160" title="Angular.js" alt="images">
-<img src="/images/logos/backbone.png" width="160" height="160" title="Backbone.js" alt="images">
-<img src="/images/logos/can.png" width="160" height="160" title="Can.js" alt="images">
-<img src="/images/logos/ember.png" width="160" height="160" title="Ember.js" alt="images">
+<img src="http://sporto.github.com/images/logos/angular.png" width="160" height="160" title="Angular.js" alt="images">
+<img src="http://sporto.github.com/images/logos/backbone.png" width="160" height="160" title="Backbone.js" alt="images">
+<img src="http://sporto.github.com/images/logos/can.png" width="160" height="160" title="Can.js" alt="images">
+<img src="http://sporto.github.com/images/logos/ember.png" width="160" height="160" title="Ember.js" alt="images">
 </p>
 
 
@@ -2062,42 +1757,15 @@ The keys to have great testable code are <strong>modularity</strong> (have small
 
 <p><strong>Update 2013-04-20</strong>: Added testability.
 <strong>Update 2013-04-18</strong>: Made it clear that the last section is just my opinion. Removed the inflammatory &ldquo;It is time to move on&rdquo; statement.</p>
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/02/22/a-plain-english-guide-to-javascript-prototypes/">A Plain English Guide to JavaScript Prototypes</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-02-22T10:21:00+11:00" pubdate data-updated="true">Feb 22<span>nd</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>When I first started learning about JavaScript object model my reaction was of horror and disbelief. I was totally puzzled by its prototype nature as it was my first encounter with a prototype based language. I didn&rsquo;t help that JavaScript has a unique take on prototypes as it adds the concept of <strong>function constructors</strong>. I bet that many of you have had similar experience.</p>
+  <entry>
+    <title type="html"><![CDATA[A Plain English Guide to JavaScript Prototypes]]></title>
+    <link href="http://sporto.github.com/blog/2013/02/22/a-plain-english-guide-to-javascript-prototypes/"/>
+    <updated>2013-02-22T10:21:00+11:00</updated>
+    <id>http://sporto.github.com/blog/2013/02/22/a-plain-english-guide-to-javascript-prototypes</id>
+    <content type="html"><![CDATA[<p>When I first started learning about JavaScript object model my reaction was of horror and disbelief. I was totally puzzled by its prototype nature as it was my first encounter with a prototype based language. I didn&rsquo;t help that JavaScript has a unique take on prototypes as it adds the concept of <strong>function constructors</strong>. I bet that many of you have had similar experience.</p>
 
 <p>But as I used JavaScript more I didn&rsquo;t just learn to understand its object model but also started love parts of it. Thanks to JavaScript I have find out the elegance and flexibility of prototypes languages. I am now quite fond of prototype languages because they have a simpler and more flexible object model than class based languages.</p>
 
@@ -2437,155 +2105,1603 @@ The keys to have great testable code are <strong>modularity</strong> (have small
 <p>That is mostly everything there is to know about the JavaScript object model. Understanding how <strong>__proto__</strong> and <strong>function.prototype</strong> are related will give you countless hours of joy and satisfaction, or maybe not.</p>
 
 <p>Mistakes, confusing? Let me know.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Some Impressions on RethinkDB]]></title>
+    <link href="http://sporto.github.com/blog/2013/02/02/some-impressions-on-rethinkdb/"/>
+    <updated>2013-02-02T08:52:00+11:00</updated>
+    <id>http://sporto.github.com/blog/2013/02/02/some-impressions-on-rethinkdb</id>
+    <content type="html"><![CDATA[<p>Tried RethinkDB for a week. Overall it gave me a very good impression.</p>
+
+<ul>
+<li>Very easy to setup and run</li>
+<li>Setting up sharding and replication is quite simple as well</li>
+<li>The composable query language is a big plus. I really like the way I can build queries in my code by adding refinements if I need them. Reminds me of ActiveRecord in Rails.</li>
+<li>The admin interface is gorgeus and super useful, but I wish I could save my queries.</li>
+<li>The developers are very active in IRC and the forum, they responded all my questions very quickly.</li>
+</ul>
+
+
+<p>Some rough edges I came accross are:</p>
+
+<ul>
+<li>Queries that require boolean logic (e.g. ‘where user.id IN (1,2,3) and user.active = 1’ in SQL) are very cumbersome in RethinkDB right now. The good thing is that this is being addressed on the next release.</li>
+<li>I manage to send several JavaScript expressions to the server that made RethinkDB spawn a bunch of processes that ate the machine CPU very quickly, making the DB almost unusable, I had to kill RethinkDB several times because of this. It would be nice if RethinkDB will  prevent this.</li>
+<li>At the moment you cannot connect instances of RethinkDB on different architectures, e.g. Ubuntu to Mac, 32 bits to 64 bits. Again this is in their list of things to address in the future.</li>
+</ul>
+
+
+<p>At the end of our exploration we ended up with a flat data structure so we reverted back to our established SQL solution. But I look forward to use RethinkDB again soon.</p>
+
+<p><strong>Update July 2013</strong></p>
+
+<p>Since I wrote this post some issues on RethinkDB has already been fixed. I was using rethink 1.5 at the time. Fixed issues are:</p>
+
+<ul>
+<li><p>&ldquo;Queries that require boolean logic (e.g. ‘where user.id IN (1,2,3) and user.active = 1’ in SQL)&rdquo; was addressed by the inclusion of array operations in RethinkDB 1.6. The equivalent ReQL command would be either of the following:</p>
+
+<pre><code>  r.table('users').filter(lambda user: r.expr([1,2,3]).contains(user['id']) &amp; (user['active'] == 1))
+  r.table('users').filter(lambda user: r.all(r.expr([1,2,3]).contains(user['id']), user['active'] == 1))
+</code></pre></li>
+<li><p>JavaScript expressions (via the r.js command) have an optional timeout flag so the user can prevent single expressions from taking down the server, since RethinkDB 1.5 (see issue #69: <a href="https://github.com/rethinkdb/rethinkdb/issues/69">https://github.com/rethinkdb/rethinkdb/issues/69</a>)</p></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Asynchronous JS: Callbacks, Listeners, Control Flow Libs and Promises]]></title>
+    <link href="http://sporto.github.com/blog/2012/12/09/callbacks-listeners-promises/"/>
+    <updated>2012-12-09T16:59:00+11:00</updated>
+    <id>http://sporto.github.com/blog/2012/12/09/callbacks-listeners-promises</id>
+    <content type="html"><![CDATA[<p>When it comes to dealing with <strong>asynchronous</strong> development in JavaScript there are many tool you can use. This post explains four of these tools and what their advantages are. These are Callbacks, Listeners, Control Flow Libraries and Promises.</p>
+
+<h3>Example Scenario</h3>
+
+<p>To illustrate the use of these four tools, let&rsquo;s create a simple example scenario.</p>
+
+<p>Let&rsquo;s say that we want to find some records, then process them and finally return the processed results. Both operations (find and process) are asynchronous.</p>
+
+<div style="height: 180px; overflow:hidden;">
+    <img src="http://photos.foter.com/29/why-didnt-you-call-me_l.jpg" style="display: block; width: 100%; margin-top:-120px;">
 </div>
-  
-  
 
 
-    </article>
-  
-  <div class="pagination">
-    
-      <a class="prev" href="/blog/page/2/">&larr; Older</a>
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
+<p>Photo credit: bitzcelt / Foter / CC BY-NC-ND</p>
+
+<h2>Callbacks</h2>
+
+<p>Let&rsquo;s start with callback pattern, this is the most basic and the best known pattern to deal with async programming.</p>
+
+<p>A callback looks like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">finder</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">results</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="p">..</span><span class="k">do</span> <span class="nx">something</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In the callback pattern we call a function that will do the asynchronous operation. One of the parameters we pass is a function that will be called when the operation is done.</p>
+
+<h3>Setup</h3>
+
+<p>In order to illustrate how they work we need a couple of functions that will find and process the records. In the real world these functions will make an AJAX request and return the results, but for now let&rsquo;s just use timeouts.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">finder</span><span class="p">(</span><span class="nx">records</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">records</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">);</span>
+</span><span class='line'>        <span class="nx">cb</span><span class="p">(</span><span class="nx">records</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">},</span> <span class="mi">1000</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="kd">function</span> <span class="nx">processor</span><span class="p">(</span><span class="nx">records</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">records</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">);</span>
+</span><span class='line'>        <span class="nx">cb</span><span class="p">(</span><span class="nx">records</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">},</span> <span class="mi">1000</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Using the callbacks</h3>
+
+<p>The code that consumes these functions looks like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">finder</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">records</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">processor</span><span class="p">(</span><span class="nx">records</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">records</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">records</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We call the first function, passing a callback. Inside this callback we call the second function passing another callback.</p>
+
+<p>These nested callbacks can be written more clearly by passing a reference to another function.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">onProcessorDone</span><span class="p">(</span><span class="nx">records</span><span class="p">){</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">records</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">function</span> <span class="nx">onFinderDone</span><span class="p">(</span><span class="nx">records</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">processor</span><span class="p">(</span><span class="nx">records</span><span class="p">,</span> <span class="nx">onProcessorDone</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">finder</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="nx">onFinderDone</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In both case the console log above with log [1,2,3,4,5,6]</p>
+
+<p>Working example here:</p>
+
+<iframe style="width: 100%; height: 300px" frameborder="0" seamless="seamless" src="http://jsfiddle.net/jjzbr/embedded/js,result/light/"></iframe>
+
+
+<h3>Pros</h3>
+
+<ul>
+<li>They are a very well know pattern, so they are familiar thus easy to understand.</li>
+<li>Very easy to implement in your own libraries / functions.</li>
+</ul>
+
+
+<h3>Cons</h3>
+
+<ul>
+<li>Nested callbacks will form the infamous pyramid of doom as shown above, which can get hard to read when you have multiple nested levels. But this is quite easy to fix by splitting the functions also as shown above.</li>
+<li>You can only pass one callback for a given event, this can be a big limitation in many cases.</li>
+</ul>
+
+
+<div style="height: 150px; overflow:hidden;">
+    <img src="http://photos.foter.com/66/summer-sound-large-view_l.jpg" style="display: block; width: 100%;">   
 </div>
-<aside class="sidebar">
+
+
+<p>Photo credit: Brandon Christopher Warren / Foter / CC BY-NC</p>
+
+<h2>Listeners</h2>
+
+<p>Listeners are also a well known pattern, mostly made popular by jQuery and other DOM libraries. A Listener might look like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">finder</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;done&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">records</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="p">..</span><span class="k">do</span> <span class="nx">something</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We call a function on an object that adds a listener. In that function we pass the name of the event we want to listen to and a callback function. &lsquo;on&rsquo; is one of many common name for this function, other common names you will come across are &lsquo;bind&rsquo;, &lsquo;listen&rsquo;, &lsquo;addEventListener&rsquo;, &lsquo;observe&rsquo;.</p>
+
+<h3>Setup</h3>
+
+<p>Let&rsquo;s do some setup for a listener demonstration. Unfortunately the setup needed is a bit more involving than in the callbacks example.</p>
+
+<p>First we need a couple of objects that will do the work of finding and processing the records.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">finder</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">run</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">records</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+</span><span class='line'>        <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">records</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">);</span>
+</span><span class='line'>           <span class="nx">self</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;done&#39;</span><span class="p">,</span> <span class="p">[</span><span class="nx">records</span><span class="p">]);</span>
+</span><span class='line'>        <span class="p">},</span> <span class="mi">1000</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">processor</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">run</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">records</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+</span><span class='line'>        <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">records</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">);</span>
+</span><span class='line'>            <span class="nx">self</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;done&#39;</span><span class="p">,</span> <span class="p">[</span><span class="nx">records</span><span class="p">]);</span>
+</span><span class='line'>        <span class="p">},</span> <span class="mi">1000</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'> <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note that they are calling a method <strong>trigger</strong> when the work is done, I will add this method to these objects using a mix-in. Again &lsquo;trigger&rsquo; is one of the names you will come across, others common names are &lsquo;fire&rsquo; and &lsquo;publish&rsquo;.</p>
+
+<p>We need a mix-in object that has the listener behaviour, in this case I will just lean on jQuery for this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">eventable</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">on</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">cb</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="nx">trigger</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">args</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">trigger</span><span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">args</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then apply the behaviour to our finder and processor objects:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'> <span class="nx">$</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">finder</span><span class="p">,</span> <span class="nx">eventable</span><span class="p">);</span>
+</span><span class='line'> <span class="nx">$</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">processor</span><span class="p">,</span> <span class="nx">eventable</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Excellent, now our objects can take listeners and trigger events.</p>
+
+<h3>Using the listeners</h3>
+
+<p>The code that consumes the listeners is simple:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">finder</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;done&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">records</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">processor</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="nx">records</span><span class="p">);</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'><span class="nx">processor</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;done&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">records</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">records</span><span class="p">);</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'><span class="nx">finder</span><span class="p">.</span><span class="nx">run</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Again the console run will output [1,2,3,4,5,6]</p>
+
+<p>Working example here:</p>
+
+<iframe style="width: 100%; height: 300px" frameborder="0" seamless="seamless" src="http://jsfiddle.net/FYBjc/embedded/js,result/light/"></iframe>
+
+
+<h3>Pros</h3>
+
+<ul>
+<li>This is another well understood pattern.</li>
+<li>The big advantage is that you are not limited to one listener per object, you can add as many listeners as you want. E.g.</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">finder</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;done&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">records</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="p">..</span> <span class="k">do</span> <span class="nx">something</span>
+</span><span class='line'>  <span class="p">})</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;done&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">records</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="p">..</span> <span class="k">do</span> <span class="nx">something</span> <span class="k">else</span>
+</span><span class='line'>  <span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Cons</h3>
+
+<ul>
+<li>A bit more difficult to setup than callbacks in your own code, you will probably want to use a library e.g. jQuery, <a href="https://github.com/fat/bean">bean.js</a>.</li>
+</ul>
+
+
+<div style="height: 150px; overflow:hidden;">
+    <img src="http://foter.com/image/display/1036313/495x371/" style="display: block; width: 100%; margin-top: -50px;">
+</div>
+
+
+<p>Photo credit: Nod Young / Foter / CC BY-NC-SA</p>
+
+<h2>A Flow Control Library</h2>
+
+<p>Flow control libraries are also a very nice way to deal with asynchronous code. One I particularly like is <a href="https://github.com/caolan/async">Async.js</a>.</p>
+
+<p>Code using Async.js looks like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">async</span><span class="p">.</span><span class="nx">series</span><span class="p">([</span>
+</span><span class='line'>    <span class="kd">function</span><span class="p">(){</span> <span class="p">...</span> <span class="p">},</span>
+</span><span class='line'>    <span class="kd">function</span><span class="p">(){</span> <span class="p">...</span> <span class="p">}</span>
+</span><span class='line'><span class="p">]);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Setup (Example 1)</h3>
+
+<p>Again we need a couple of functions that will do the work, as in the other examples these functions in the real world will probably make an AjAX request and return the results. For now let&rsquo;s just use timeouts.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">finder</span><span class="p">(</span><span class="nx">records</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">records</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">);</span>
+</span><span class='line'>        <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">records</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">},</span> <span class="mi">1000</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="kd">function</span> <span class="nx">processor</span><span class="p">(</span><span class="nx">records</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">records</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">);</span>
+</span><span class='line'>        <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">records</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">},</span> <span class="mi">1000</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>The Node Continuation Passing Style</h4>
+
+<p>Note the style used in the callbacks inside the functions above.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">records</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The first argument in the callback is null if no error occurs; or the error if one occurs. This is a common pattern in Node.js libraries and Async.js uses this pattern. By using this style the flow between Async.js and the callbacks becomes super simple.</p>
+
+<h3>Using Async</h3>
+
+<p>The code that will consume these functions looks like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">async</span><span class="p">.</span><span class="nx">waterfall</span><span class="p">([</span>
+</span><span class='line'>    <span class="kd">function</span><span class="p">(</span><span class="nx">cb</span><span class="p">){</span>
+</span><span class='line'>        <span class="nx">finder</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="nx">cb</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="nx">processor</span><span class="p">,</span>
+</span><span class='line'>    <span class="kd">function</span><span class="p">(</span><span class="nx">records</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">alert</span><span class="p">(</span><span class="nx">records</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">]);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Async.js takes care of calling each function in order after the previous one has finished. Note how we can just pass the &lsquo;processor&rsquo; function, this is because we are using the Node continuation style. As you can see this code is quite minimal and easy to understand.</p>
+
+<p>Working example here:</p>
+
+<iframe style="width: 100%; height: 300px" frameborder="0" seamless="seamless" src="http://jsfiddle.net/GuxRF/embedded/js,result/light/"></iframe>
+
+
+<h3>Another setup (Example 2)</h3>
+
+<p>Now, when doing front-end development it is unlikely that you will have a library that follows the callback(null, results) signature. So a more realistic example will look like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">finder</span><span class="p">(</span><span class="nx">records</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">records</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">);</span>
+</span><span class='line'>        <span class="nx">cb</span><span class="p">(</span><span class="nx">records</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">},</span> <span class="mi">500</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="kd">function</span> <span class="nx">processor</span><span class="p">(</span><span class="nx">records</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">records</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">);</span>
+</span><span class='line'>        <span class="nx">cb</span><span class="p">(</span><span class="nx">records</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">},</span> <span class="mi">500</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// using the finder and the processor</span>
+</span><span class='line'><span class="nx">async</span><span class="p">.</span><span class="nx">waterfall</span><span class="p">([</span>
+</span><span class='line'>    <span class="kd">function</span><span class="p">(</span><span class="nx">cb</span><span class="p">){</span>
+</span><span class='line'>        <span class="nx">finder</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">records</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">records</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">});</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="kd">function</span><span class="p">(</span><span class="nx">records</span><span class="p">,</span> <span class="nx">cb</span><span class="p">){</span>
+</span><span class='line'>        <span class="nx">processor</span><span class="p">(</span><span class="nx">records</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">records</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">records</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">});</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="kd">function</span><span class="p">(</span><span class="nx">records</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">alert</span><span class="p">(</span><span class="nx">records</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">]);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>​
+It becomes a lot more convoluted but at least you can see the flow going from top to bottom.</p>
+
+<p>Working example here:</p>
+
+<iframe style="width: 100%; height: 300px" frameborder="0" seamless="seamless" src="http://jsfiddle.net/x63BS/embedded/js,result/light/"></iframe>
+
+
+<h3>Pros</h3>
+
+<ul>
+<li>Usually code using a control flow library is easier to understand because it follows a natural order (from top to bottom). This is not true with callbacks and listeners.</li>
+</ul>
+
+
+<h3>Cons</h3>
+
+<ul>
+<li>If the signatures of the functions don&rsquo;t match as in the second example then you can argue that the flow control library offers little in terms of readability.</li>
+</ul>
+
+
+<div style="height: 150px; overflow:hidden;">
+    <img src="http://photos.foter.com/90/time-heals-nothing_4.jpeg" style="display: block; width: 100%; margin-top:-70px;">
+</div>
+
+
+<p>Photo credit: Helmut Kaczmarek / Foter / CC BY-NC-SA</p>
+
+<h2>Promises</h2>
+
+<p>Finally we get to our final destination. Promises are a very powerful tool, but they are the least understood.</p>
+
+<p>Code using promises may look like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">finder</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">records</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="p">..</span> <span class="k">do</span> <span class="nx">something</span>
+</span><span class='line'>    <span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This will vary widely depending on the promises library you use, in this case I am using <a href="https://github.com/cujojs/when">when.js</a>.</p>
+
+<h3>Setup</h3>
+
+<p>Out finder and processor functions look like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">finder</span><span class="p">(</span><span class="nx">records</span><span class="p">){</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">when</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
+</span><span class='line'>    <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">records</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">);</span>
+</span><span class='line'>        <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">records</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">},</span> <span class="mi">500</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="kd">function</span> <span class="nx">processor</span><span class="p">(</span><span class="nx">records</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>     <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">when</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
+</span><span class='line'>    <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">records</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">);</span>
+</span><span class='line'>        <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">records</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">},</span> <span class="mi">500</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Each function creates a deferred object and returns a promise. Then it resolves the deferred when the results arrive.</p>
+
+<h3>Using the promises</h3>
+
+<p>The code that consumes these functions looks like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">finder</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">processor</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">records</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">alert</span><span class="p">(</span><span class="nx">records</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can see, it is quite minimal and easy to understand. When used like this, promises bring a lot of clarity to your code as they follow a natural flow. Note how in the first callback we can simply pass the &lsquo;processor&rsquo; function. This is because this function returns a promise itself so everything will just flow nicely.</p>
+
+<p>Working example here:</p>
+
+<iframe style="width: 100%; height: 300px" frameborder="0" seamless="seamless" src="http://jsfiddle.net/Rhjbn/embedded/js,result/light/"></iframe>
+
+
+<p>There is a lot to promises:</p>
+
+<ul>
+<li>they can be passed around as regular objects</li>
+<li>aggregated into bigger promises</li>
+<li>you can add handlers for failed promises</li>
+</ul>
+
+
+<h3>The big benefit of promises</h3>
+
+<p>Now if you think that this is all there is to promises you are missing what I consider the biggest advantage. Promises have a neat trick that neither callbacks, listeners or control flows can do. You can add a listener to promise even when it has already been resolved, in this case that listener will trigger immediately, meaning that you don&rsquo;t have to worry if the event has already happened when you add the listener. This works the same for aggregated promises. Let me show you an example of this:</p>
+
+<iframe style="width: 100%; height: 300px" frameborder="0" seamless="seamless" src="http://jsfiddle.net/8zjGq/embedded/js,result/light/"></iframe>
+
+
+<p>This is a huge feature for dealing with user interaction in the browser. In complex applications you may not now the order of actions that the user will take, so you can use promises to track use interaction. See this other <a href="http://sporto.github.com/blog/2012/09/22/embracing-async-with-deferreds/">post</a> if interested.</p>
+
+<h3>Pros</h3>
+
+<ul>
+<li>Really powerful, you can aggregate promises, pass them around, or add listeners when already resolved.</li>
+</ul>
+
+
+<h3>Cons</h3>
+
+<ul>
+<li>The least understood of all these tools.</li>
+<li>They can get difficult to track when you have lots of aggregated promises with added listeners along the way.</li>
+</ul>
+
+
+<h2>Conclusion</h2>
+
+<p>That&rsquo;s it! These are in my opinion the four main tools for dealing with asynchronous code. Hopefully I have help you to understand them better and gave you more options for you asynchronous needs.</p>
+]]></content>
+  </entry>
   
-    <section>
-  <h1>Recent Posts</h1>
-  <ul id="recent_posts">
-    
-      <li class="post">
-        <a href="/blog/2014/03/20/avoiding-memory-leaks-with-canjs/">Avoiding Memory Leaks With CanJS</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/03/04/form-validations-with-canjs/">Form Validations With CanJS</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/03/04/creating-filtered-lists-in-canjs/">Creating Filtered Lists in CanJS</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/09/25/simple-dependency-injection/">Simple Dependency Injection in Ruby</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/08/18/concurrency-node-vs-go/">Comparing Concurrency in Node and Go</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/06/27/safe-testing-in-rails/">Safe Testing in Rails</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/06/24/nested-recursive-directives-in-angular/">Building Nested Recursive Directives in Angular</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/06/23/sharing-simple-business-logic-between-the-client-and-front-end-with-rails/">Sharing Simple Business Logic Between the Client and Front End With Rails</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/04/12/comparison-angular-backbone-can-ember/">A Comparison of Angular, Backbone, CanJS and Ember</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/22/a-plain-english-guide-to-javascript-prototypes/">A Plain English Guide to JavaScript Prototypes</a>
-      </li>
-    
-  </ul>
-</section>
+  <entry>
+    <title type="html"><![CDATA[AMD, Is Not One or the Other]]></title>
+    <link href="http://sporto.github.com/blog/2012/12/05/amd/"/>
+    <updated>2012-12-05T12:43:00+11:00</updated>
+    <id>http://sporto.github.com/blog/2012/12/05/amd</id>
+    <content type="html"><![CDATA[<p>I am starting to see a pattern in many JS libraries where they are trying to detect the presence of AMD an act accordingly. I think it is great that AMD is getting so much attention but they usual way this is done has a big issue: <strong>It shouldn’t be one or the other.</strong></p>
 
-<section>
-  <h1>GitHub Repos</h1>
-  <ul id="gh_repos">
-    <li class="loading">Status updating&#8230;</li>
-  </ul>
+<p>The pattern usually goes like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'>   <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">define</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">define</span><span class="p">.</span><span class="nx">amd</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="err">…</span> <span class="nx">define</span> <span class="nx">as</span> <span class="nx">AMD</span> <span class="nx">module</span>
+</span><span class='line'>  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>      <span class="err">…</span> <span class="nx">attach</span> <span class="nx">as</span> <span class="nx">global</span>
+</span><span class='line'>  <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Problem with this is that if the script is loaded using a common script tag and a AMD loaded (e.g. require) is also present, then it won’t be possible to use the library in the normal way (using the global variable).</p>
+
+<p>You might think that if require is there we should load everything using it, but we have good reasons not to do this. We concatentate and minifiy the most important parts of our JS code, the rest is loaded using require on demand.</p>
+
+<p>So the better way to do this is by attaching the library in many ways as possible:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'>   <span class="c1">// CommonJS module is defined</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">exports</span> <span class="o">!==</span> <span class="s1">&#39;undefined&#39;</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">module</span> <span class="o">!==</span> <span class="s1">&#39;undefined&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">foo</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">exports</span><span class="p">.</span><span class="nx">foo</span> <span class="o">=</span> <span class="nx">foo</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// Register as a named module with AMD.</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">define</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">define</span><span class="p">.</span><span class="nx">amd</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">define</span><span class="p">(</span><span class="err">‘</span><span class="nx">foo</span><span class="err">’</span><span class="p">,</span> <span class="p">[],</span> <span class="kd">function</span><span class="p">(){</span> <span class="k">return</span> <span class="nx">foo</span><span class="p">;</span> <span class="p">});</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// Integrate with $ if defined</span>
+</span><span class='line'>  <span class="c1">// or create our own underscore object.</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="nx">jQuery</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">jQuery</span><span class="p">.</span><span class="nx">fn</span><span class="p">.</span><span class="nx">foo</span> <span class="o">=</span> <span class="nx">foo</span>
+</span><span class='line'>  <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
-  <a href="https://github.com/sporto">@sporto</a> on GitHub
+  <entry>
+    <title type="html"><![CDATA[A Pattern for Service Objects in Rails]]></title>
+    <link href="http://sporto.github.com/blog/2012/11/15/a-pattern-for-service-objects-in-rails/"/>
+    <updated>2012-11-15T21:59:00+11:00</updated>
+    <id>http://sporto.github.com/blog/2012/11/15/a-pattern-for-service-objects-in-rails</id>
+    <content type="html"><![CDATA[<p>Service Objects in Rails allows to neatly separate the business logic of your application in reausable components. This post describes our implementation of this pattern.</p>
+
+<p>We went through the usual story, we started by putting some business logic in controllers and some in models, then decided that all this logic should go in the models and ended up with very fat models tightly coupled to each other.</p>
+
+<p>So when looking for alternatives patterns for organising the business logic I came across the idea of having separated objects to handle this business logic. Somewhere I saw this pattern labeled as &lsquo;Service objects&rsquo; (SO). This was way before this very interesting post <a href="http://blog.codeclimate.com/blog/2012/10/17/7-ways-to-decompose-fat-activerecord-models/">7 Patterns to Refactor Fat ActiveRecord Models</a></p>
+
+<p>The discussions often involved the Single Responsibility Principle (SLP), so most of the examples shown a class with only one public method on it. At first I totally dismissed this as a kind of functional pattern that didn&rsquo;t fit into the OOP world of Ruby.</p>
+
+<p>But my pain with the fat models made me look into this again. So I decided to give it a try. Since then I have grown very fond of this approach because of the following:</p>
+
+<ul>
+<li>As this objects have little code they are easy to reason about</li>
+<li>They are very easy to compose (use one inside the other)</li>
+<li>They encapsulate the business logic neatly, so you never has to repeat the same logic in different places</li>
+<li>They use dependency injection (DI) heavily so they are loosely couple with the rest of the application</li>
+<li>Using DI makes it very easy to swap the dependencies in testing</li>
+<li>But still they have sensible dependency defaults, I don&rsquo;t see the point in injecting dependencies all the time when in 90% of the cases you just need the defaults</li>
+</ul>
+
+
+<p>Let me show the pattern we are using:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">FindInvoicesForClientService</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">{})</span>
+</span><span class='line'>      <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span><span class='line'>      <span class="n">invoices</span> <span class="o">=</span> <span class="n">find_invoices_service</span><span class="o">.</span><span class="p">(</span><span class="n">some_args</span><span class="p">)</span>
+</span><span class='line'>      <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">find_invoices_service</span>
+</span><span class='line'>      <span class="vi">@find_invoices_service</span> <span class="o">||=</span> <span class="no">FindInvoicesService</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">find_invoices_service</span><span class="o">=</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+</span><span class='line'>      <span class="vi">@find_invoices_service</span> <span class="o">=</span> <span class="n">obj</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">service</span> <span class="o">=</span> <span class="no">FindInvoicesForClientService</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="n">service</span><span class="o">.</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># in test we just swap the dependencies</span>
+</span><span class='line'><span class="n">collaborator</span> <span class="o">=</span> <span class="n">double</span><span class="o">.</span><span class="n">as_null_object</span>
+</span><span class='line'><span class="n">collaborator</span><span class="o">.</span><span class="n">stub</span><span class="p">(</span><span class="ss">:call</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span><span class="p">(</span><span class="n">invoices</span><span class="p">)</span>
+</span><span class='line'><span class="n">service</span><span class="o">.</span><span class="n">find_invoices_service</span> <span class="o">=</span> <span class="n">collaborator</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The key points in our version are:</p>
+
+<ul>
+<li>the class has only one public method (call)</li>
+<li>dependencies are only passed if needed, the class has some sensible defaults that will be used 90% of the time</li>
+<li>each dependency injector has its own method instead of a attr_accessor, this is so you can prepare the dependencies if needed</li>
+</ul>
+
+
+<p>This has been a great pattern for us, we have hundreds of these objects that can be easily composed as needed. This pattern has made our code seriously easier to work with.</p>
+]]></content>
+  </entry>
   
-  <script type="text/javascript">
-    $(document).ready(function(){
-        if (!window.jXHR){
-            var jxhr = document.createElement('script');
-            jxhr.type = 'text/javascript';
-            jxhr.src = '/javascripts/libs/jXHR.js';
-            var s = document.getElementsByTagName('script')[0];
-            s.parentNode.insertBefore(jxhr, s);
-        }
+  <entry>
+    <title type="html"><![CDATA[Embracing Async With Deferreds and Promises]]></title>
+    <link href="http://sporto.github.com/blog/2012/09/22/embracing-async-with-deferreds/"/>
+    <updated>2012-09-22T00:00:00+10:00</updated>
+    <id>http://sporto.github.com/blog/2012/09/22/embracing-async-with-deferreds</id>
+    <content type="html"><![CDATA[<p>Deferred and promises are a very powerful tool for handling asynchronous events. In this blog post I will explain what they are and when to use them.</p>
 
-        github.showRepos({
-            user: 'sporto',
-            count: 5,
-            skip_forks: true,
-            target: '#gh_repos'
-        });
-    });
-  </script>
-  <script src="/javascripts/github.js" type="text/javascript"> </script>
-</section>
+<h2>Let&rsquo;s create gretting cards</h2>
+
+<p>As an example let’s say that we are building a UI for a greeting cards making application. Our UI may look something like this:</p>
+
+<p><img src="http://sporto.github.com/images/deferreds/image01.png"></p>
+
+<p>The user can select an animation, select the music and then click next. Our event flow will look like this:</p>
+
+<p><img src="http://sporto.github.com/images/deferreds/image02.png"></p>
+
+<p>In this first case we know everything we need from the beginning. When the user clicks &lsquo;next&rsquo; we know which animation and which music to load. After we are done loading these assets we will show the greeting card. To do this is code we have several options:</p>
+
+<h3>We can count the assets already loaded:</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">assetsToLoad</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">loader</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;load&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>  <span class="nx">assetsToLoad</span> <span class="o">--</span><span class="p">;</span>
+</span><span class='line'>      <span class="k">if</span><span class="p">(</span><span class="nx">assetsToLoad</span><span class="o">===</span><span class="mi">0</span><span class="p">)</span> <span class="nx">show</span><span class="p">();</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">loader</span><span class="p">.</span><span class="nx">load</span><span class="p">(</span><span class="nx">anim</span><span class="p">);</span>
+</span><span class='line'><span class="nx">loader</span><span class="p">.</span><span class="nx">load</span><span class="p">(</span><span class="nx">music</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-<section>
-  <h1>On Delicious</h1>
-  <div id="delicious"></div>
-  <script type="text/javascript" src="http://feeds.delicious.com/v2/json/sebasporto?count=3&amp;sort=date&amp;callback=renderDeliciousLinks"></script>
-  <p><a href="http://delicious.com/sebasporto">My Delicious Bookmarks &raquo;</a></p>
-</section>
+<p>This code simply keeps a count of assets loaded and when all are loaded it shows the card.</p>
+
+<h3>We can use a library like <a href="https://github.com/caolan/async">Async</a>:</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">async</span><span class="p">.</span><span class="nx">parallel</span><span class="p">([</span>
+</span><span class='line'>  <span class="nx">loadAnim</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">loadMusic</span><span class="p">,</span>
+</span><span class='line'><span class="p">],</span> <span class="nx">show</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
+<p>We simply tell the library that we want to load these two assets in parallel and then call &lsquo;show&rsquo; when done. The library takes care of all the details for us. A library like this is great but we need to know everything that we need to load at the start.</p>
+
+<h2>Not knowing everything from the beginning</h2>
+
+<p>Now let’s imagine that we don’t want a ‘Next’ button anymore in our UI:</p>
+
+<p><img src="http://sporto.github.com/images/deferreds/image04.png"></p>
+
+<p>Here we just want to show the greeting card automatically after the user has selected the animation and the music. Maybe not the best user experience but it works for our example. We don&rsquo;t know the order in which the user will select the assets.</p>
+
+<p>If we want to stick with the previous way of doing thing (knowing everything at the start). Our event flow will looks something like this:</p>
+
+<p><img src="http://sporto.github.com/images/deferreds/image05.png"></p>
+
+<p>In the above flow we are waiting idle while the user is busy selecting the music. We don&rsquo;t want this, we want to take advantage of this time to load the assets the user has already chosen. So our event flow should look more like this:</p>
+
+<p><img src="http://sporto.github.com/images/deferreds/image06.png"></p>
+
+<p>In this flow we start loading the animation as soon as the user has selected it. While the user is busy selecting the music the animation is loading in the background. As soon as the user select the music we start loading it too in paralell.</p>
+
+<p>A library like as Async is not useful in this case anymore. We can however still count like before or we could use conditional like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">onVideoLoaded</span><span class="p">(){</span>
+</span><span class='line'>      <span class="nx">checkIfAllLoaded</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">function</span> <span class="nx">onMusicLoaded</span><span class="p">(){</span>
+</span><span class='line'>      <span class="nx">checkIfAllLoaded</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">function</span> <span class="nx">checkIfAllLoaded</span><span class="p">(){</span>
+</span><span class='line'>      <span class="k">if</span><span class="p">(</span><span class="nx">videoLoaded</span> <span class="o">&amp;&amp;</span> <span class="nx">musicLoaded</span> <span class="o">&amp;&amp;</span> <span class="err">…</span> <span class="p">)</span> <span class="nx">show</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
+<p>This works but it is not very elegant and becomes hard to maintain quickly.</p>
+
+<h2>Deferreds to the rescue</h2>
+
+<p>Here is where Deferreds shine. But let me explain what they are first. In a nutshell a Deferred is contract for an event that will happen in the future. Easier to explain this with some code:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// we create a Deferred</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">def</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">Deferred</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// we add a listener to the Deferred</span>
+</span><span class='line'><span class="c1">// when the Deferred is done then do something</span>
+</span><span class='line'><span class="nx">def</span><span class="p">.</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">val</span><span class="p">){</span>
+</span><span class='line'>      <span class="c1">//… do something</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//… later</span>
+</span><span class='line'><span class="c1">// we mark the Deferred as done</span>
+</span><span class='line'><span class="c1">// this will trigger the listener added above</span>
+</span><span class='line'><span class="nx">def</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">val</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We create an Deferred object that accepts listeners like ‘done’. At some point in our application we set this deferreds as done (‘resolve’). This will trigger all the listeners.</p>
+
+<p>There are many Deferred implementations like jQuery (1.5+), <a href="https://github.com/wookiehangover/underscore.deferred">underscore deferreds</a>, <a href="https://github.com/kriszyp/promised-io">promised-IO</a>. My examples are using jQuery but the concepts are pretty much the same for all of them.</p>
+
+<h2>Aggregation</h2>
+
+<p>A deferred can also be aggregated (I will explain promises later):</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// We create two deferreds</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">def1</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">Deferred</span><span class="p">();</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">def2</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">Deferred</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// We combine them together using the ‘when’ function. </span>
+</span><span class='line'><span class="c1">// This creates a new object (Promise) that is the aggregation of the two Deferreds. </span>
+</span><span class='line'><span class="c1">// We add a listener ‘done’ to the aggregated Promise.</span>
+</span><span class='line'><span class="nx">$</span><span class="p">.</span><span class="nx">when</span><span class="p">(</span><span class="nx">def1</span><span class="p">,</span> <span class="nx">def2</span><span class="p">).</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">one</span><span class="p">,</span> <span class="nx">two</span><span class="p">){</span>
+</span><span class='line'>      <span class="c1">//… do something with one and two;</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//… later</span>
+</span><span class='line'><span class="nx">def1</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">val</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//… even later</span>
+</span><span class='line'><span class="nx">def2</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">val</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In this case when def1 and def2 are resolved the listener in the combined Promise will trigger.</p>
+
+<p>So going back to our greeting cards example. To do this:</p>
+
+<p><img src="http://sporto.github.com/images/deferreds/image06.png"></p>
+
+<p>We can simply code it like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">animDef</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">Deferred</span><span class="p">();</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">musicDef</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">Deferred</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">$</span><span class="p">.</span><span class="nx">when</span><span class="p">(</span><span class="nx">animDef</span><span class="p">,</span> <span class="nx">musicDef</span><span class="p">).</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>      <span class="nx">show</span><span class="p">();</span>  
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//when the music is loaded</span>
+</span><span class='line'><span class="nx">musicDef</span><span class="p">.</span><span class="nx">resolve</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//when the animation is loaded</span>
+</span><span class='line'><span class="nx">animDef</span><span class="p">.</span><span class="nx">resolve</span><span class="p">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>No conditions, no counting. Quite elegant if you ask me.</p>
+
+<h2>What if it is already resolved?</h2>
+
+<p>Deferreds have another neat trick. Let&rsquo;s say that the user selects the music first and it completely loads before we even start loading the animation.</p>
+
+<p><img src="http://sporto.github.com/images/deferreds/image07.png"></p>
+
+<p>By the time we add our aggregated listener the Deferred for the music has already been resolved:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">animDef</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">Deferred</span><span class="p">();</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">musicDef</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">Deferred</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//…later</span>
+</span><span class='line'><span class="nx">musicDef</span><span class="p">.</span><span class="nx">resolve</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//…even later</span>
+</span><span class='line'><span class="nx">$</span><span class="p">.</span><span class="nx">when</span><span class="p">(</span><span class="nx">animDef</span><span class="p">,</span> <span class="nx">musicDef</span><span class="p">).</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>      <span class="nx">show</span><span class="p">();</span>  
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>No problems! The aggregated listener will still triggers, it knows that the Deferred is already resolved and acts as expected. This is something you cannot with common event listeners!</p>
+
+<h2>Fail and reject</h2>
+
+<p>Deferred can also be rejected as well:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">def</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">Deferred</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">def</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">result</span><span class="p">){</span>
+</span><span class='line'>      <span class="c1">//do something</span>
+</span><span class='line'>  <span class="p">})</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">fail</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>      <span class="c1">//fallback</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//…later, something bad happened</span>
+</span><span class='line'><span class="nx">def</span><span class="p">.</span><span class="nx">reject</span><span class="p">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This gives us a way of handling errors and providing fallbacks.</p>
+
+<h2>Promises</h2>
+
+<p>A promise is mostly like a Deferred but it doesn’t provide the methods to resolve and reject it. This is useful when you want to give a reference to the Deferred to another object so it can add listeners but you don&rsquo;t want to give that object the power to resolve the Deferred.</p>
+
+<p>Let&rsquo;s say you have a caller object with code like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// create a loader object</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">loader</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Loader</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// ask the loader to load something</span>
+</span><span class='line'><span class="c1">// it receives a promise back</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">promise</span> <span class="o">=</span> <span class="nx">loader</span><span class="p">.</span><span class="nx">load</span><span class="p">(</span><span class="err">…</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// add listeners to the promise</span>
+</span><span class='line'><span class="nx">promise</span><span class="p">.</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="p">...</span><span class="k">do</span> <span class="nx">something</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This caller receives a Promise from the loader object, it can add listeners to the Promise or aggregate it with other Promises. But it cannot resolve or reject them. Trying to do something like:</p>
+
+<pre><code>promise.resolve();
+</code></pre>
+
+<p>will fail.</p>
+
+<p>The code in the loader object will look something like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">load</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">def</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">Deferred</span><span class="p">();</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">def</span><span class="p">.</span><span class="nx">promise</span><span class="p">();</span> <span class="c1">// it returns the promise</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//..later</span>
+</span><span class='line'><span class="kd">function</span> <span class="nx">onLoad</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">def</span><span class="p">.</span><span class="nx">resolve</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note the def.promise() method which creates the promise. The jQuery ajax methods does exactly this, it gives you a promise back when called.</p>
+
+<p>You can combine promises to you heart content:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">promise1</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">when</span><span class="p">(</span><span class="nx">animDef</span><span class="p">,</span> <span class="nx">musDef</span><span class="p">);</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">promise2</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">when</span><span class="p">(</span><span class="nx">msgDef</span><span class="p">,</span> <span class="nx">bgDef</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">$</span><span class="p">.</span><span class="nx">when</span><span class="p">(</span><span class="nx">promise1</span><span class="p">,</span> <span class="nx">promise2</span><span class="p">).</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>      <span class="c1">//… do something with anim, music message and background</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Using Deferreds you can easily code something like this. Where you have many actions happening at the same time, each without a clear start and ending and depending on each other.</p>
+
+<p><img src="http://sporto.github.com/images/deferreds/image08.png"></p>
+
+<h2>Conclusion</h2>
+
+<p>In conclusion Deferreds are best suited in situations where:</p>
+
+<ul>
+<li>You have several actions happening at the same time e.g. loaders</li>
+<li>You don’t know where the action starts and when it finishes e.g. user interaction</li>
+<li>You have other actions that depend on the completion of multiple other actions</li>
+</ul>
+
+]]></content>
+  </entry>
   
-</aside>
+  <entry>
+    <title type="html"><![CDATA[My Experience With Backbone, Ember and CanJS]]></title>
+    <link href="http://sporto.github.com/blog/2012/08/18/backbone-ember-canjs/"/>
+    <updated>2012-08-18T00:00:00+10:00</updated>
+    <id>http://sporto.github.com/blog/2012/08/18/backbone-ember-canjs</id>
+    <content type="html"><![CDATA[<p>Before coming to the JavaScript world I was doing Flex development, so I was quite familiar with MVC paradigm in the front-end side of applications.</p>
 
-    </div>
-  </div>
-  <footer role="contentinfo"><p>
-  Copyright &copy; 2014 - Sebastian Porto -
-  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
-</p>
+<p>When I first started using JavaScript I learnt to do things in the usual way of that time &ndash; which is having the DOM as the source of truth. e.g. We will add elements to the DOM and if we wanted to know the length of a collection we will just use jQuery to ask the DOM for how many elements there were.</p>
 
-</footer>
+<p>I soon grew tired of this way of doing things, it was just messy.</p>
+
+<h2>Backbone</h2>
+
+<p><a href="http://backbonejs.org/">Backbone</a> captured a lot of attention when it came up, it was the first MVC framework that looked easy to get into. So I decided to try it. It was a great start, the structure of my code started to resemble a lot more what I was used to in Flex e.g. collections, views, controllers.</p>
+
+<p>But there were many times where I would think &ldquo;What? Do I need to do this myself? Shouldn&rsquo;t Backbone take care of this?&rdquo;. For example when a collection changed the view needed to know and I had to hook all these events myself.</p>
+
+<p>Another thing that was a let down is that there is no build-in way of doing live binding in the views. You have to do this yourself e.g. re-render a view manually when something changes (via events). Also doing nested views was more complex that it needed to be.</p>
+
+<p>Backbone just left me wanting a lot more from an MVC framework. So I decided that Backbone was not my cup of tea, it wasn&rsquo;t really doing enough useful things for me.</p>
+
+<h2>Ember</h2>
+
+<p><a href="http://emberjs.com/">Ember</a> also came up with quite a hype and it looked like the perfect fit for everything I was expecting. It has live binding, a great object model and an excellent template engine.</p>
+
+<p>It takes a while to learn as it deviates quite a bit from the usual way of doing JavaScript, Ember relies heavily on binding instead of events. I got a lot into it, even did a talk about it in my local user group.</p>
+
+<p>I liked it but I wasn&rsquo;t completely happy with it because:</p>
+
+<ul>
+<li>It is huge, totally overkill for small projects or mobile apps.</li>
+<li>Performance wise it is not that good either, quite slow compared to Backbone. <a href="http://jsfiddle.net/jashkenas/CGSd5/">http://jsfiddle.net/jashkenas/CGSd5/</a></li>
+<li>It is hard to debug, when something fails it gives you very obscure error messages that are hard to track back to the source.</li>
+<li>It adds scripts tags around elements, which breaks CSS styling in some cases.</li>
+<li>It required me to declare lots of small components, so for simple things I ended up with too many objects.</li>
+<li>It also force me to declare objects in the global space, I couldn&rsquo;t find a way of not having to do this.</li>
+</ul>
+
+
+<h2>CanJS</h2>
+
+<p>Then came <a href="http://canjs.us/">CanJS</a> (without the hype of the other two), it is a reboot of the venerable JavascriptMVC project. Bitovi has done a great job at making JavascriptMVC a lot more accessible to newcomers.</p>
+
+<p>CanJS looked intriguing, so I decided to use it in my next project. It was a great success for me. It stroked a great balance between Backbone and Ember. The features I like a lot in CanJS are:</p>
+
+<ul>
+<li>It is quite small, just a bit bigger than Backbone. Tiny compared to Ember.</li>
+<li>It is fast (as fast as Backbone). <a href="http://jsfiddle.net/sporto/Ek9am/">http://jsfiddle.net/sporto/Ek9am/</a></li>
+<li>It has live binding out of the box, and they work perfectly well (although I prefer handlebars, I can live with EJS).</li>
+<li>It is a lot more general purpose than Backbone and Ember. For example CanJS has an observable object that can be used in a huge variety of situations, not just when doing MVC.</li>
+</ul>
+
+
+<p>CanJS has become my MVC library of choice. I really recommend you give it a go in your next project.</p>
+
+<h2>The future</h2>
+
+<p>I am planning to keep using CanJS in the future, but <a href="http://www.angularjs.org/">Angular</a> looks very appealing, I really like the declarative way of doing things directly in html without having to use templates. I am planning to give Angular a go soon.</p>
+]]></content>
+  </entry>
   
+  <entry>
+    <title type="html"><![CDATA[The Intuitive Proto Object in JavaScript]]></title>
+    <link href="http://sporto.github.com/blog/2011/11/06/the-intuitive-proto-object-in-javascript/"/>
+    <updated>2011-11-06T09:25:00+11:00</updated>
+    <id>http://sporto.github.com/blog/2011/11/06/the-intuitive-proto-object-in-javascript</id>
+    <content type="html"><![CDATA[<p>Javascript is meant to be a prototypical language. But unfortunately it is a half done prototypical language. Internally it works like this but externally it tries to looks like something else. To understand this let&rsquo;s look at the <strong>proto</strong> property.</p>
 
-<script type="text/javascript">
-      var disqus_shortname = 'sportoblog';
-      
-        
-        var disqus_script = 'count.js';
-      
-    (function () {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    }());
-</script>
+<p>Take the following code</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">Animal</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">alive</span><span class="o">:</span><span class="kc">true</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">legs</span><span class="o">:</span><span class="mi">4</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">person</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">legs</span><span class="o">:</span><span class="mi">2</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nx">person</span><span class="p">.</span><span class="nx">__proto__</span> <span class="o">=</span> <span class="nx">Animal</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">person</span><span class="p">.</span><span class="nx">alive</span><span class="p">);</span>
+</span><span class='line'><span class="c1">//true</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
+<p>It is extremely easy to see what is happening here. We have just created a prototype inheritance chain between &lsquo;person&rsquo; and &lsquo;Animal&rsquo;. If you ask for a property or method in &lsquo;person&rsquo; it will be looked up in that object first, if it is not found there it then will be looked up in the prototype.</p>
+
+<p><strong>proto</strong> looks scary because of all the underscores around the name, but in reality it is quite easy and straightforward to understand and use. Unfortunately the <strong>proto</strong> property is an internal properties only exposed by some browsers (e.g. Chrome, Firefox). So it cannot be used safely.</p>
+
+<p>So sadly we are left with this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">Animal</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">alive</span><span class="o">:</span><span class="kc">true</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">legs</span><span class="o">:</span><span class="mi">4</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">Person</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">legs</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nx">Person</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="nx">Animal</span><span class="p">;</span>
+</span><span class='line'><span class="nx">person</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Person</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">person</span><span class="p">.</span><span class="nx">alive</span><span class="p">);</span> <span class="c1">//true</span>
+</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">person</span><span class="p">.</span><span class="nx">legs</span><span class="p">);</span> <span class="c1">//2</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
+<p>Note what is happening here:</p>
+
+<ul>
+<li>We need to create a constructor function</li>
+<li>Then we assign &lsquo;Animal&rsquo; as the prototype of that constructor</li>
+<li>Then we run the function to get the instance we want</li>
+</ul>
 
 
+<p>This is an extremely convoluted process to get to what we want, which is to have an object that inherits from another.</p>
 
-  <script type="text/javascript">
-    (function(){
-      var twitterWidgets = document.createElement('script');
-      twitterWidgets.type = 'text/javascript';
-      twitterWidgets.async = true;
-      twitterWidgets.src = '//platform.twitter.com/widgets.js';
-      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
-    })();
-  </script>
+<h2>Object.create</h2>
+
+<p>There is another alternative which is using Object.create:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">Animal</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">alive</span><span class="o">:</span><span class="kc">true</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">legs</span><span class="o">:</span><span class="mi">4</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">person</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">Animal</span><span class="p">);</span>
+</span><span class='line'><span class="nx">person</span><span class="p">.</span><span class="nx">legs</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">person</span><span class="p">.</span><span class="nx">alive</span><span class="p">);</span> <span class="c1">//true</span>
+</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">person</span><span class="p">.</span><span class="nx">legs</span><span class="p">);</span> <span class="c1">//2</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
+<p>Object.create makes a new object with the prototype set to the given object. This is heaps better than the function prototype work around. But still using <strong>proto</strong> is a lot more intuitive.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[State Machines Are Awesome]]></title>
+    <link href="http://sporto.github.com/blog/2011/10/06/state-machines-are-awesome/"/>
+    <updated>2011-10-06T09:29:00+11:00</updated>
+    <id>http://sporto.github.com/blog/2011/10/06/state-machines-are-awesome</id>
+    <content type="html"><![CDATA[<p>Being mostly a self taught developer, nobody ever taught me what a state machine was. When I finally stumbled upon them I realised I have been missing out by not using them before.</p>
+
+<p>When I first started learning about them I couldn&rsquo;t find a good explanation in plain english. So here is my attempt to explain state machines in a simple way and why you should use them.</p>
+
+<p>The code examples below are in Ruby using the <a href="https://github.com/pluginaweek/state_machine">state_machine</a> gem. But this are general concepts for any language.</p>
+
+<h2>What is a state machine?</h2>
+
+<p>In essence a state machine tracks the state of an object and describes the actions that this object can perform at any given time.</p>
+
+<p>A state machine has several components: states, events and transitions.</p>
+
+<h2>States</h2>
+
+<p>Let&rsquo;s say we have an &lsquo;order&rsquo; object. We could use a state machine to track the state of our order. The order could have the following states:</p>
+
+<ul>
+<li>Open</li>
+<li>Placed</li>
+<li>Held</li>
+<li>Cancelled</li>
+<li>Shipped</li>
+<li>Returned</li>
+</ul>
 
 
+<p>The subject of the state machine can be in only one state at any given  time. The order can either be &lsquo;Held&rsquo; or &lsquo;Shipped&rsquo;. These are the states. And we can have only one.</p>
 
-</body>
-</html>
+<p>If we want to have two states at the same time we would need to have two state machine running in parallel.</p>
+
+<h2>Events</h2>
+
+<p>We can define events that our state machine can perform. For example:</p>
+
+<ul>
+<li>Create</li>
+<li>Cancel</li>
+<li>Hold</li>
+<li>Ship</li>
+<li>Return</li>
+</ul>
+
+
+<p>Not all events can be called at any time, the available events are dependant on the current state of the object.  A state machine manages this logic for us.</p>
+
+<p>In Ruby (using state_machine) we could do something like this:</p>
+
+<pre><code>order.can_cancel? #ask if the order can be cancelled at this time
+order.cancel #send the cancel event to the order
+</code></pre>
+
+<p>The following diagram shows the state machine flow.</p>
+
+<p><img src="https://docs.google.com/drawings/pub?id=178_CnXn19xnNumvnBY8BxIsJQ245rdoyzvUOwN-MQqM&amp;w=528&amp;h=413"></p>
+
+<p>So as you can see in the diagram there are predetermined paths that the state machine can follow. It can move from the &lsquo;Created&rsquo; state to the &lsquo;Placed&rsquo; state but not to the &lsquo;Shipped&rsquo; state.</p>
+
+<p>The state machine will complain if you try to call an event that is not permitted depending on the current state.</p>
+
+<h2>Transitions</h2>
+
+<p>Finally, when an event is called it may trigger a transition. For example the &lsquo;cancel&rsquo; event could trigger the following transitions:</p>
+
+<ul>
+<li>&lsquo;placed&rsquo; to &lsquo;cancelled&rsquo;</li>
+<li>&lsquo;held&rsquo; to &lsquo;cancelled&rsquo;</li>
+<li>&lsquo;any&rsquo; to &lsquo;cancelled&rsquo;</li>
+</ul>
+
+
+<p>Transitions are useful for triggering processes that should occur in particular cases. For example sending an email when the state of an order changes from &lsquo;placed&rsquo; to &lsquo;cancelled&rsquo;.</p>
+
+<h2>So why you should use state machines?</h2>
+
+<p>If it is not clear already the main reason to user them is because a state machine can manage all the complexity of knowing what events and states are available at any given time.</p>
+
+<p>So, that&rsquo;s my understanding of state machines so far. I am sure I am missing out some stuff but I believe that the basics are here.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Don't Hate Tables]]></title>
+    <link href="http://sporto.github.com/blog/2011/08/01/dont-hate-tables/"/>
+    <updated>2011-08-01T09:30:00+10:00</updated>
+    <id>http://sporto.github.com/blog/2011/08/01/dont-hate-tables</id>
+    <content type="html"><![CDATA[<p>Recently I was maintaining a project were the original developer did everything using lists to present data in rows and columns like a table.</p>
+
+<p>So to present something like this:</p>
+
+<pre><code>&lt;table&gt;
+    &lt;tr&gt;
+        &lt;th &gt;Cosher &lt;/th&gt;
+        &lt;td&gt;To treat with special fondness.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;th style='padding-right:12px;'&gt;Flamboyant &lt;/th&gt;
+        &lt;td&gt;strikingly bold or brilliant; showy: flamboyant colors.&lt;/td&gt;
+    &lt;/tr&gt;
+&lt;/table&gt;
+&lt;br /&gt;
+</code></pre>
+
+<p>they were using a ul like this:</p>
+
+<pre><code>&lt;ul&gt;
+    &lt;li&gt;Cosher &lt;span&gt;To treat with special fondness.&lt;/span&gt;&lt;/li&gt;
+    &lt;li&gt;Flamboyant&lt;span&gt;strikingly bold or brilliant; showy: flamboyant colors.&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+
+<p>And then styling the list using CSS to make it look like a table.</p>
+
+<p>This is a little less markup than a normal table but what for? It seems to me like the &lsquo;no tables&rsquo; mantra taken to the extreme. This is perfectly appropriate content for a table. And using a table makes better sense because:</p>
+
+<ul>
+<li>Developer looking at the code will immediately know what the intention is</li>
+<li>The code is easier to maintain because you don&rsquo;t have to fight with the css to make something look like a table when it is not</li>
+<li>The display is consistent in any browser</li>
+<li>People disabling CSS will still see a table</li>
+</ul>
+
+
+<p>So please use tables when appropriate, don&rsquo;t hate them.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Finding the Bounding Box of an SVG Path in Ruby]]></title>
+    <link href="http://sporto.github.com/blog/2011/06/06/finding-the-bounding-box-of-an-svg-path-in-ruby/"/>
+    <updated>2011-06-06T09:32:00+10:00</updated>
+    <id>http://sporto.github.com/blog/2011/06/06/finding-the-bounding-box-of-an-svg-path-in-ruby</id>
+    <content type="html"><![CDATA[<p>Here is a way for finding out the bounding box (left, right, width and height) of an SVG path in Ruby. You will need <a href="http://www.imagemagick.org/">ImageMagick</a> and <a href="http://rmagick.rubyforge.org/">RMagick</a> for this. In Javascript this is quite simple using the getBBox method, but I couldn&rsquo;t find a similar thing in Ruby.</p>
+
+<p>First install ImageMagick if you don&rsquo;t have it already. I like to use Homebrew:</p>
+
+<pre><code>brew install imagemagick
+</code></pre>
+
+<p>Then install RMagick</p>
+
+<pre><code>gem install rmagick
+</code></pre>
+
+<p>With these two requirements in place you can find the bounding box using a script like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'> <span class="nb">require</span> <span class="s1">&#39;rubygems&#39;</span>
+</span><span class='line'>  <span class="nb">require</span> <span class="s1">&#39;RMagick&#39;</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="k">def</span> <span class="nf">find_bounding_box</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+</span><span class='line'>      <span class="kp">include</span> <span class="no">Magick</span>  
+</span><span class='line'>  
+</span><span class='line'>      <span class="c1">#create a drawing object</span>
+</span><span class='line'>      <span class="n">drawing</span> <span class="o">=</span> <span class="ss">Magick</span><span class="p">:</span><span class="ss">:Draw</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'>  
+</span><span class='line'>  
+</span><span class='line'>      <span class="c1">#create a new image for finding out the offset</span>
+</span><span class='line'>      <span class="n">canvas</span> <span class="o">=</span> <span class="no">Image</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="mi">1500</span><span class="p">,</span><span class="mi">1000</span><span class="p">)</span> <span class="p">{</span><span class="nb">self</span><span class="o">.</span><span class="n">background_color</span> <span class="o">=</span> <span class="s1">&#39;white&#39;</span> <span class="p">}</span>
+</span><span class='line'>  
+</span><span class='line'>      <span class="c1">#draw the path into the canvas image</span>
+</span><span class='line'>      <span class="n">drawing</span><span class="o">.</span><span class="n">path</span> <span class="n">path</span>
+</span><span class='line'>      <span class="n">drawing</span><span class="o">.</span><span class="n">draw</span> <span class="n">canvas</span>
+</span><span class='line'>  
+</span><span class='line'>      <span class="c1">#trim the whitespace of the image</span>
+</span><span class='line'>      <span class="n">canvas</span><span class="o">.</span><span class="n">trim!</span>   
+</span><span class='line'>  
+</span><span class='line'>      <span class="c1">#here is the bounding box information we are looking for</span>
+</span><span class='line'>      <span class="p">{</span> <span class="ss">:x</span><span class="o">=&gt;</span> <span class="n">canvas</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="ss">:y</span><span class="o">=&gt;</span><span class="n">canvas</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="ss">:width</span><span class="o">=&gt;</span> <span class="n">canvas</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="ss">:height</span><span class="o">=&gt;</span> <span class="n">canvas</span><span class="o">.</span><span class="n">rows</span><span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Let&rsquo;s test it:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'> <span class="n">svg_path</span> <span class="o">=</span> <span class="s2">&quot;M555.545,95.489c-9.67,4.589-19.34,9.178-29.01,13.767c9.097,19.235,18.194,38.47,27.291,57.705c9.667-4.598,19.335-9.196,29.002-13.794C573.733,133.941,564.64,114.715,555.545,95.489z&quot;</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="n">bbox</span> <span class="o">=</span> <span class="n">find_bounding_box</span><span class="p">(</span><span class="n">svg_path</span><span class="p">)</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;x=&quot;</span><span class="o">+</span><span class="n">bbox</span><span class="o">[</span><span class="ss">:x</span><span class="o">].</span><span class="n">to_s</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;y=&quot;</span><span class="o">+</span><span class="n">bbox</span><span class="o">[</span><span class="ss">:y</span><span class="o">].</span><span class="n">to_s</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;width=&quot;</span><span class="o">+</span><span class="n">bbox</span><span class="o">[</span><span class="ss">:width</span><span class="o">].</span><span class="n">to_s</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;height=&quot;</span><span class="o">+</span><span class="n">bbox</span><span class="o">[</span><span class="ss">:height</span><span class="o">].</span><span class="n">to_s</span>
+</span><span class='line'>  
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+</feed>
