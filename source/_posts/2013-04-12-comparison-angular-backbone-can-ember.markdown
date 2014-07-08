@@ -30,7 +30,7 @@ Feature                | Angular | Backbone | CanJS | Ember
 Observables            | y       | y        | y     | y     
 Routing                | y       | y        | y     | y     
 View bindings          | y       |          | y     | y     
-Two way bindings       | y       | -        | -     | y     
+Two way bindings       | y       | -        | y     | y     
 Partial views          | y       | -        | y     | y     
 Filtered list views    | y       | -        | y     | y     
 
@@ -45,6 +45,8 @@ __Two way bindings__: Having the view push changes to the observable object auto
 __Partial views__: Views that include other views.
 
 __Filtered list views__: Having views that display objects filtered by a certain criteria.
+
+__Update 2014-07-08__: As of version 2.0 CanJS now supports two way bindings.
 
 ### Scores
 
